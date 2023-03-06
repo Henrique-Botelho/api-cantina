@@ -96,7 +96,15 @@ const produtosController = {
         }
    },
    deletaProduto: async (req, res) => {
-    
+        const { id } = req.params;
+        const queryDeletaProduto = 'DELETE FROM produtos WHERE id= ?';
+        try {
+            const [response] = await pool.query(queryDeletaProduto, [id]);
+            res.status(200).json({response, message: 'Produto excluido com sucesso!'});
+        } catch(error) {
+            res.status(500).json({message: 'Erro no servidor.'});
+            console.log('Erro ao tentar deletar esse produto: ' + error);
+        }
    }
 }
 
