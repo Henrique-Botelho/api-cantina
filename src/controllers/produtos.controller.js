@@ -28,7 +28,7 @@ const produtosController = {
 
         // Validações
         if (!nome || !preco || !categoria || !descricao) {
-            return res.status(400).json({errorCode: 400, message: 'Todos os campos d'})
+            return res.status(400).json({errorCode: 400, message: 'Todos os campos devem ser enviados.'})
         }
 
         if (nome.length > 50 || categoria.length > 30) {
@@ -53,7 +53,7 @@ const produtosController = {
         const queryInsereProduto = 'INSERT INTO produtos (nome, preco, categoria, descricao) VALUES (?, ?, ?, ?)';
         try {
             const response = await pool.query(queryInsereProduto, [nome, preco, categoria, descricao]);
-            res.status(201).json({response, criado: {nome,preco,categoria,descricao}});
+            res.status(201).json({message: 'Produto criado com sucesso!', criado: {nome,preco,categoria,descricao}});
         } catch (error) {
             res.status(500).json({errorCode: 500, message: 'Erro do servidor.'})
             console.log('Erro ao registrar um novo produto: ' + error);
@@ -62,27 +62,29 @@ const produtosController = {
    atualizaProduto: async (req, res) => {
         const { id } = req.params;
         let { nome, preco, categoria, descricao } = req.body;
-        
-        // Verificando o tamanho dos valores
+    
+        // Validação
+        if (!nome || !preco || !categoria || !descricao) {
+            return res.status(400).json({errorCode: 400, message: 'Todos os campos devem ser enviados.'})
+        }
+        if (!id) {
+            return res.status(400).json({errorCode: 400, message: 'É necessário informar o id do produto que deseja alterar.'});
+        }
         if (nome.length > 50 || categoria.length > 30) {
             return res.status(400).json({errorCode: 400, message: 'Número de caracteres do nome ou da categoria muito grande.'});
         }
-        // Verificando o tipo de dado do preço
         if (typeof preco !== 'number') {
             preco = parseFloat(preco);
             if (Number.isNaN(preco)) {
                 return res.status(400).json({errorCode: 400, message: 'O campo preço deve ser do tipo número.'});
             }
         }
-        // Verificando o tipo de dado dos outros campos
         if ((typeof nome !== 'string') || (typeof categoria !== 'string') || (typeof descricao !== 'string')) {
             return res.status(400).json({errorCode: 400, message: 'As colunas nome, categoria e descrição devem ser do tipo strings.'});
         }
-        // Removendo espaços em branco
         nome = nome.trim();
         categoria = categoria.trim();
         descricao = descricao.trim();
-        // Deixando as strings todas minúsculas
         nome = nome.toLowerCase();
         categoria = categoria.toLowerCase();
         descricao = descricao.toLowerCase();
@@ -90,7 +92,7 @@ const produtosController = {
         const queryAtualizaProduto = 'UPDATE produtos SET nome = ?, preco= ?, categoria= ?, descricao= ? WHERE id= ?';
         try {
             const [response] = await pool.query(queryAtualizaProduto, [nome,preco,categoria,descricao,id]);
-            res.status(200).json({response, atualizado: {nome,preco,categoria,descricao}});
+            res.status(200).json({message: 'Produto atualizado com sucesso!', atualizado: {nome,preco,categoria,descricao}});
         } catch (error) {
             res.status(500).json({errorCode: 500, message: 'Erro do servidor.'});
             console.log('Erro ao atualizar os dados: ' + error);
@@ -98,10 +100,15 @@ const produtosController = {
    },
    deletaProduto: async (req, res) => {
         const { id } = req.params;
+
+        // Validação
+        if (!id) {
+            return res.status(400).json({errorCode: 400, message: 'É necessário informar o id do produto que deseja alterar.'});
+        }
         const queryDeletaProduto = 'DELETE FROM produtos WHERE id= ?';
         try {
             const [response] = await pool.query(queryDeletaProduto, [id]);
-            res.status(200).json({response, message: 'Produto excluido com sucesso!'});
+            res.status(200).json({message: 'Produto excluido com sucesso!'});
         } catch(error) {
             res.status(500).json({errorCode: 500, message: 'Erro no servidor.'});
             console.log('Erro ao tentar deletar esse produto: ' + error);
