@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const produtosController = require('../controllers/produtos.controller');
+const { verificaUsurio } = require('../middleware/auth.middleware');
 
 // Rota para pegar todos os produtos
 router.get('/', produtosController.pegaTodosProdutos)
@@ -9,7 +10,7 @@ router.get('/', produtosController.pegaTodosProdutos)
 router.get('/:categoria', produtosController.pegaProdutoCategoria);
 
 // Rota para cadastrar novo produto
-router.post('/', produtosController.insereProduto);
+router.post('/', verificaUsurio, produtosController.insereProduto);
 
 // Rota para alterar um produto
 router.put('/:id', produtosController.atualizaProduto);

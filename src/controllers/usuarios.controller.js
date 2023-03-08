@@ -67,14 +67,20 @@ const usuariosController = {
                 return res.status(404).json({errorCode: 404, message: 'Usuário não encontrado.'});
             }
             
-            // Verificação da senha do usuário
+            // Verificação da senha do usuário: compara a senha que o usuário digitou no front com a senha do banco de dados
+
             const verificaSenha = await bcrypt.compare(senha, response[0].senha);
             if (!verificaSenha) {
                 return res.status(400).json({errorCode: 400, message: 'Senha incorreta.'});
             }
 
-            // Gerando token
-            const token = jwt.sign({id: response[0].id}, SECRET);
+            // Gerando token de autorização na autenticação
+            const token = jwt.sign({
+                id: response[0].id,
+                userName: response[0].userName
+            }, SECRET, {
+                expiresIn: '1d'
+            });
             return res.status(200).json({message: 'Autenticação realizada com sucesso!', token});
 
         } catch (err) {

@@ -1,5 +1,4 @@
 const express = require('express');
-const { excluirCompra } = require('../controllers/compras.controller');
 const router = express.Router();
 const comprasController = require('../controllers/compras.controller');
 
@@ -13,7 +12,7 @@ router.put('/:id', comprasController.alterarCompra);
 router.delete('/compras/:id', comprasController.excluirCompra);
 
 // Rota de pegar todas as compras
-router.get("/compras", comprasController.pegarCompras);
+// router.get("/compras", comprasController.pegarCompras);
 
 // Rota para listar todas as compras de um usuário específico
 router.get("/compras/:id_cliente", comprasController.listarComprasPorUsuario);
