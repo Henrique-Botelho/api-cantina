@@ -14,9 +14,6 @@ const clientesController = {
             return res.status(400).json({ errorCode: 400, message: 'Quantidade de caracteres para nome e/ou telefone inválidos.' })
         }
 
-        nome = nome.trim();
-        telefone = telefone.trim();
-
         //Consulta no banco de dados
         const queryInsereCliente = "INSERT INTO clientes (nome, numero) VALUES (?, ?)"
         try{
@@ -46,21 +43,39 @@ const clientesController = {
         const { nome, telefone } = req.body;
 
         //Validações
-        if(typeof id !== 'number'){
-            return res.status(400).json({errorCode: 400, message: 'O id deve ser um número.'})
+        if(!id){
+            return res.status(400).json({errorCode: 400, message: 'É necessário informar o id do cliente a ser atualizado.'});
         }
 
         //Consulta no banco de dados
-        const queryAtualizaCliente = "UPDATE clientes SET nome = (?), numero = (?) WHERE id = (?)"
+        const queryAtualizaCliente = "UPDATE clientes SET nome = (?), numero = (?) WHERE id = (?)";
         try{
             const [response] = await pool.query(queryAtualizaCliente, [nome, telefone, id]);
-            return res.status(200).json(response);
+            return res.status(200).json({ message: 'Cliente atualizado com sucesso.' });
         } catch(error) {
             console.log('Erro ao atualizar cliente' + error)
             return res.status(500).json({errorCode: 500, message: 'Erro no servidor.'})
         }
     },
-    deletaCliente: async (req, res) => {},
+    deletaCliente: async (req, res) => {
+        const { id } = req.params;
+
+        //Validações
+        if(!id){
+            return res.status(400).json({errorCode: 400, message: 'É necessário informar o id do cliente a ser deletado.'});
+        }
+        
+        //Consulta no banco de dados
+        const queryDeletaCliente = "DELETE FROM clientes WHERE id = (?)";
+        try{
+            const [response] = await pool.query(queryDeletaCliente, id);
+            return res.status(200).json({ message: 'Cliente deletado com sucesso.' });
+        } catch (error) {
+            console.log('Erro ao tentar deletar o cliente: ' + error);
+            return res.status(500).json({errorCode: 500, message: 'Erro no servidor.'});
+        }
+        
+    },
 };
 
 module.exports = clientesController;
