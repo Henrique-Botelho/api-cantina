@@ -7,8 +7,8 @@ const produtosController = {
             const [response] = await pool.query(queryPegaTodosProdutos);
             return res.status(200).json(response);
         } catch (error) {
-            res.status(500).json({errorCode: 500, message: 'Erro do servidor'});
             console.log('Erro ao pegar todos os produtos: ' + error);
+            return res.status(500).json({errorCode: 500, message: 'Erro do servidor'});
         }
     },
     pegaProdutoCategoria: async (req, res) => {
@@ -19,8 +19,8 @@ const produtosController = {
             const [response] = await pool.query(queryPegaProdutoCategoria, [categoria]);
             return res.status(200).json(response);
         } catch (error) {
-            res.status(500).json({errorCode: 500, message: 'Erro do servidor'});
             console.log('Erro ao pegar produtos dessa categoria: ' + error);
+            return res.status(500).json({errorCode: 500, message: 'Erro do servidor'});
         }
     },
     insereProduto: async (req, res) => {
@@ -53,10 +53,10 @@ const produtosController = {
         const queryInsereProduto = 'INSERT INTO produtos (nome, preco, categoria, descricao) VALUES (?, ?, ?, ?)';
         try {
             const response = await pool.query(queryInsereProduto, [nome, preco, categoria, descricao]);
-            res.status(201).json({message: 'Produto criado com sucesso!', criado: {nome,preco,categoria,descricao}});
+            return res.status(201).json({message: 'Produto criado com sucesso!', criado: {nome,preco,categoria,descricao}});
         } catch (error) {
-            res.status(500).json({errorCode: 500, message: 'Erro do servidor.'})
             console.log('Erro ao registrar um novo produto: ' + error);
+            return res.status(500).json({errorCode: 500, message: 'Erro do servidor.'})
         }
    },
    atualizaProduto: async (req, res) => {
@@ -92,10 +92,10 @@ const produtosController = {
         const queryAtualizaProduto = 'UPDATE produtos SET nome = ?, preco= ?, categoria= ?, descricao= ? WHERE id= ?';
         try {
             const [response] = await pool.query(queryAtualizaProduto, [nome,preco,categoria,descricao,id]);
-            res.status(200).json({message: 'Produto atualizado com sucesso!', atualizado: {nome,preco,categoria,descricao}});
+            return res.status(200).json({message: 'Produto atualizado com sucesso!', atualizado: {nome,preco,categoria,descricao}});
         } catch (error) {
-            res.status(500).json({errorCode: 500, message: 'Erro do servidor.'});
             console.log('Erro ao atualizar os dados: ' + error);
+            return res.status(500).json({errorCode: 500, message: 'Erro do servidor.'});
         }
    },
    deletaProduto: async (req, res) => {
@@ -108,10 +108,10 @@ const produtosController = {
         const queryDeletaProduto = 'DELETE FROM produtos WHERE id= ?';
         try {
             const [response] = await pool.query(queryDeletaProduto, [id]);
-            res.status(200).json({message: 'Produto excluido com sucesso!'});
+            return res.status(200).json({message: 'Produto excluido com sucesso!'});
         } catch(error) {
-            res.status(500).json({errorCode: 500, message: 'Erro no servidor.'});
             console.log('Erro ao tentar deletar esse produto: ' + error);
+            return res.status(500).json({errorCode: 500, message: 'Erro no servidor.'});
         }
    }
 }
