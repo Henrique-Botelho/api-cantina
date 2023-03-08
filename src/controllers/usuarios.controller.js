@@ -15,17 +15,8 @@ const usuariosController = {
         if (typeof userName !== 'string' || typeof senha !== 'string' || typeof confirmaSenha !== 'string') {
             return res.status(400).json({errorCode: 400, message: "Todos os dados devem ser do tipo String."});
         }
-        if (senha.length < 8) {
-            return res.status(400).json({errorCode: 400, message: 'A senha deve ter no mínimo 8 caracteres.'});
-        }
-        if (senha.length > 20) {
-            return res.status(400).json({errorCode: 400, message: 'A senha deve ter no máximo 20 caracteres.'});
-        }
-        if (userName.length > 50) {
-            return res.status(400).json({errorCode: 400, message: 'O nome de usuário deve ter no máximo 50 caracteres.'});
-        }
-        if (userName.length < 3) {
-            return res.status(400).json({errorCode: 400, message: 'O nome de usuário deve ter no mínimo 3 caracteres.'});
+        if (senha.length < 8 || senha.length > 20 || userName.length > 50 || userName.length < 3) {
+            return res.status(400).json({errorCode: 400, message: 'Quantidade de caracteres errada. (userName): min. 3, max. 50; (senha): min. 8, max. 20.'});
         }
 
         // Conferindo se já existe o mesmo usuário
@@ -36,11 +27,11 @@ const usuariosController = {
                 return res.status(400).json({errorCode: 400, message: 'Esse usuário já existe.'});
             }
 
+            // Cadastrando novo usuário
+            // criando a senha
             userName = userName.trim();
             senha = senha.trim();
 
-            // Cadastrando novo usuário
-            // criando a senha
             const salt = await bcrypt.genSalt(12);
             const senhaHash = await bcrypt.hash(senha, salt);
 
@@ -55,7 +46,7 @@ const usuariosController = {
         }
     },
     login: async (req, res) => {
-
+        
     }
 }
 
