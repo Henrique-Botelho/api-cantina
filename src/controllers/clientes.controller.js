@@ -10,26 +10,56 @@ const clientesController = {
             return res.status(400).json({ errorCode: 400, message: 'Todos os campos devem ser enviados.'})
         }
 
-        if(nome.length > 50 || telefone.length !== 11){
+        if(nome.length > 50){
             return res.status(400).json({ errorCode: 400, message: 'Quantidade de caracteres para nome e/ou telefone inválidos.' })
         }
 
         nome = nome.trim();
         telefone = telefone.trim();
 
-        const queryInsereCliente = "INSERT INTO clientes (nome, telefone) VALUES (?, ?)"
+        //Consulta no banco de dados
+        const queryInsereCliente = "INSERT INTO clientes (nome, numero) VALUES (?, ?)"
         try{
             const response = await pool.query(queryInsereCliente, [nome, telefone]);
-            res.status(201).json({ message: 'Cliente cadastrado com sucesso!' });
+            return res.status(201).json({ message: 'Cliente cadastrado com sucesso!' });
         } catch(error){
-            res.status(500).json({errorCode: 500, message: 'Erro no servidor.'});
             console.log('Erro ao cadastrar cliente' + error);
+            return res.status(500).json({errorCode: 500, message: 'Erro no servidor.'});
+        }
+    },
+    listaClientes: async (req, res) => {
+
+        //Consulta no banco de dados
+        const queryListaClientes = "SELECT * FROM clientes";
+        try{
+            const [response] = await pool.query(queryListaClientes);
+            return res.status(200).json(response);
+        } catch(error) {
+            console.log('Erro ao listar todos os clientes: ' + error);
+            return res.status(500).json({errorCode: 500, message: 'Erro do servidor'});
         }
 
-        res.status(200).json({nome, telefone});
     },
-    listaClientes: async (req, res) => {},
-    atualizaCliente: async (req, res) => {},
+    atualizaCliente: async (req, res) => {
+        //Puxando o id do cliente
+        const { id } = req.params;
+        const { nome, telefone } = req.body;
+
+        //Validações
+        if(typeof id !== 'number'){
+            return res.status(400).json({errorCode: 400, message: 'O id deve ser um número.'})
+        }
+
+        //Consulta no banco de dados
+        const queryAtualizaCliente = "UPDATE clientes SET nome = (?), numero = (?) WHERE id = (?)"
+        try{
+            const [response] = await pool.query(queryAtualizaCliente, [nome, telefone, id]);
+            return res.status(200).json(response);
+        } catch(error) {
+            console.log('Erro ao atualizar cliente' + error)
+            return res.status(500).json({errorCode: 500, message: 'Erro no servidor.'})
+        }
+    },
     deletaCliente: async (req, res) => {},
 };
 
