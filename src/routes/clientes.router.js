@@ -14,6 +14,4 @@ router.put('/:id', clientesController.atualizaCliente);
 //Rota para excluir um cliente específico
 router.delete('/:id', clientesController.deletaCliente);
 
-
-
 module.exports = router;
