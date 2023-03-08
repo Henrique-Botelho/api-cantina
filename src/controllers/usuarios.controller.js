@@ -1,5 +1,7 @@
 const pool = require('../database/index');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const { SECRET } = require('../config/config');
 
 const usuariosController = {
     cadastraUsuario: async (req, res) => {
@@ -48,13 +50,32 @@ const usuariosController = {
     login: async (req, res) => {
         const { userName, senha } = req.body;
 
+        // Validação
+        if (!userName || !senha) {
+            return res.status(400).json({errorCode: 400, message: 'Faltam dados.'});
+        }
+        if (typeof userName !== 'string' || typeof senha !== 'string') {
+            return res.status(400).json({errorCode: 400, message: 'Os dados devem ser do tipo string.'});
+        }
+
         try {
+            // Verificação da existência do usuário
             const queryVerificaUsuario = 'SELECT * FROM usuarios WHERE userName=?';
             const [response] = await pool.query(queryVerificaUsuario, [userName]);
 
             if (response.length === 0) {
-                
+                return res.status(404).json({errorCode: 404, message: 'Usuário não encontrado.'});
             }
+            
+            // Verificação da senha do usuário
+            const verificaSenha = await bcrypt.compare(senha, response[0].senha);
+            if (!verificaSenha) {
+                return res.status(400).json({errorCode: 400, message: 'Senha incorreta.'});
+            }
+
+            // Gerando token
+            const token = jwt.sign({id: response[0].id}, SECRET);
+            return res.status(200).json({message: 'Autenticação realizada com sucesso!', token});
 
         } catch (err) {
             console.log(err);
