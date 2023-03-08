@@ -46,7 +46,20 @@ const usuariosController = {
         }
     },
     login: async (req, res) => {
-        
+        const { userName, senha } = req.body;
+
+        try {
+            const queryVerificaUsuario = 'SELECT * FROM usuarios WHERE userName=?';
+            const [response] = await pool.query(queryVerificaUsuario, [userName]);
+
+            if (response.length === 0) {
+                
+            }
+
+        } catch (err) {
+            console.log(err);
+            res.status(500).json({errorCode: 500, message: 'Erro no servidor'});
+        }
     }
 }
 
