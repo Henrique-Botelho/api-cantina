@@ -74,7 +74,7 @@ const comprasController = {
       res.status(200).json(resultado);
     } catch (erro) {
       console.error(erro);
-      return res.status(500).json({ errorCode: 500, message: "Erro do servidor" });
+      return res.status(500).json({ errorCode: 500, message: "Erro ao pegar todas as compras" });
     }
   },
 };
