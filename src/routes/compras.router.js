@@ -10,9 +10,12 @@ router.post('/', comprasController.criarCompra);
 router.put('/:id', comprasController.alterarCompra);
 
 // Rota de excluir a compra
+router.delete('/compras/:id', comprasController.excluirCompra);
 
-// Rota de pegar todas as compras 
+// Rota de pegar todas as compras
+router.get("/compras", comprasController.pegarCompras);
 
-// Rota pegar todas as compras de um usuario especifico
+// Rota para listar todas as compras de um usuário específico
+router.get("/compras/:id_cliente", comprasController.listarComprasPorUsuario);
 
 module.exports = router;

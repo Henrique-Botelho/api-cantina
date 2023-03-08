@@ -2,7 +2,6 @@ const pool = require("../database/index");
 
 const comprasController = {
   // ESSA É A ROTA PARA CRIAR A COMPRA
-
   criarCompra: async (req, res) => {
     const { id_cliente, compra, total, dataHora } = req.body;
     if (!id_cliente || !compra || !total || !dataHora) {
@@ -18,9 +17,7 @@ const comprasController = {
     }
   },
 
-
   // Alterar a comprar que foi comprada
-
   alterarCompra: async (req, res) => {
     const { id } = req.params;
     const { compra, total, dataHora } = req.body;
@@ -41,7 +38,7 @@ const comprasController = {
   },
 
   // Excluir a compra pelo ID
-  excluirCompra: async (req, res) => { 
+  excluirCompra: async (req, res) => {
     const { id } = req.params;
     try {
       const queryexcluirCompra = "DELETE FROM compras WHERE id=?";
@@ -56,6 +53,30 @@ const comprasController = {
     }
   },
 
+  // Rota de pegar todas as compras
+  listarCompras: async (req, res) => {
+    try {
+      const queryListarCompras = "SELECT * FROM compras";
+      const resultado = await pool.query(queryListarCompras);
+      res.status(200).json(resultado);
+    } catch (erro) {
+      console.error(erro);
+      return res.status(500).json({ errorCode: 500, message: "Erro do servidor" });
+    }
+  },
+
+  // Rota de pegar todas as compras de um usuário específico
+  listarComprasPorUsuario: async (req, res) => {
+    const { id_cliente } = req.params;
+    try {
+      const queryListarComprasPorUsuario = "SELECT * FROM compras WHERE id_cliente = ?";
+      const resultado = await pool.query(queryListarComprasPorUsuario, [id_cliente]);
+      res.status(200).json(resultado);
+    } catch (erro) {
+      console.error(erro);
+      return res.status(500).json({ errorCode: 500, message: "Erro do servidor" });
+    }
+  },
 };
 
 module.exports = comprasController;
