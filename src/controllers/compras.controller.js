@@ -68,10 +68,12 @@ const comprasController = {
   // Função de pegar todas as compras de um usuário específico
   listarComprasPorUsuario: async (req, res) => {
     const { telefone } = req.params;
-    const queryVerificaCliente = 'SELECT  FROM usuarios WHERE numero=?';
+    const queryVerificaCliente = 'SELECT id FROM usuarios WHERE numero=?';
     const queryListarComprasPorUsuario = 'SELECT * FROM compras WHERE id_cliente = ?';
     try {
       // Encontrando o usuário pelo número
+      const [responseUsuario] = await pool.query(queryVerificaCliente, [telefone]);
+
       const resultado = await pool.query(queryListarComprasPorUsuario, [id_cliente]);
       res.status(200).json(resultado);
     } catch (erro) {
