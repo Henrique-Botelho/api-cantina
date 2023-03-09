@@ -5,7 +5,7 @@ const comprasController = {
   criarCompra: async (req, res) => {
     const { id_cliente, compra, total, dataHora } = req.body;
     if (!id_cliente || !compra || !total || !dataHora) {
-      return res.status(400).json({ errorCode: 400, message: 'Faltam dados')
+      return res.status(400).json({ errorCode: 400, message: 'Faltam dados'});
     }
     const queryInsereCompra = 'INSERT INTO compras (id_cliente, compra, total, dataHora) VALUES (?, ?, ?, ?)';
     try {
