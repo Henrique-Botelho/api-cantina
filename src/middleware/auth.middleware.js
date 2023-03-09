@@ -2,7 +2,7 @@ const jwt = require('jsonwebtoken');
 const { SECRET, CARDAPIO_KEY } = require('../config/config');
 
 const authMiddleware = {
-    verificaUsurio: (req, res, next) => {
+    verificaUsuario: (req, res, next) => {
         // Pegando o token de autorização no header da requisição
         const authHeader = req.headers['authorization'];
         // Verificando se o token existe e formatando ele adequadamente
