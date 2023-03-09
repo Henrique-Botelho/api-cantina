@@ -43,8 +43,8 @@ const clientesController = {
         const { nome, telefone } = req.body;
 
         //Validações
-        if(!id){
-            return res.status(400).json({errorCode: 400, message: 'É necessário informar o id do cliente a ser atualizado.'});
+        if(!id || !nome || !telefone){
+            return res.status(400).json({errorCode: 400, message: 'É necessário informar o id, o nome e a senha do cliente a ser atualizado.'});
         }
 
         //Consulta no banco de dados
