@@ -65,18 +65,45 @@ const clientesController = {
         const { nome, telefone } = req.body;
 
         //Validações
-        if(!id || !nome || !telefone){
-            return res.status(400).json({errorCode: 400, message: 'É necessário informar o id, o nome e a senha do cliente a ser atualizado.'});
+        if(!id){
+            return res.status(400).json({errorCode: 400, message: 'É necessário informar o id do cliente a ser atualizado.'});
         }
+        if(nome && telefone){
+            //Consulta no banco de dados
+            const queryAtualizaCliente = "UPDATE clientes SET nome = (?), numero = (?) WHERE id = (?)";
+            try{
+                await pool.query(queryAtualizaCliente, [nome, telefone, id]);
+                return res.status(200).json({ message: 'Cliente atualizado com sucesso.' });
+            } catch(error) {
+                console.log('Erro ao atualizar cliente' + error)
+                return res.status(500).json({errorCode: 500, message: 'Erro no servidor.'})
+            }
 
-        //Consulta no banco de dados
-        const queryAtualizaCliente = "UPDATE clientes SET nome = (?), numero = (?) WHERE id = (?)";
-        try{
-            const [response] = await pool.query(queryAtualizaCliente, [nome, telefone, id]);
-            return res.status(200).json({ message: 'Cliente atualizado com sucesso.' });
-        } catch(error) {
-            console.log('Erro ao atualizar cliente' + error)
-            return res.status(500).json({errorCode: 500, message: 'Erro no servidor.'})
+
+        } else{
+            
+            if(!nome && !telefone){
+                console.log('É necessário informar o nome e/ou o telefone do cliente a ser alterado.')
+                return res.status(400).json({errorCode: 400, message: 'É necessário informar o nome e/ou o telefone do cliente a ser alterado.'});
+    
+            } else if(!nome){
+                const queryAtualizaCliente = "UPDATE clientes SET numero = (?) WHERE id = (?)";
+                await pool.query(queryAtualizaCliente, [telefone, id]).then(
+                    res.status(200).json({statusCode: 200, message: 'Cliente atualizado com sucesso.'})
+                )
+                .catch((error) => {
+                    console.log('Erro ao atualizar cliente' + error)
+                    return res.status(500).json({statusCode: 500, message: 'Erro no servidor.'})});
+
+            } else {
+                const queryAtualizaCliente = "UPDATE clientes SET nome = (?) WHERE id = (?)";
+                await pool.query(queryAtualizaCliente, [nome, id]).then(
+                    res.status(200).json({statusCode: 200, message: 'Cliente atualizado com sucesso.'})
+                )
+                .catch((error) => {
+                    console.log('Erro ao atualizar cliente' + error)
+                    return res.status(500).json({statusCode: 500, message: 'Erro no servidor.'})});
+            }
         }
     },
 
