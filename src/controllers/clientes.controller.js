@@ -24,6 +24,7 @@ const clientesController = {
             return res.status(500).json({errorCode: 500, message: 'Erro no servidor.'});
         }
     },
+
     listaClientes: async (req, res) => {
 
         //Consulta no banco de dados
@@ -37,6 +38,27 @@ const clientesController = {
         }
 
     },
+
+    listaCLiente: async (req, res) => {
+        //Pegando o id do cliente passado nos parâmetros
+        const { id } = req.params;
+
+        //Validação
+        if(!id){
+            return res.status(400).json({errorCode: 400, message: 'É necessário informar o id do cliente a ser listado.'});
+        }
+
+        //Consulta no banco de dados 
+        const queryListaCliente = "SELECT nome, telefone FROM clientes WHERE id = (?)";
+        try {
+            const [response] = await pool.query(queryListaCliente, id);
+            return res.status(200).json(response);
+        } catch (error) {
+            console.log('Erro ao listar o cliente específico: ' + error);
+            return res.status(500).json({errorCode: 500, message: 'Erro no servidor.'});
+        }
+    },
+
     atualizaCliente: async (req, res) => {
         //Puxando o id do cliente
         const { id } = req.params;
@@ -57,6 +79,7 @@ const clientesController = {
             return res.status(500).json({errorCode: 500, message: 'Erro no servidor.'})
         }
     },
+
     deletaCliente: async (req, res) => {
         const { id } = req.params;
 
