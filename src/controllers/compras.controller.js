@@ -7,8 +7,8 @@ const comprasController = {
     try {
       const [resultado] = await pool.query(queryListarCompras);
       res.status(200).json({statusCode: 200, resultado});
-    } catch (erro) {
-      console.error(erro);
+    } catch (error) {
+      console.error(error);
       return res.status(500).json({ errorCode: 500, message: 'Erro do servidor'});
     }
   },
@@ -25,8 +25,8 @@ const comprasController = {
       }
       const [response] = await pool.query(queryListarComprasPorUsuario, [responseUsuario[0].id]);
       return res.status(200).json({statusCode: 200, response});
-    } catch (erro) {
-      console.error(erro);
+    } catch (error) {
+      console.error(error);
       return res.status(500).json({ errorCode: 500, message: 'Erro do servidor.'});
     }
   },
