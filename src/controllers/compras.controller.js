@@ -65,20 +65,22 @@ const comprasController = {
     }
   },
 
-  // Função de pegar todas as compras de um usuário específico
+  // Função de pegar todas as compras de um cliente específico
   listarComprasPorUsuario: async (req, res) => {
-    const { telefone } = req.params;
-    const queryVerificaCliente = 'SELECT id FROM usuarios WHERE numero=?';
+    const { numero } = req.params;
+    const queryVerificaCliente = 'SELECT id FROM clientes WHERE numero=?';
     const queryListarComprasPorUsuario = 'SELECT * FROM compras WHERE id_cliente = ?';
     try {
-      // Encontrando o usuário pelo número
-      const [responseUsuario] = await pool.query(queryVerificaCliente, [telefone]);
-
-      const resultado = await pool.query(queryListarComprasPorUsuario, [id_cliente]);
-      res.status(200).json(resultado);
+      // Encontrando o cliente pelo número
+      const [responseUsuario] = await pool.query(queryVerificaCliente, [numero]);
+      if (responseUsuario.length === 0) {
+        return res.status(401).json({errorCode: 401, message: 'Usuário não encontrado.'});
+      }
+      const [response] = await pool.query(queryListarComprasPorUsuario, [responseUsuario[0].id]);
+      return res.status(200).json({statusCode: 200, response});
     } catch (erro) {
       console.error(erro);
-      return res.status(500).json({ errorCode: 500, message: 'Erro ao pegar todas as compras'});
+      return res.status(500).json({ errorCode: 500, message: 'Erro do servidor.'});
     }
   },
 };
