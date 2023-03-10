@@ -16,7 +16,7 @@ Requisitos
 ## Clonar esse repositório
 ```cmd
 > git clone https://github.com/Henrique-Botelho/api-cantina
-> cd api-canina
+> cd api-cantina
 ```
 Use `code .` para abrir a pasta no VS Code
 ```cmd
@@ -58,5 +58,3 @@ module.exports = {
     CARDAPIO_KEY
 }
 ```
-
-
