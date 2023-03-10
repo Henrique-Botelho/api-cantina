@@ -13,7 +13,7 @@ Requisitos
 * [Cors](https://expressjs.com/en/resources/middleware/cors.html)
 * [MySQL2](https://www.npmjs.com/package/mysql2)
 
-## Clonar esse repositório
+## Clonando esse repositório
 ```cmd
 > git clone https://github.com/Henrique-Botelho/api-cantina
 > cd api-cantina
