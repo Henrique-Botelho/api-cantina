@@ -1,4 +1,4 @@
-# **Api REST cantina SENAI ⚛️** 
+# **Cantina SENAI API 📚** 
 
 Rest-API com sistema de autenticação e rotas, feita utilizando MySQL2, Express.js, Node.js e bcrypt. 
 
