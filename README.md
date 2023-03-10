@@ -1,6 +1,6 @@
-# **Node JS Rest-API ⚛️** 
+# **Api REST cantina SENAI ⚛️** 
 
-Rest-API com sistema de autenticação, feita utilizando MySQL2, Express.js, Node.js e bcrypt. 
+Rest-API com sistema de autenticação e rotas, feita utilizando MySQL2, Express.js, Node.js e bcrypt. 
 
 
 # Instalação
