@@ -15,7 +15,7 @@ const clientesController = {
         }
 
         //Consulta no banco de dados
-        const queryInsereCliente = "INSERT INTO clientes (nome, numero) VALUES (?, ?)"
+        const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)'
         try{
             const response = await pool.query(queryInsereCliente, [nome, telefone]);
             return res.status(201).json({ message: 'Cliente cadastrado com sucesso!' });
@@ -28,7 +28,7 @@ const clientesController = {
     listaClientes: async (req, res) => {
 
         //Consulta no banco de dados
-        const queryListaClientes = "SELECT * FROM clientes";
+        const queryListaClientes = 'SELECT * FROM clientes';
         try{
             const [response] = await pool.query(queryListaClientes);
             return res.status(200).json(response);
@@ -49,7 +49,7 @@ const clientesController = {
         }
 
         //Consulta no banco de dados 
-        const queryListaCliente = "SELECT nome, telefone FROM clientes WHERE id = (?)";
+        const queryListaCliente = 'SELECT nome, telefone FROM clientes WHERE id = (?)';
         try {
             const [response] = await pool.query(queryListaCliente, id);
             return res.status(200).json(response);
@@ -70,7 +70,7 @@ const clientesController = {
         }
         if(nome && telefone){
             //Consulta no banco de dados
-            const queryAtualizaCliente = "UPDATE clientes SET nome = (?), numero = (?) WHERE id = (?)";
+            const queryAtualizaCliente = 'UPDATE clientes SET nome = (?), numero = (?) WHERE id = (?)';
             try{
                 await pool.query(queryAtualizaCliente, [nome, telefone, id]);
                 return res.status(200).json({ message: 'Cliente atualizado com sucesso.' });
@@ -87,7 +87,7 @@ const clientesController = {
                 return res.status(400).json({errorCode: 400, message: 'É necessário informar o nome e/ou o telefone do cliente a ser alterado.'});
     
             } else if(!nome){
-                const queryAtualizaCliente = "UPDATE clientes SET numero = (?) WHERE id = (?)";
+                const queryAtualizaCliente = 'UPDATE clientes SET numero = (?) WHERE id = (?)';
                 await pool.query(queryAtualizaCliente, [telefone, id]).then(
                     res.status(200).json({statusCode: 200, message: 'Cliente atualizado com sucesso.'})
                 )
@@ -96,7 +96,7 @@ const clientesController = {
                     return res.status(500).json({statusCode: 500, message: 'Erro no servidor.'})});
 
             } else {
-                const queryAtualizaCliente = "UPDATE clientes SET nome = (?) WHERE id = (?)";
+                const queryAtualizaCliente = 'UPDATE clientes SET nome = (?) WHERE id = (?)';
                 await pool.query(queryAtualizaCliente, [nome, id]).then(
                     res.status(200).json({statusCode: 200, message: 'Cliente atualizado com sucesso.'})
                 )
@@ -116,7 +116,7 @@ const clientesController = {
         }
         
         //Consulta no banco de dados
-        const queryDeletaCliente = "DELETE FROM clientes WHERE id = (?)";
+        const queryDeletaCliente = 'DELETE FROM clientes WHERE id = (?)';
         try{
             const [response] = await pool.query(queryDeletaCliente, id);
             return res.status(200).json({ message: 'Cliente deletado com sucesso.' });
