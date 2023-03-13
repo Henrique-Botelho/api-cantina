@@ -11,10 +11,14 @@ const comprasRouter = require('./src/routes/compras.router');
 app.use(cors());
 app.use(express.json());
 
-app.use('/produtos', produtosRouter);
-app.use('/usuarios', usuariosRouter);
-app.use('/clientes', clientesRouter);
-app.use('/compras', comprasRouter);
+app.get('/api', (req, res) => {
+    res.status(200).json({message: 'Bem vindo a API da cantina - Senai Suíço Brasileiro!'});
+});
+
+app.use('/api/produtos', produtosRouter);
+app.use('/api/usuarios', usuariosRouter);
+app.use('/api/clientes', clientesRouter);
+app.use('/api/compras', comprasRouter);
 
 app.listen(PORT, () => {
     console.log(`Servidor rodando na porta ${PORT}...`);
