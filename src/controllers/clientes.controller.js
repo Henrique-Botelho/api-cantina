@@ -26,7 +26,6 @@ const clientesController = {
     },
 
     listaClientes: async (req, res) => {
-
         //Consulta no banco de dados
         const queryListaClientes = 'SELECT * FROM clientes';
         try{
