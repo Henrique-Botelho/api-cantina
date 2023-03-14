@@ -18,4 +18,7 @@ router.put('/:id', verificaUsuario, comprasController.alterarCompra);
 // Rota de excluir a compra
 router.delete('/:id', verificaUsuario, comprasController.excluirCompra);
 
+// Excluir todas as compras de um único cliente
+// router.delete('/compras/:id_cliente', comprasController.excluirComprasPorCliente);
+
 module.exports = router;
