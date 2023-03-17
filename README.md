@@ -18,6 +18,9 @@ Dependências:
 * [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - 9.0.0
 * [bcrypt](https://www.npmjs.com/package/bcrypt) - 5.1.0
 
+Dependências de desenvolvimento:
+* [nodemon](https://www.npmjs.com/package/nodemon) - 2.0.21
+
 ## Clonando esse repositório
 ```cmd
 > git clone https://github.com/Henrique-Botelho/api-cantina
