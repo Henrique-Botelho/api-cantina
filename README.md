@@ -25,11 +25,13 @@ Use `code .` para abrir a pasta no VS Code
 
 ## Instalando as depêndencias
 ```cmd
+> yarn install
 > npm install
 ```
 
 ## Rodando a API
 ```cmd
+> yarn run dev
 > npm run dev
 ```
 
