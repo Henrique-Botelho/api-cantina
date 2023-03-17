@@ -1,7 +1,11 @@
 const pool = require('../database/index');
 
 const produtosController = {
+    /**
+        * Função para pegar todos os produtos do banco de dados.
+        */
     pegaTodosProdutos: async (req, res) => {
+
         const queryPegaTodosProdutos = 'SELECT * FROM produtos';
         try {
             const [response] = await pool.query(queryPegaTodosProdutos);
