@@ -1,17 +1,25 @@
 # **Cantina SENAI API 📚** 
 
-Rest-API com sistema de autenticação e rotas, feita utilizando MySQL2, Express.js, Node.js e bcrypt. 
+Rest-API com sistema de autenticação e rotas, feita com Node JS.
 
+## Instalação
 
-# Instalação
-
-Requisitos
+Ferramentas necessárias:
 * [Node.js](https://nodejs.org/en/)
-* [Git](https://git-scm.com/downloads)
-* [VS Code](https://code.visualstudio.com/download) ou qualquer editor de texto
-* [Express](https://expressjs.com/pt-br/starter/installing.html)
-* [Cors](https://expressjs.com/en/resources/middleware/cors.html)
-* [MySQL2](https://www.npmjs.com/package/mysql2)
+* Um editor de texto ([VS Code](https://code.visualstudio.com/download), [Notepad++](https://notepad-plus-plus.org/downloads/) ou qualquer outro)
+
+Ferramentas recomendadas:
+* Software de versionamento ([Git](https://git-scm.com/downloads))
+
+Dependências:
+* [express](https://expressjs.com/) - 4.18.2
+* [cors](https://www.npmjs.com/package/cors) - 2.8.5
+* [mysql2](https://www.npmjs.com/package/mysql2) - 3.2.0
+* [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - 9.0.0
+* [bcrypt](https://www.npmjs.com/package/bcrypt) - 5.1.0
+
+Dependências de desenvolvimento:
+* [nodemon](https://www.npmjs.com/package/nodemon) - 2.0.21
 
 ## Clonando esse repositório
 ```cmd
@@ -23,38 +31,32 @@ Use `code .` para abrir a pasta no VS Code
 > code .
 ```
 
-## Instalando as depêndencias
+## Instalação das Dependências - Rodando o Projeto:
+Recomendamos utilizar o **yarn**:
+
+### Instalação:
+```cmd
+> yarn install
+```
+
 ```cmd
 > npm install
 ```
 
-## Rodando a API
+### Rodando o projeto:
+Para iniciar o projeto, utilize o comando 
+~~~cmd
+> yarn start
+~~~~ 
+com **npm**:
+~~~cmd
+> npm start
+~~~~ 
+Para iniciar o projeto em ambiente de desenvolvimento, utilizando o pacote [nodemon](https://www.npmjs.com/package/nodemon):
+```cmd
+> yarn run dev
+```
+com **npm**:
 ```cmd
 > npm run dev
-```
-
-## Editando as credenciais do banco
-Para fazer a conexão com o banco, acesse a pasta `config` e abra o arquivo `config.js`.
-
-```js
-const PORT = process.env.PORT || 8080;
-
-const DB_HOST = process.env.DB_HOST || 'localhost';
-const DB_USER = process.env.DB_USER || 'root';
-const DB_PASS = process.env.DB_PASS || '';
-const DB_NAME = process.env.DB_NAME || 'cantina';
-const DB_PORT = process.env.DB_PORT || 3306;
-const SECRET = process.env.SECRET || '';
-const CARDAPIO_KEY = process.env.CARDAPIO_KEY || '';
-
-module.exports = {
-    PORT,
-    DB_HOST,
-    DB_USER,
-    DB_PASS,
-    DB_NAME,
-    DB_PORT,
-    SECRET,
-    CARDAPIO_KEY
-}
 ```
