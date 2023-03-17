@@ -23,40 +23,32 @@ Use `code .` para abrir a pasta no VS Code
 > code .
 ```
 
-## Instalando as depêndencias
+## Instalação das Dependências - Rodando o Projeto:
+Recomendamos utilizar o **yarn**:
+
+### Instalação:
 ```cmd
 > yarn install
+```
+
+```cmd
 > npm install
 ```
 
-## Rodando a API
+### Rodando o projeto:
+Para iniciar o projeto, utilize o comando 
+~~~cmd
+> yarn start
+~~~~ 
+com **npm**:
+~~~cmd
+> npm start
+~~~~ 
+Para iniciar o projeto em ambiente de desenvolvimento, utilizando o pacote [nodemon](https://www.npmjs.com/package/nodemon):
 ```cmd
 > yarn run dev
-> npm run dev
 ```
-
-## Editando as credenciais do banco
-Para fazer a conexão com o banco, acesse a pasta `config` e abra o arquivo `config.js`.
-
-```js
-const PORT = process.env.PORT || 8080;
-
-const DB_HOST = process.env.DB_HOST || 'localhost';
-const DB_USER = process.env.DB_USER || 'root';
-const DB_PASS = process.env.DB_PASS || '';
-const DB_NAME = process.env.DB_NAME || 'cantina';
-const DB_PORT = process.env.DB_PORT || 3306;
-const SECRET = process.env.SECRET || '';
-const CARDAPIO_KEY = process.env.CARDAPIO_KEY || '';
-
-module.exports = {
-    PORT,
-    DB_HOST,
-    DB_USER,
-    DB_PASS,
-    DB_NAME,
-    DB_PORT,
-    SECRET,
-    CARDAPIO_KEY
-}
+com **npm**:
+```cmd
+> npm run dev
 ```
