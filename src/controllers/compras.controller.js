@@ -36,12 +36,15 @@ const comprasController = {
     if (!id_cliente || !compra || !total || !dataHora) {
       return res.status(400).json({ status: 400, message: 'Faltam dados para completar o registro.' });
     }
+    if(typeof id_cliente !== "string" || typeof compra !== "string" || typeof total !== "string"){
+        return res.status(404).json({ status: 400, message: 'Tipo dos dados incorreto'})
+    }
     const queryInsereCompra = 'INSERT INTO compras (id_cliente, compra, total, dataHora) VALUES (?, ?, ?, ?)';
     try {
-      const response = await pool.query(queryInsereCompra, [id_cliente, compra, total, dataHora]);
+      await pool.query(queryInsereCompra, [id_cliente, compra, total, dataHora]);
       res.status(200).json({ status: 200, message: 'Compra criada com sucesso!' });
     } catch (error) {
-      console.log(error);
+      console.log("Não foi possível inserir os dados" + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
@@ -52,15 +55,18 @@ const comprasController = {
     if (!compra || !total || !dataHora) {
       return res.status(400).json({ status: 400, message: 'Faltam dados' });
     }
-    const queryalterarCompra = 'UPDATE compras SET compra=?, total=?, dataHora=? WHERE id=?';
+    if(typeof compra !== "string" || typeof total !== "string"){
+      return res.status(404).json({ status: 400, message: 'Tipo dos dados incorreto'})
+  }
+    const queryAlterarCompra = 'UPDATE compras SET compra=?, total=?, dataHora=? WHERE id=?';
     try {
-      const resultado = await pool.query(queryalterarCompra, [compra, total, dataHora, id]);
+      const resultado = await pool.query(queryAlterarCompra, [compra, total, dataHora, id]);
       if (resultado.affectedRows === 0) {
         return res.status(404).json({ status: 404, message: 'Compra não encontrada' });
       }
       return res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
     } catch (error) {
-      console.log(error);
+      console.log("Erro ao atualizar compra" + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
@@ -75,7 +81,7 @@ const comprasController = {
       }
       return res.status(200).json({ status: 200, message: 'Compra excluída com sucesso!' });
     } catch (error) {
-      console.log(error);
+      console.log("Erro ao deletar compra" + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },

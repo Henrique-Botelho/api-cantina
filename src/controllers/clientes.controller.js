@@ -23,8 +23,7 @@ const clientesController = {
         //Consulta no banco de dados
         const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)'
         try{
-            const response = await pool.query(queryInsereCliente, [nome, telefone]);
-            console.log(response);
+            await pool.query(queryInsereCliente, [nome, telefone]);
             return res.status(201).json({ message: 'Cliente cadastrado com sucesso!' });
             
         } catch(error){
@@ -79,8 +78,7 @@ const clientesController = {
             //Consulta no banco de dados
             const queryAtualizaCliente = 'UPDATE clientes SET nome = (?), numero = (?) WHERE id = (?)';
             try{
-                const response = await pool.query(queryAtualizaCliente, [nome, telefone, id]);
-                console.log(response)
+                await pool.query(queryAtualizaCliente, [nome, telefone, id]);
                 return res.status(200).json({ message: 'Cliente atualizado com sucesso.' });
             } catch(error) {
                 console.log('Erro ao atualizar cliente' + error)
@@ -126,8 +124,7 @@ const clientesController = {
         //Consulta no banco de dados
         const queryDeletaCliente = 'DELETE * FROM clientes WHERE id = (?)';
         try{
-            const [response] = await pool.query(queryDeletaCliente, id);
-            console.log(response);
+            await pool.query(queryDeletaCliente, id);
             return res.status(200).json({ message: 'Cliente deletado com sucesso.' });
         } catch (error) {
             console.log('Erro ao tentar deletar o cliente: ' + error);
