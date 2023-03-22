@@ -16,7 +16,7 @@ const comprasController = {
   listarComprasPorUsuario: async (req, res) => {
     const { numero } = req.params;
     const queryVerificaCliente = 'SELECT id FROM clientes WHERE numero = ?';
-    const queryListarComprasPorUsuario = 'SELECT * FROM compras WHERE id_cliente = ?';
+    const queryListarComprasPorUsuario = 'SELECT compras.compra FROM compras INNER JOIN clientes ON compras.id_cliente = ?';
     try {
       // Encontrando o cliente pelo número
       const [responseUsuario] = await pool.query(queryVerificaCliente, [numero])
