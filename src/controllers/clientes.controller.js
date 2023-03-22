@@ -12,7 +12,7 @@ const clientesController = {
             return res.status(400).json({ status: 400, message: 'Todos os campos devem ser enviados.'});
         }
         // Verificando se quantidade de caracteres inseridos no nome está entre o mínimo e o máximo pedido.
-        if(nome.length > 50 || nome.length < 16){
+        if(nome.length > 50 || nome.length < 8){
             return res.status(400).json({ status: 400, message: 'Quantidade de caracteres para nome e/ou telefone inválidos.' });
         }
         // Verificando se quantidade de caracteres inseridos no telefone está entre o mínimo e o máximo pedido.
