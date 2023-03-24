@@ -85,11 +85,26 @@ const clientesController = {
         const { id } = req.params;
         const { nome, telefone } = req.body;
 
-        if(!id){
-            // Caso não seja inserido nenhum id, reposta ao cliente que é necessário ser inserido.
+        if(!id) {
+        // Caso não seja inserido nenhum id, reposta ao cliente que é necessário ser inserido.
             return res.status(400).json({status: 400, message: 'É necessário informar o id do cliente a ser atualizado.'});
         }
         if(nome && telefone){
+
+        // Verificando se quantidade de caracteres inseridos no nome está entre o mínimo e o máximo pedido.
+        if(nome.length > 50 || nome.length < 8){
+            return res.status(400).json({ status: 400, message: 'Quantidade de caracteres para nome e/ou telefone inválidos.' });
+        }
+        // Verificando se quantidade de caracteres inseridos no telefone está entre o mínimo e o máximo pedido.
+        if(telefone.length < 11 || telefone.length > 11){
+            return res.status(400).json({status: 400, message: 'Quantidade de caracteres inválida'});
+        }
+        // Verificando se todos os dados inseridos são do tipo string.
+        if(typeof nome !== 'string' || typeof telefone !== 'string'){
+            return res.status(400).json({status: 400, message: 'Dados não são do tipo string.'});
+        }
+
+
             // Atualizando os dados "nome" e "numero" da tabela "clientes" onde o id seja igual ao inserido. 
             const queryAtualizaCliente = 'UPDATE clientes SET nome = (?), numero = (?) WHERE id = (?)';
             try{
@@ -114,6 +129,16 @@ const clientesController = {
                 return res.status(400).json({status: 400, message: 'É necessário informar o nome e/ou o telefone do cliente a ser alterado.'});
     
             } else if(!nome){
+
+                // Verificando se quantidade de caracteres inseridos no telefone está entre o mínimo e o máximo pedido.
+                if(telefone.length < 11 || telefone.length > 11){
+                    return res.status(400).json({status: 400, message: 'Quantidade de caracteres inválida'});
+                }
+                // Verificando se os dados inseridos são do tipo string.
+                if(typeof telefone !== 'string'){
+                    return res.status(400).json({status: 400, message: 'Dados não são do tipo string.'});
+                }
+
                 // Atualizando os dados "numero" da tabela "clientes" onde o id seja igual ao inserido.
                 const queryAtualizaCliente = 'UPDATE clientes SET numero = (?) WHERE id = (?)';
                 // Fazendo a operação.
@@ -128,6 +153,17 @@ const clientesController = {
                     return res.status(500).json({status: 500, message: 'Erro no contato com o servidor.'})});
 
             } else {
+
+                // Verificando se quantidade de caracteres inseridos no nome está entre o mínimo e o máximo pedido.
+                if(nome.length > 50 || nome.length < 8){
+                    return res.status(400).json({ status: 400, message: 'Quantidade de caracteres para nome e/ou telefone inválidos.' });
+                }
+
+                // Verificando se os dados inseridos são do tipo string.
+                if(typeof nome !== 'string'){
+                    return res.status(400).json({status: 400, message: 'Dados não são do tipo string.'});
+                }
+
                 // Atualizando os dados "nome" da tabela "clientes" onde o id seja igual ao inserido.
                 const queryAtualizaCliente = 'UPDATE clientes SET nome = (?) WHERE id = (?)';
                 // Fazendo a operação.
