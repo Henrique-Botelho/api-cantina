@@ -165,7 +165,7 @@ const clientesController = {
             // Resposta ao usuario que sua operação não foi realizada.
             console.log('Erro ao tentar deletar o cliente: ' + error);
             // Tratamento de erros durante o "Try"
-            return res.status(500).json({status: 500, message: 'Erro no contato com o servidor, verificar se há compras relacionadas ao cliente.'});
+            return res.status(500).json({status: 500, message: 'Erro no contato com o servidor ou existem compras relacionadas ao cliente.'});
         }
         
     },
