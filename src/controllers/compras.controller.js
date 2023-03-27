@@ -148,7 +148,7 @@ const comprasController = {
       }
       return res.status(200).json({ status: 200, message: 'Compras excluídas com sucesso!' });
     } catch (error) {
-      console.log(error);
+      console.log("Erro ao Deletar todas as compras" + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
