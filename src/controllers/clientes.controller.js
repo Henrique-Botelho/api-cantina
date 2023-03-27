@@ -194,7 +194,6 @@ const clientesController = {
         try{
             // Fazendo a operação.
             const [response] = await pool.query(queryDeletaCliente, id);
-            console.log(response);
             // Resposta ao usuario que a operação foi um sucesso.
             return res.status(200).json({ message: 'Cliente deletado com sucesso.' });
         } catch (error) {
