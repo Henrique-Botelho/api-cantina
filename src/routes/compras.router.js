@@ -19,6 +19,6 @@ router.put('/:id', verificaUsuario, comprasController.alterarCompra);
 router.delete('/:id', verificaUsuario, comprasController.excluirCompra);
 
 // Excluir todas as compras de um único cliente
-router.delete('/compras/:id_cliente', comprasController.excluirComprasPorCliente);
+router.delete('/compras/:numero', comprasController.excluirComprasPorCliente);
 
 module.exports = router;
