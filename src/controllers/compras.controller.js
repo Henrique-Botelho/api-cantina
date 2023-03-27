@@ -1,24 +1,32 @@
 const pool = require("../database/index");
 
+// Criando objeto "comprasController"
 const comprasController = {
-  // Função de pegar todas as compras
+  // Criando a função "listarCompras"
   listarCompras: async (req, res) => {
+    // Utilizando a query para selecionar todas as compras
     const queryListarCompras = 'SELECT * FROM compras';
     try {
+      // Fazendo a operação.
       const [resultado] = await pool.query(queryListarCompras);
+      // Exibindo as compras
       res.status(200).json({ status: 200, resultado });
     } catch (error) {
+      // Resposta ao usuario que sua operação não foi realizada.
       console.log("Erro ao listar compras." + error);
+      // Tratamento de erros durante o "Try"
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
-  // Função de pegar todas as compras de um cliente específico
+  // Criando a função "listarComprasPorUsuario"
   listarComprasPorUsuario: async (req, res) => {
     const { numero } = req.params;
+    // Verificando se existe um cliente registrado com aquele numero (telefone).
     const queryVerificaCliente = 'SELECT id FROM clientes WHERE numero = ?';
+    // Selecionando todas as compras vinculadas com aquele id.
     const queryListarComprasPorUsuario = 'SELECT * FROM compras WHERE compras.id_cliente = ?';
     try {
-      // Encontrando o cliente pelo número
+      // Fazendo a operação.
       const [responseUsuario] = await pool.query(queryVerificaCliente, [numero])
       if (responseUsuario.length === 0) {
         return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' })
