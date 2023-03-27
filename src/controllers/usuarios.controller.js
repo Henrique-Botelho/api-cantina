@@ -63,7 +63,7 @@ const usuariosController = {
 
         // Verificando se todos os campos estão preenchidos
         if (!userName || !senha) {
-            return res.status(400).json({errorCode: 400, message: 'Faltam dados.'});
+            return res.status(400).json({errorCode: 400, message: 'Username ou senha estão vazios.'});
         }
         // Verificando se todos os dados inseridos são do tipo string.
         if (typeof userName !== 'string' || typeof senha !== 'string') {
