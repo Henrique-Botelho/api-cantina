@@ -140,14 +140,14 @@ const comprasController = {
     try {
       const [response] = await pool.query(queryVerificaCliente, numero);
       console.log(response)
-      if (response.length === 0) {
-        return res.status(401).json({status: 401, message: 'Esse cliente não existe.'});
-      }
-      const resultado = await pool.query(queryExcluirCompras, [id_cliente]);
-      if (resultado.affectedRows === 0) {
-        return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para este cliente' });
-      }
-      return res.status(200).json({ status: 200, message: 'Compras excluídas com sucesso!' });
+      // if (response.length === 0) {
+      //   return res.status(401).json({status: 401, message: 'Esse cliente não existe.'});
+      // }
+      // const resultado = await pool.query(queryExcluirCompras, [id_cliente]);
+      // if (resultado.affectedRows === 0) {
+      //   return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para este cliente' });
+      // }
+      // return res.status(200).json({ status: 200, message: 'Compras excluídas com sucesso!' });
     } catch (error) {
       console.log(error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
