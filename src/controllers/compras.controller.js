@@ -36,7 +36,7 @@ const comprasController = {
     if (!id_cliente || !compra || !total || !dataHora) {
       return res.status(400).json({ status: 400, message: 'Faltam dados para completar o registro.' });
     }
-    if(typeof id_cliente !== "string" || typeof compra !== "string" || typeof total !== "string"){
+    if(typeof compra !== "string" || typeof total !== "string"){
         return res.status(404).json({ status: 400, message: 'Tipo dos dados incorreto'})
     }
     const queryInsereCompra = 'INSERT INTO compras (id_cliente, compra, total, dataHora) VALUES (?, ?, ?, ?)';
