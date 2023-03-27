@@ -41,11 +41,12 @@ const comprasController = {
   // Função para criar compra
   criarCompra: async (req, res) => {
     const { id_cliente, compra, total, dataHora } = req.body;
+
     if (!id_cliente || !compra || !total || !dataHora) {
       return res.status(400).json({ status: 400, message: 'Faltam dados para completar o registro.' });
     }
     if(typeof compra !== "string" || typeof total !== "string"){
-        return res.status(404).json({ status: 400, message: 'Tipo dos dados incorreto'})
+        return res.status(404).json({ status: 400, message: 'Tipo dos dados incorreto.'})
     }
     const queryInsereCompra = 'INSERT INTO compras (id_cliente, compra, total, dataHora) VALUES (?, ?, ?, ?)';
     try {
