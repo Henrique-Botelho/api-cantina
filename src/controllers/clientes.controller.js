@@ -181,19 +181,21 @@ const clientesController = {
     },
 
     deletaCliente: async (req, res) => {
-        const { id } = req.params;
         //Recebendo o id do cliente
+        const { id } = req.params;
 
         if(!id){
             // Caso não seja inserido o id, reposta ao cliente que é necessário ser inserido.
             return res.status(400).json({status: 400, message: 'É necessário informar o id do cliente a ser deletado.'});
         }
         
+        const ID = parseInt(id);
+
         // Deletando na tabela cliente, todos os cadastros onde o id seja igual ao inserido.
         const queryDeletaCliente = 'DELETE * FROM clientes WHERE id = (?)';
         try{
             // Fazendo a operação.
-            const [response] = await pool.query(queryDeletaCliente, id);
+            const [response] = await pool.query(queryDeletaCliente, ID);
             // Resposta ao usuario que a operação foi um sucesso.
             return res.status(200).json({ message: 'Cliente deletado com sucesso.' });
         } catch (error) {
