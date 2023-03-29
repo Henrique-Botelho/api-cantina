@@ -53,8 +53,8 @@ const usuariosController = {
 
         } catch (error) {
             // Tratamento de erros durante o "Try"
-            res.status(500).json({errorCode:500, message: 'Erro no servidor.'});
             console.log(error);
+            return res.status(500).json({errorCode:500, message: 'Erro no servidor.'});
         }
     },
     login: async (req, res) => {
