@@ -19,7 +19,7 @@ const comprasController = {
     }
   },
   // Criando a função "listarComprasPorUsuario"
-  listarComprasPorUsuario: async (req, res) => {
+  listarComprasPorCliente: async (req, res) => {
     // Recebendo "numero" dos parâmetros
     const { numero } = req.params;
     // Selecionando clientes com o id vinculado ao numero inserido.
@@ -30,15 +30,15 @@ const comprasController = {
       // Verificando se existe um cliente registrado com aquele "numero" (telefone).
       const [responseUsuario] = await pool.query(queryVerificaCliente, [numero])
       if (responseUsuario.length === 0) {
-      // Resposta ao usuario que nenhum usuario foi encontrado com aquele telefone.
-        return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' })
+      // Resposta ao usuario que nenhum cliente foi encontrado com aquele telefone.
+        return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' })
       }
       const [response] = await pool.query(queryListarComprasPorUsuario, [responseUsuario[0].id])
       // Reposta ao cliente com as compras listadas
       return res.status(200).json({ status: 200, response });
     } catch (error) {
       // Resposta ao usuario que sua operação não foi realizada.
-      console.log("Erro ao listar compras do usuário." + error);
+      console.log("Erro ao listar compras do cliente." + error);
       // Tratamento de erros durante o "Try"
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' })
     }
@@ -111,14 +111,14 @@ const comprasController = {
     // Recebendo "id" dos parâmetros
     const { id } = req.params;
 
-    console.log(typeof id);
+    const queryVerificaId = 'SELECT * FROM compras WHERE id_cliente'
 
     // Deletando compras onde o "id" seja igual ao inserido.
     const queryExcluirCompra = 'DELETE FROM compras WHERE id=?';
     try {
       // Realizando a operação de excluir a compra.
-      const resultado = await pool.query(queryExcluirCompra, [id]);
-      if (resultado.affectedRows === 0) {
+      const [resultado] = await pool.query(queryExcluirCompra, [id]);
+      if (!resultado) {
         // Resposta ao usuário que nehuma compra foi encontrada.
         return res.status(404).json({ status: 404, message: 'Compra não encontrada' });
       }
