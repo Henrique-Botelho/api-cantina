@@ -143,7 +143,6 @@ const comprasController = {
       if (response.length === 0) {
         return res.status(401).json({ status: 401, message: 'Este cliente não existe.' });
       }
-      return res.status(200).json(response);
       const id_cliente = response[0].id;
       const resultado = await pool.query(queryExcluirCompras, [id_cliente]);
       if (resultado.affectedRows === 0) {
