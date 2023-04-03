@@ -100,20 +100,20 @@ const clientesController = {
             return res.status(400).json({status: 400, message: 'É necessário informar o id do cliente a ser atualizado.'});
         }
 
-        const verificaID = 'SELECT * FROM clientes WHERE id = (?)';
+        // const verificaID = 'SELECT * FROM clientes WHERE id = (?)';
 
-        const verificaCliente = async () => {
-            const resposta = await pool.query(verificaID, id).then(res.status(200).json(resposta)).catch((error) => {
-                console.log('Erro ao verificar cliente' + error);
-                return res.status(500).json({ message: 'Cliente inexistente ou problemas com servidor.'});
-            });
-        };
+        // const verificaCliente = async () => {
+        //     const resposta = await pool.query(verificaID, id).then(res.status(200).json(resposta)).catch((error) => {
+        //         console.log('Erro ao verificar cliente' + error);
+        //         return res.status(500).json({ message: 'Cliente inexistente ou problemas com servidor.'});
+        //     });
+        // };
 
-        try {
-            verificaCliente();
-        } catch (error) {
-            return res.status(400).json({message : 'Erro ao verificar cliente.'});
-        };
+        // try {
+        //     verificaCliente();
+        // } catch (error) {
+        //     return res.status(400).json({message : 'Erro ao verificar cliente.'});
+        // };
 
         if(nome && telefone){
 
