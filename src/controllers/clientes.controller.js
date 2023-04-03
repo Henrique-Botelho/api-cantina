@@ -191,9 +191,10 @@ const clientesController = {
         const queryDeletaCliente = 'DELETE FROM clientes WHERE id = ?';
     
         try {
+
             const [response] = await pool.query(queryDeletaCliente, ID);
             
-            if(response) return res.json({ message: 'Cliente deletado com sucesso.' });
+            return res.json({ message: 'Cliente deletado com sucesso.' });
 
         } catch (error) {
             console.log('Erro ao tentar deletar o cliente: ' + error);
