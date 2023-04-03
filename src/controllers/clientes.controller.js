@@ -192,12 +192,9 @@ const clientesController = {
     
         try {
             const [response] = await pool.query(queryDeletaCliente, ID);
-    
-            if (!response.affectedRows) {
-                return res.json({ message: 'Não foi possível encontrar o cliente com o ID informado.' }).status(404);
-            }
-    
-            return res.json({ message: 'Cliente deletado com sucesso.' });
+            
+            if(response) return res.json({ message: 'Cliente deletado com sucesso.' });
+
         } catch (error) {
             console.log('Erro ao tentar deletar o cliente: ' + error);
             return res.json({ message: 'Erro no contato com o servidor ou existem compras relacionadas ao cliente.' }).status(500);
