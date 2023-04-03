@@ -181,8 +181,8 @@ const clientesController = {
     },
 
     deletaCliente: async (req, res) => {
-        //Recebendo o id do cliente
         const { id } = req.params;
+<<<<<<< Updated upstream
 
         if(!id){
             // Caso não seja inserido o id, reposta ao cliente que é necessário ser inserido.
@@ -196,14 +196,30 @@ const clientesController = {
             const [response] = await pool.query(queryDeletaCliente, id);
             // Resposta ao usuario que a operação foi um sucesso.
             if(response) return res.status(200).json({ message: 'Cliente deletado com sucesso.' });
-        } catch (error) {
-            // Resposta ao usuario que sua operação não foi realizada.
-            console.log('Erro ao tentar deletar o cliente: ' + error);
-            // Tratamento de erros durante o "Try"
-            return res.status(500).json({status: 500, message: 'Erro no contato com o servidor ou existem compras relacionadas ao cliente.'});
+=======
+        const ID = parseInt(id);
+    
+        if (!ID) {
+            return res.json({ message: 'É necessário informar o id do cliente a ser deletado.' }).status(400);
         }
-        
-    },
+    
+        const queryDeletaCliente = 'DELETE FROM clientes WHERE id = ?';
+    
+        try {
+            const [response] = await pool.query(queryDeletaCliente, ID);
+    
+            if (!response.affectedRows) {
+                return res.json({ message: 'Não foi possível encontrar o cliente com o ID informado.' }).status(404);
+            }
+    
+            return res.json({ message: 'Cliente deletado com sucesso.' });
+>>>>>>> Stashed changes
+        } catch (error) {
+            console.log('Erro ao tentar deletar o cliente: ' + error);
+            return res.json({ message: 'Erro no contato com o servidor ou existem compras relacionadas ao cliente.' }).status(500);
+        }
+    }
+    
 };
 
 module.exports = clientesController;
