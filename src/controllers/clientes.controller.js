@@ -100,6 +100,17 @@ const clientesController = {
             return res.status(400).json({status: 400, message: 'É necessário informar o id do cliente a ser atualizado.'});
         }
 
+        const verificaID = 'SELECT * FROM clientes WHERE id = (?)';
+
+        const verificaCliente = async () => {
+            const resposta = await pool.query(verificaID, id).then(res.status(200).json(resposta)).catch((error) => {
+                console.log('Erro ao verificar cliente' + error);
+                return res.status(500).json({ message: 'Cliente inexistente ou problemas com servidor.'});
+            });
+        };
+
+        verificaCliente();
+
         if(nome && telefone){
 
         // Verificando se quantidade de caracteres inseridos no nome está entre o mínimo e o máximo pedido.
@@ -217,7 +228,6 @@ const clientesController = {
         const queryDeletaCliente = 'DELETE FROM clientes WHERE id = ?';
     
         try {
-
             const [response] = await pool.query(queryDeletaCliente, ID);
             return res.status(200).json({ message: 'Cliente deletado com sucesso.' });
 
