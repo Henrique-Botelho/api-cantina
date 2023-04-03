@@ -96,7 +96,7 @@ const clientesController = {
         const { nome, telefone } = req.body;
 
         if(!id) {
-        // Caso não seja inserido nenhum id, reposta ao cliente que é necessário ser inserido.
+            // Caso não seja inserido nenhum id, reposta ao cliente que é necessário ser inserido.
             return res.status(400).json({status: 400, message: 'É necessário informar o id do cliente a ser atualizado.'});
         }
 
@@ -109,7 +109,11 @@ const clientesController = {
             });
         };
 
-        verificaCliente();
+        try {
+            verificaCliente();
+        } catch (error) {
+            return res.status(400).json({message : 'Erro ao verificar cliente.'});
+        };
 
         if(nome && telefone){
 
