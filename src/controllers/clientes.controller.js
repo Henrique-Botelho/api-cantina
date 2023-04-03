@@ -182,21 +182,6 @@ const clientesController = {
 
     deletaCliente: async (req, res) => {
         const { id } = req.params;
-<<<<<<< Updated upstream
-
-        if(!id){
-            // Caso não seja inserido o id, reposta ao cliente que é necessário ser inserido.
-            return res.status(400).json({status: 400, message: 'É necessário informar o id do cliente a ser deletado.'});
-        }
-
-        // Deletando na tabela cliente, todos os cadastros onde o id seja igual ao inserido.
-        const queryDeletaCliente = 'DELETE * FROM clientes WHERE id = (?)';
-        try{
-            // Fazendo a operação.
-            const [response] = await pool.query(queryDeletaCliente, id);
-            // Resposta ao usuario que a operação foi um sucesso.
-            if(response) return res.status(200).json({ message: 'Cliente deletado com sucesso.' });
-=======
         const ID = parseInt(id);
     
         if (!ID) {
@@ -213,7 +198,6 @@ const clientesController = {
             }
     
             return res.json({ message: 'Cliente deletado com sucesso.' });
->>>>>>> Stashed changes
         } catch (error) {
             console.log('Erro ao tentar deletar o cliente: ' + error);
             return res.json({ message: 'Erro no contato com o servidor ou existem compras relacionadas ao cliente.' }).status(500);
