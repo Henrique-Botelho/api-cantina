@@ -26,8 +26,9 @@ const clientesController = {
         if(telefone.length < 11 || telefone.length > 11){
             return res.status(400).json({status: 400, message: 'Quantidade de caracteres inválida'});
         }
+
         if (!validarNome.test(nome)) {
-            return res.status(400).json({ status: 400, message: 'Nome deve conter apenas letras, espaços e hífens.' });
+            return res.status(400).json({ status: 400, message: 'Nome deve conter apenas letras e espaços.' });
         }
         if (!validarTelefone.test(telefone)) {
             return res.status(400).json({ status: 400, message: 'Telefone deve conter apenas números.' });
@@ -39,7 +40,7 @@ const clientesController = {
 
         // Inserindo os dados do cliente no banco de dados.
         try {
-            const queryInsereCliente = 'INSERT INTO clientes (nome, telefone) VALUES (?, ?)';
+            const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)';
             const response = await pool.query(queryInsereCliente, [nome, telefone]);
             console.log(response);
             return res.status(201).json({ message: 'Cliente cadastrado com sucesso!' });
@@ -76,7 +77,7 @@ const clientesController = {
         }
 
         // Selecionando "nome" e "telefone" na tabela "clientes" onde o "id" seja igual ao inserido. 
-        const queryListaCliente = 'SELECT nome, telefone FROM clientes WHERE id = (?)';
+        const queryListaCliente = 'SELECT nome, numero FROM clientes WHERE id = (?)';
         try {
             // Fazendo a operação.
             const [response] = await pool.query(queryListaCliente, id);
@@ -111,6 +112,13 @@ const clientesController = {
         // Verificando se todos os dados inseridos são do tipo string.
         if(typeof nome !== 'string' || typeof telefone !== 'string'){
             return res.status(400).json({status: 400, message: 'Dados não são do tipo string.'});
+        }
+
+        if (!validarNome.test(nome)) {
+            return res.status(400).json({ status: 400, message: 'Nome deve conter apenas letras e espaços.' });
+        }
+        if (!validarTelefone.test(telefone)) {
+            return res.status(400).json({ status: 400, message: 'Telefone deve conter apenas números.' });
         }
 
 
@@ -148,6 +156,10 @@ const clientesController = {
                     return res.status(400).json({status: 400, message: 'Dados não são do tipo string.'});
                 }
 
+                if (!validarTelefone.test(telefone)) {
+                    return res.status(400).json({ status: 400, message: 'Telefone deve conter apenas números.' });
+                }
+
                 // Atualizando os dados "numero" da tabela "clientes" onde o id seja igual ao inserido.
                 const queryAtualizaCliente = 'UPDATE clientes SET numero = (?) WHERE id = (?)';
                 // Fazendo a operação.
@@ -171,6 +183,10 @@ const clientesController = {
                 // Verificando se os dados inseridos são do tipo string.
                 if(typeof nome !== 'string'){
                     return res.status(400).json({status: 400, message: 'Dados não são do tipo string.'});
+                }
+
+                if (!validarNome.test(nome)) {
+                    return res.status(400).json({ status: 400, message: 'Nome deve conter apenas letras e espaços.' });
                 }
 
                 // Atualizando os dados "nome" da tabela "clientes" onde o id seja igual ao inserido.
@@ -202,7 +218,7 @@ const clientesController = {
         try {
 
             const [response] = await pool.query(queryDeletaCliente, ID);
-            
+
             return res.json({ message: 'Cliente deletado com sucesso.' });
 
         } catch (error) {
