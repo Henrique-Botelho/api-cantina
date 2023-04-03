@@ -1,6 +1,13 @@
 const { response } = require('express');
 const pool = require('../database/index');
 
+// Expressão regular para validar se o nome contém apenas letras, espaços e hífens.
+const validarNome = /^[a-zA-ZÀ-ú]+([ '-][a-zA-ZÀ-ú]+)*$/;
+
+// Expressão regular para validar se o telefone contém apenas números.
+const validarTelefone = /^[0-9]{11}$/;
+
+
 // Criando objeto "clientesController"
 const clientesController = {
     cadastraCliente: async (req, res) => {
@@ -19,23 +26,25 @@ const clientesController = {
         if(telefone.length < 11 || telefone.length > 11){
             return res.status(400).json({status: 400, message: 'Quantidade de caracteres inválida'});
         }
+        if (!validarNome.test(nome)) {
+            return res.status(400).json({ status: 400, message: 'Nome deve conter apenas letras, espaços e hífens.' });
+        }
+        if (!validarTelefone.test(telefone)) {
+            return res.status(400).json({ status: 400, message: 'Telefone deve conter apenas números.' });
+        }
         // Verificando se todos os dados inseridos são do tipo string.
         if(typeof nome !== 'string' || typeof telefone !== 'string'){
             return res.status(400).json({status: 400, message: 'Dados não são do tipo string.'});
         }
 
         // Inserindo os dados do cliente no banco de dados.
-        const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)'
-        try{
+        try {
+            const queryInsereCliente = 'INSERT INTO clientes (nome, telefone) VALUES (?, ?)';
             const response = await pool.query(queryInsereCliente, [nome, telefone]);
             console.log(response);
-            // Resposta ao usuario que seu cadastro foi um sucesso.
             return res.status(201).json({ message: 'Cliente cadastrado com sucesso!' });
-            
-        } catch(error){
-            // Resposta ao usuario que seu cadastro não foi realizado.
+        } catch(error) {
             console.log('Erro ao cadastrar cliente' + error);
-            // Tratamento de erros durante o "Try"
             return res.status(500).json({status: 500, message: 'Erro no contato com o servidor.'});
         }
     },
