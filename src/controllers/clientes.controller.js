@@ -192,7 +192,7 @@ const clientesController = {
         }
 
         // Deletando na tabela cliente, todos os cadastros onde o id seja igual ao inserido.
-        const queryDeletaCliente = 'DELETE * FROM clientes WHERE id = ?';
+        const queryDeletaCliente = 'DELETE * FROM clientes WHERE id = (?)';
         try{
             // Fazendo a operação.
             const [response] = await pool.query(queryDeletaCliente, ID);
