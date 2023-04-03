@@ -99,7 +99,7 @@ const clientesController = {
         // Caso não seja inserido nenhum id, reposta ao cliente que é necessário ser inserido.
             return res.status(400).json({status: 400, message: 'É necessário informar o id do cliente a ser atualizado.'});
         }
-        
+
         if(nome && telefone){
 
         // Verificando se quantidade de caracteres inseridos no nome está entre o mínimo e o máximo pedido.
@@ -219,12 +219,11 @@ const clientesController = {
         try {
 
             const [response] = await pool.query(queryDeletaCliente, ID);
-
-            return res.json({ message: 'Cliente deletado com sucesso.' });
+            return res.status(200).json({ message: 'Cliente deletado com sucesso.' });
 
         } catch (error) {
             console.log('Erro ao tentar deletar o cliente: ' + error);
-            return res.json({ message: 'Erro no contato com o servidor ou existem compras relacionadas ao cliente.' }).status(500);
+            return res.status(400).json({ message: 'Erro no contato com o servidor ou existem compras relacionadas ao cliente.' }).status(500);
         }
     }
     
