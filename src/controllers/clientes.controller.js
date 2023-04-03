@@ -99,6 +99,7 @@ const clientesController = {
         // Caso não seja inserido nenhum id, reposta ao cliente que é necessário ser inserido.
             return res.status(400).json({status: 400, message: 'É necessário informar o id do cliente a ser atualizado.'});
         }
+        
         if(nome && telefone){
 
         // Verificando se quantidade de caracteres inseridos no nome está entre o mínimo e o máximo pedido.
