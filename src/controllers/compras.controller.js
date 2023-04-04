@@ -120,7 +120,7 @@ const comprasController = {
       const resultado = await pool.query(queryExcluirCompra, [id]);
       if (resultado.affectedRows === 0) {
         // Resposta ao usuário que nehuma compra foi encontrada.
-        return res.status(404).json({ status: 404, message: 'Compra não encontrada' });
+        return res.status(404).json({ status: 404, message: 'Compra não encontrada ou já foi excluída.' });
       }
       // Resposta ao usuário que a compra foi excluída com sucesso.
       return res.status(204).send();
@@ -131,7 +131,6 @@ const comprasController = {
       return res.status(500).json({ status: 500, message: 'Erro ao excluir a compra.' });
     }
   },
-
 
   // Criando a função "excluirComprasPorCliente"
   excluirComprasPorCliente: async (req, res) => {
