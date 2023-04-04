@@ -30,11 +30,12 @@ const clientesController = {
         }
 
         try {
-            const queryVerificaTelefone = 'SELECT COUNT(*) as total FROM clientes WHERE numero = ?';
-            const response = await pool.query(queryVerificaTelefone, [telefone]);
+            const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE nome = ? AND numero = ?';
+            const response = await pool.query(queryVerificaCliente, [nome, telefone]);
             const totalClientes = response[0].total;
+
             if (totalClientes > 0) {
-                return res.status(400).json({ status: 400, message: 'Telefone já cadastrado.' });
+                return res.status(400).json({ status: 400, message: 'Cliente já cadastrado.' });
             }
 
             const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)';
@@ -45,7 +46,6 @@ const clientesController = {
             console.log('Erro ao cadastrar cliente' + error);
             return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
         }
-
     },
 
     listaClientes: async (req, res) => {
