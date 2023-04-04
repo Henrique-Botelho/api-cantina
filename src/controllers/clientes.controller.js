@@ -53,6 +53,7 @@ const clientesController = {
     listaClientes: async (req, res) => {
         // Selecionando todos os clientes na tabela clientes.
         const queryListaClientes = 'SELECT * FROM clientes';
+        
         try{
             // Fazendo a operação.
             const [response] = await pool.query(queryListaClientes);
