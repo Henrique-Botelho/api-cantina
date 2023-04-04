@@ -109,11 +109,11 @@ const clientesController = {
         try {
             const verificaCliente = async () => {
                 const response = await pool.query(verificaID, id);
-                console.log(response)
 
-                // if (!response) {
-                //     return res.status(404).json({ message: 'Cliente não cadastrado. Falha na atualização.' });
-                // }
+                if (!response) {
+                    console.log('Id não encontrado.')
+                    return res.status(404).json({ message: 'Cliente não cadastrado. Falha na atualização.' });
+                }
             };
             verificaCliente();
 
