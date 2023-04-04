@@ -35,8 +35,7 @@ const clientesController = {
         // que o cliente já está cadastrado, e uma mensagem de erro é retornada com o código de status 400 (Bad Request). 
         // Se a consulta retornar zero clientes, o novo cliente é inserido normalmente.
         try {
-            // Verificar se já existe um cliente com o mesmo nome e telefone
-            const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE nome = ? AND telefone = ?';
+            const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE nome = ? AND numero = ?';
             const response = await pool.query(queryVerificaCliente, [nome, telefone]);
             const totalClientes = response[0].total;
 
@@ -44,7 +43,6 @@ const clientesController = {
                 return res.status(400).json({ status: 400, message: 'Cliente já cadastrado.' });
             }
 
-            // Inserir o novo cliente
             const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)';
             const response2 = await pool.query(queryInsereCliente, [nome, telefone]);
 
