@@ -30,7 +30,7 @@ const comprasController = {
       // Verificando se existe um cliente registrado com aquele "numero" (telefone).
       const [responseUsuario] = await pool.query(queryVerificaCliente, [numero])
       if (responseUsuario.length === 0) {
-      // Resposta ao usuario que nenhum usuario foi encontrado com aquele telefone.
+        // Resposta ao usuario que nenhum usuario foi encontrado com aquele telefone.
         return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' })
       }
       const [response] = await pool.query(queryListarComprasPorUsuario, [responseUsuario[0].id])
@@ -47,16 +47,16 @@ const comprasController = {
   criarCompra: async (req, res) => {
     // Recebendo as variáveis "id_cliente", "compra", "total" e "dataHora" do body.
     const { id_cliente, compra, total, dataHora } = req.body;
-  
+
     // Verificando se os campos estão preenchidos.
     if (!id_cliente || !compra || !total || !dataHora) {
       // Resposta ao cliente que faltam campos para preencher.
       return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
     }
     // Verificando se todos os dados são do tipo string.
-    if(typeof compra !== "string" || typeof total !== "string"){
+    if (typeof compra !== "string" || typeof total !== "string") {
       // Resposta ao cliente que os dados são do tipo incorreto.
-        return res.status(404).json({ status: 400, message: 'Tipo dos dados incorreto.'})
+      return res.status(404).json({ status: 400, message: 'Tipo dos dados incorreto.' })
     }
     // Inserindo uma nova compra na tabela "compras".
     const queryInsereCompra = 'INSERT INTO compras (id_cliente, compra, total, dataHora) VALUES (?, ?, ?, ?)';
@@ -78,17 +78,17 @@ const comprasController = {
     const { id } = req.params;
     // Recebendo as variáveis "compra", "total" e "dataHora" do body.
     const { compra, total, dataHora } = req.body;
-    
+
     // Verificando se os campos estão preenchidos.
     if (!compra || !total || !dataHora) {
       // Resposta ao cliente que faltam campos para preencher.
       return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
     }
     // Verificando se todos os dados são do tipo string.
-    if(typeof compra !== "string" || typeof total !== "string"){
+    if (typeof compra !== "string" || typeof total !== "string") {
       // Resposta ao cliente que os dados são do tipo incorreto.
-      return res.status(404).json({ status: 400, message: 'Tipo dos dados incorreto'})
-  }
+      return res.status(404).json({ status: 400, message: 'Tipo dos dados incorreto' })
+    }
     // Alterando os dados de uma compra na tabela "compras".
     const queryAlterarCompra = 'UPDATE compras SET compra=?, total=?, dataHora=? WHERE id=?';
     try {
@@ -123,19 +123,20 @@ const comprasController = {
         return res.status(404).json({ status: 404, message: 'Compra não encontrada' });
       }
       // Resposta ao usuário que a compra foi excluída com sucesso.
-      return res.status(200).json({ status: 200, message: 'Compra excluída com sucesso!' });
+      return res.status(204).send();
     } catch (error) {
       // Resposta de erro ao deletar a compra.
       console.log("Erro ao deletar compra" + error);
       // Tratamento de erros durante o "Try"
-      return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
+      return res.status(500).json({ status: 500, message: 'Erro ao excluir a compra.' });
     }
   },
-  
+
+
   // Criando a função "excluirComprasPorCliente"
   excluirComprasPorCliente: async (req, res) => {
     const { numero } = req.params;
-  
+
     const queryVerificaCliente = 'SELECT id FROM clientes WHERE numero=?';
     const queryExcluirCompras = 'DELETE FROM compras WHERE id_cliente=?';
     try {
