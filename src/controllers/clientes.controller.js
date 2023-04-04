@@ -10,7 +10,7 @@ const validarTelefone = /^[0-9]{11}$/;
 
 // Criando objeto "clientesController"
 const clientesController = {
-    cadastroCliente: async (req, res) => {
+    cadastraCliente: async (req, res) => {
         const { nome, telefone } = req.body;
 
         if (!nome || !telefone) {
@@ -29,6 +29,11 @@ const clientesController = {
             return res.status(400).json({ status: 400, message: 'Telefone deve conter apenas números.' });
         }
 
+
+        // Neste exemplo, adicionamos uma nova consulta queryVerificaCliente antes da inserção para verificar se já 
+        // existe um cliente com o mesmo nome e telefone. Se a consulta retornar um totalClientes maior que zero, significa 
+        // que o cliente já está cadastrado, e uma mensagem de erro é retornada com o código de status 400 (Bad Request). 
+        // Se a consulta retornar zero clientes, o novo cliente é inserido normalmente.
         try {
             // Verificar se já existe um cliente com o mesmo nome e telefone
             const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE nome = ? AND numero = ?';
