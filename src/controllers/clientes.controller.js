@@ -30,7 +30,7 @@ const clientesController = {
         }
 
         try {
-            const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE nome = ? AND numero = ?';
+            const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE nome = ? AND telefone = ?';
             const response = await pool.query(queryVerificaCliente, [nome, telefone]);
             const totalClientes = response[0].total;
 
@@ -38,7 +38,7 @@ const clientesController = {
                 return res.status(400).json({ status: 400, message: 'Cliente já cadastrado.' });
             }
 
-            const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)';
+            const queryInsereCliente = 'INSERT INTO clientes (nome, telefone) VALUES (?, ?)';
             const response2 = await pool.query(queryInsereCliente, [nome, telefone]);
 
             return res.status(201).json({ message: 'Cliente cadastrado com sucesso!' });
