@@ -12,41 +12,41 @@ const validarTelefone = /^[0-9]{11}$/;
 const clientesController = {
     cadastraCliente: async (req, res) => {
         const { nome, telefone } = req.body;
-
+    
         if (!nome || !telefone) {
             return res.status(400).json({ status: 400, message: 'Todos os campos devem ser enviados.' });
         }
-
+    
         if (nome.length > 50 || nome.length < 8 || telefone.length !== 11) {
             return res.status(400).json({ status: 400, message: 'Quantidade de caracteres para nome e/ou telefone inválidos.' });
         }
-
+    
         if (!validarNome.test(nome)) {
             return res.status(400).json({ status: 400, message: 'Nome deve conter apenas letras e espaços.' });
         }
-
+    
         if (!validarTelefone.test(telefone)) {
             return res.status(400).json({ status: 400, message: 'Telefone deve conter apenas números.' });
         }
-
+    
         try {
-            const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE nome = ? AND numero = ?';
+            const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE nome = ? OR numero = ?';
             const response = await pool.query(queryVerificaCliente, [nome, telefone]);
             const totalClientes = response[0].total;
-
+    
             if (totalClientes > 0) {
                 return res.status(400).json({ status: 400, message: 'Cliente já cadastrado.' });
             }
-
+    
             const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)';
             const response2 = await pool.query(queryInsereCliente, [nome, telefone]);
-
+    
             return res.status(201).json({ message: 'Cliente cadastrado com sucesso!' });
         } catch (error) {
             console.log('Erro ao cadastrar cliente' + error);
             return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
         }
-    },
+    },    
 
     listaClientes: async (req, res) => {
         // Selecionando todos os clientes na tabela clientes.
