@@ -34,7 +34,7 @@ const clientesController = {
         // Se a consulta retornar zero clientes, o novo cliente é inserido normalmente.
         try {
             // Verificar se já existe um cliente com o mesmo nome e telefone
-            const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE nome = ? AND numero = ?';
+            const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE nome = ? AND telefone = ?';
             const response = await pool.query(queryVerificaCliente, [nome, telefone]);
             const totalClientes = response[0].total;
 
