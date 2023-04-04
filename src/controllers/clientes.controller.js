@@ -29,6 +29,11 @@ const clientesController = {
             return res.status(400).json({ status: 400, message: 'Telefone deve conter apenas números.' });
         }
 
+
+        // Neste exemplo, adicionamos uma nova consulta queryVerificaCliente antes da inserção para verificar se já 
+        // existe um cliente com o mesmo nome e telefone. Se a consulta retornar um totalClientes maior que zero, significa 
+        // que o cliente já está cadastrado, e uma mensagem de erro é retornada com o código de status 400 (Bad Request). 
+        // Se a consulta retornar zero clientes, o novo cliente é inserido normalmente.
         try {
             const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE nome = ? AND numero = ?';
             const response = await pool.query(queryVerificaCliente, [nome, telefone]);
