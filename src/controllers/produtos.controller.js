@@ -32,7 +32,7 @@ const produtosController = {
         categoria = categoria.toLowerCase();
 
         // Selecionando todos os produtos = a categoria selecionada
-        const queryPegaProdutoCategoria = 'SELECT * FROM produtos WHERE categoria= ?';
+        const queryPegaProdutoCategoria = 'SELECT * FROM produtos WHERE categoria= ? ORDER BY nome';
         try {
             // Realizando a operação
             const [response] = await pool.query(queryPegaProdutoCategoria, [categoria]);
