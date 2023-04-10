@@ -30,6 +30,7 @@ const clientesController = {
         }
     
         try {
+            //A consulta usa a cláusula COUNT(*) para contar o número de linhas na tabela "clientes" que correspondem aos valores especificados para o nome e número do cliente.
             const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE numero = ?';
             const response = await pool.query(queryVerificaCliente, [numero]);
             const totalClientes = response[0].total;
