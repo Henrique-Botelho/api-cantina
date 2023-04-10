@@ -5,33 +5,33 @@ const pool = require('../database/index');
 const validarNome = /^[a-zA-ZÀ-ú]+([ '-][a-zA-ZÀ-ú]+)*$/;
 
 // Expressão regular para validar se o telefone contém apenas números.
-const validarTelefone = /^[0-9]{11}$/;
+const validarNumero = /^[0-9]{11}$/;
 
 
 // Criando objeto "clientesController"
 const clientesController = {
     cadastraCliente: async (req, res) => {
-        const { nome, telefone } = req.body;
+        const { nome, numero } = req.body;
     
-        if (!nome || !telefone) {
+        if (!nome || !numero) {
             return res.status(400).json({ status: 400, message: 'Todos os campos devem ser enviados.' });
         }
     
-        if (nome.length > 50 || nome.length < 8 || telefone.length !== 11) {
-            return res.status(400).json({ status: 400, message: 'Quantidade de caracteres para nome e/ou telefone inválidos.' });
+        if (nome.length > 50 || nome.length < 8 || numero.length !== 11) {
+            return res.status(400).json({ status: 400, message: 'Quantidade de caracteres para nome e/ou numero inválidos.' });
         }
     
         if (!validarNome.test(nome)) {
             return res.status(400).json({ status: 400, message: 'Nome deve conter apenas letras e espaços.' });
         }
     
-        if (!validarTelefone.test(telefone)) {
-            return res.status(400).json({ status: 400, message: 'Telefone deve conter apenas números.' });
+        if (!validarNumero.test(numero)) {
+            return res.status(400).json({ status: 400, message: 'Numero deve conter apenas números.' });
         }
     
         try {
             const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE nome = ? OR numero = ?';
-            const response = await pool.query(queryVerificaCliente, [nome, telefone]);
+            const response = await pool.query(queryVerificaCliente, [nome, numero]);
             const totalClientes = response[0].total;
     
             if (totalClientes > 0) {
@@ -39,7 +39,7 @@ const clientesController = {
             }
     
             const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)';
-            const response2 = await pool.query(queryInsereCliente, [nome, telefone]);
+            const response2 = await pool.query(queryInsereCliente, [nome, numero]);
     
             return res.status(201).json({ message: 'Cliente cadastrado com sucesso!' });
         } catch (error) {
