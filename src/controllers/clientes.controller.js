@@ -91,7 +91,7 @@ const clientesController = {
 
     atualizaCliente: async (req, res) => {
         //Recebendo o id do cliente
-        const { id } = req.params.id;
+        const { id } = req.params;
         const { nome, numero } = req.body;
 
         if (!id) {
