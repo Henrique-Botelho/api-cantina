@@ -30,8 +30,8 @@ const clientesController = {
         }
     
         try {
-            const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE nome = ? OR numero = ?';
-            const response = await pool.query(queryVerificaCliente, [nome, numero]);
+            const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE numero = ?';
+            const response = await pool.query(queryVerificaCliente, numero);
             const totalClientes = response[0].total;
     
             if (totalClientes > 0) {
