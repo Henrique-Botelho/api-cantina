@@ -91,7 +91,7 @@ const clientesController = {
 
     atualizaCliente: async (req, res) => {
         //Recebendo o id do cliente
-        const { id } = req.params;
+        const { id } = req.params.id;
         const { nome, numero } = req.body;
 
         if (!id) {
@@ -144,7 +144,7 @@ const clientesController = {
             const queryAtualizaCliente = 'UPDATE clientes SET nome = (?), numero = (?) WHERE id = (?)';
             try {
                 // Fazendo a operação.
-                const response = await pool.query(queryAtualizaCliente, [id, nome, numero]);
+                const response = await pool.query(queryAtualizaCliente, [nome, numero, id]);
                 console.log(response)
                 // Resposta ao usuario que a operação foi um sucesso.
                 return res.status(200).json({ message: 'Cliente atualizado com sucesso.' });
