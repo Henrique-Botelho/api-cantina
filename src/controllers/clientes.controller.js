@@ -33,6 +33,7 @@ const clientesController = {
             const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE nome = ? AND numero = ?';
             const response = await pool.query(queryVerificaCliente, [nome, numero]);
             const totalClientes = response[0].total;
+            console.log(totalClientes);
     
             if (totalClientes > 0) {
                 return res.status(400).json({ status: 400, message: 'Cliente já cadastrado.' });
