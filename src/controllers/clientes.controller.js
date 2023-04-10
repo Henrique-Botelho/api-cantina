@@ -144,7 +144,7 @@ const clientesController = {
             const queryAtualizaCliente = 'UPDATE clientes SET nome = (?), numero = (?) WHERE id = (?)';
             try {
                 // Fazendo a operação.
-                const response = await pool.query(queryAtualizaCliente, [nome, numero, id]);
+                const response = await pool.query(queryAtualizaCliente, [id, nome, numero]);
                 console.log(response)
                 // Resposta ao usuario que a operação foi um sucesso.
                 return res.status(200).json({ message: 'Cliente atualizado com sucesso.' });
