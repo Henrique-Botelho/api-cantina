@@ -105,7 +105,7 @@ const clientesController = {
             const verificaCliente = async () => {
                 const response = await pool.query(verificaID, id);
             
-                if (response.length === 0) {
+                if (!response.length) {
                     return res.status(404).json({ message: 'Cliente não cadastrado. Falha na atualização.' });
                 }
             };
