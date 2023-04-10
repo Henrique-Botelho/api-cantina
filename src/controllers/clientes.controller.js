@@ -30,8 +30,8 @@ const clientesController = {
         }
     
         try {
-            const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE numero = ?';
-            const response = await pool.query(queryVerificaCliente, numero);
+            const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE nome = ? OR numero = ?';
+            const response = await pool.query(queryVerificaCliente, [nome, numero]);
             const totalClientes = response[0].total;
     
             if (totalClientes > 0) {
@@ -46,7 +46,7 @@ const clientesController = {
             console.log('Erro ao cadastrar cliente' + error);
             return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
         }
-    },    
+    },
 
     listaClientes: async (req, res) => {
         // Selecionando todos os clientes na tabela clientes.
