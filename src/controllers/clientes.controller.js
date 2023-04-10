@@ -92,7 +92,7 @@ const clientesController = {
     atualizaCliente: async (req, res) => {
         //Recebendo o id do cliente
         const { id } = req.params;
-        const { nome, telefone } = req.body;
+        const { nome, numero } = req.body;
 
         if (!id) {
             // Caso não seja inserido nenhum id, reposta ao cliente que é necessário ser inserido.
@@ -117,25 +117,25 @@ const clientesController = {
             return res.status(500).json({ message: 'Servidor não conseguiu realizar a operação.' })
         }
 
-        if (nome && telefone) {
+        if (nome && numero) {
 
             // Verificando se quantidade de caracteres inseridos no nome está entre o mínimo e o máximo pedido.
             if (nome.length > 50 || nome.length < 8) {
                 return res.status(400).json({ status: 400, message: 'Quantidade de caracteres inválida para o nome.' });
             }
             // Verificando se quantidade de caracteres inseridos no telefone está entre o mínimo e o máximo pedido.
-            if (telefone.length < 11 || telefone.length > 11) {
+            if (numero.length < 11 || numero.length > 11) {
                 return res.status(400).json({ status: 400, message: 'Quantidade de caracteres inválida para o telefone.' });
             }
             // Verificando se todos os dados inseridos são do tipo string.
-            if (typeof nome !== 'string' || typeof telefone !== 'string') {
+            if (typeof nome !== 'string' || typeof numero !== 'string') {
                 return res.status(400).json({ status: 400, message: 'Dados não são do tipo string.' });
             }
 
             if (!validarNome.test(nome)) {
                 return res.status(400).json({ status: 400, message: 'Nome deve conter apenas letras e espaços.' });
             }
-            if (!validarTelefone.test(telefone)) {
+            if (!validarNumero.test(numero)) {
                 return res.status(400).json({ status: 400, message: 'Telefone deve conter apenas números.' });
             }
 
@@ -144,7 +144,7 @@ const clientesController = {
             const queryAtualizaCliente = 'UPDATE clientes SET nome = (?), numero = (?) WHERE id = (?)';
             try {
                 // Fazendo a operação.
-                const response = await pool.query(queryAtualizaCliente, [nome, telefone, id]);
+                const response = await pool.query(queryAtualizaCliente, [nome, numero, id]);
                 console.log(response)
                 // Resposta ao usuario que a operação foi um sucesso.
                 return res.status(200).json({ message: 'Cliente atualizado com sucesso.' });
@@ -158,7 +158,7 @@ const clientesController = {
 
         } else {
 
-            if (!nome && !telefone) {
+            if (!nome && !numero) {
                 // Caso não seja inserido algum dos dados, reposta ao cliente que é necessário ser inserido.
                 console.log('É necessário informar o nome e/ou o telefone do cliente a ser alterado.')
                 return res.status(400).json({ status: 400, message: 'É necessário informar o nome e/ou o telefone do cliente a ser alterado.' });
@@ -166,22 +166,22 @@ const clientesController = {
             } else if (!nome) {
 
                 // Verificando se quantidade de caracteres inseridos no telefone está entre o mínimo e o máximo pedido.
-                if (telefone.length < 11 || telefone.length > 11) {
+                if (numero.length < 11 || numero.length > 11) {
                     return res.status(400).json({ status: 400, message: 'Quantidade de caracteres inválida para o telefone.' });
                 }
                 // Verificando se os dados inseridos são do tipo string.
-                if (typeof telefone !== 'string') {
+                if (typeof numero !== 'string') {
                     return res.status(400).json({ status: 400, message: 'Dados não são do tipo string.' });
                 }
 
-                if (!validarTelefone.test(telefone)) {
+                if (!validarNumero.test(numero)) {
                     return res.status(400).json({ status: 400, message: 'Telefone deve conter apenas números.' });
                 }
 
                 // Atualizando os dados "numero" da tabela "clientes" onde o id seja igual ao inserido.
                 const queryAtualizaCliente = 'UPDATE clientes SET numero = (?) WHERE id = (?)';
                 // Fazendo a operação.
-                await pool.query(queryAtualizaCliente, [telefone, id]).then(
+                await pool.query(queryAtualizaCliente, [numero, id]).then(
                     // Resposta ao usuario que a operação foi um sucesso.
                     res.status(200).json({ status: 200, message: 'Cliente atualizado com sucesso.' })
                 )
