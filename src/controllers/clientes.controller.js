@@ -110,7 +110,7 @@ const clientesController = {
                 }
             };
             
-            await verificaCliente();            
+            verificaCliente();            
 
         } catch (error) {
             console.log('Erro ao atualizar cliente: ' + error);
