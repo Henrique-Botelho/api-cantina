@@ -13,14 +13,14 @@ const clientesController = {
     cadastraCliente: async (req, res) => {
         const { nome, numero } = req.body;
     
-        if (nome.length < 8 || nome.length > 50 || numero.length !== 11) {
-            return res.status(400).json({ status: 400, message: 'Quantidade de caracteres inválida para nome e/ou número.' });
-        }
-        
         if (!nome || !numero) {
             return res.status(400).json({ status: 400, message: 'Todos os campos devem ser enviados.' });
         }
-            
+    
+        if (nome.length > 50 || nome.length < 8 || numero.length !== 11) {
+            return res.status(400).json({ status: 400, message: 'Quantidade de caracteres para nome e/ou numero inválidos.' });
+        }
+    
         if (!validarNome.test(nome)) {
             return res.status(400).json({ status: 400, message: 'Nome deve conter apenas letras e espaços.' });
         }
