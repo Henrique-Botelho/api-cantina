@@ -121,6 +121,11 @@ const clientesController = {
                 }
             }
     
+            // verifica se há mudanças antes de atualizar
+            if (nome === rows[0].nome && numero === rows[0].numero) {
+                return res.status(200).json({ message: 'As informações do cliente não foram alteradas.' });
+            }
+    
             const queryAtualizaCliente = 'UPDATE clientes SET nome = ?, numero = ? WHERE id = ?';
             const response = await pool.query(queryAtualizaCliente, [nome, numero, id]);
     
