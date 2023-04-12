@@ -10,7 +10,6 @@ const validarNumero = /^[0-9]{11}$/;
 // é criado um array chamado numerosCadastrados, que armazena todos os números de telefone já cadastrados
 const numerosCadastrados = [];
 
-
 // Criando objeto "clientesController"
 const clientesController = {
     cadastraCliente: async (req, res) => {
