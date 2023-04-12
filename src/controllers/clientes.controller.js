@@ -29,14 +29,21 @@ const clientesController = {
         }
 
         try {
+            const queryBuscaCliente = 'SELECT * FROM clientes WHERE numero = ?';
+            const [rows] = await pool.query(queryBuscaCliente, [numero]);
+        
+            if (rows.length > 0) {
+                return res.status(400).json({ status: 400, message: 'Já existe um cliente cadastrado com este número de telefone.' });
+            }
+        
             const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)';
             const response2 = await pool.query(queryInsereCliente, [nome, numero]);
-
+        
             return res.status(201).json({ message: 'Cliente cadastrado com sucesso!' });
         } catch (error) {
             console.log('Erro ao cadastrar cliente' + error);
             return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
-        }
+        }        
     },
 
     listaClientes: async (req, res) => {
