@@ -12,23 +12,23 @@ const validarNumero = /^[0-9]{11}$/;
 const clientesController = {
     cadastraCliente: async (req, res) => {
         const { nome, numero } = req.body;
-    
+
         if (!nome || !numero) {
             return res.status(400).json({ status: 400, message: 'Todos os campos devem ser enviados.' });
         }
-    
+
         if (nome.length > 50 || nome.length < 8 || numero.length !== 11) {
             return res.status(400).json({ status: 400, message: 'Quantidade de caracteres para nome e/ou numero inválidos.' });
         }
-    
+
         if (!validarNome.test(nome)) {
             return res.status(400).json({ status: 400, message: 'Nome deve conter apenas letras e espaços.' });
         }
-    
+
         if (!validarNumero.test(numero)) {
             return res.status(400).json({ status: 400, message: 'Numero deve conter apenas números.' });
         }
-    
+
         try {
             //A consulta usa a cláusula COUNT(*) para contar o número de linhas na tabela "clientes" que correspondem aos valores especificados para o nome e número do cliente.
             const queryVerificaNumero = 'SELECT COUNT(*) as total FROM clientes WHERE numero = ?';
@@ -36,7 +36,7 @@ const clientesController = {
             const totalClientes = response[0].total;
 
             if (totalClientes > 0) {
-               return res.status(400).json({ status: 400, message: 'Cliente já cadastrado.' });
+                return res.status(400).json({ status: 400, message: 'Cliente já cadastrado.' });
             }
 
             const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)';
@@ -104,13 +104,13 @@ const clientesController = {
         try {
             const verificaCliente = async () => {
                 const response = await pool.query(verificaID, id);
-            
+
                 if (!response.length) {
                     return res.status(404).json({ message: 'Cliente não cadastrado. Falha na atualização.' });
                 }
             };
-            
-            verificaCliente();            
+
+            verificaCliente();
 
         } catch (error) {
             console.log('Erro ao atualizar cliente: ' + error);
