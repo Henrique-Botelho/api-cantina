@@ -30,9 +30,9 @@ const clientesController = {
         }
 
         try {
-            // A consulta usa a cláusula COUNT(*) para contar o número de linhas na tabela "clientes" que correspondem aos valores especificados para o nome e número do cliente.
-            const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE numero = ?';
-            const response = await pool.query(queryVerificaCliente, [numero]);
+            //A consulta usa a cláusula COUNT(*) para contar o número de linhas na tabela "clientes" que correspondem aos valores especificados para o nome e número do cliente.
+            const queryVerificaNumero = 'SELECT COUNT(*) as total FROM clientes WHERE numero = ?';
+            const response = await pool.query(queryVerificaNumero, [numero]);
             const totalClientes = response[0].total;
 
             if (totalClientes > 0) {
@@ -47,6 +47,22 @@ const clientesController = {
             console.log('Erro ao cadastrar cliente' + error);
             return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
         }
+    },
+
+    listaClientes: async (req, res) => {
+        // Selecionando todos os clientes na tabela clientes.
+        const queryListaClientes = 'SELECT * FROM clientes';
+        try {
+            // Fazendo a operação.
+            const [response] = await pool.query(queryListaClientes);
+            return res.status(200).json(response);
+        } catch (error) {
+            // Resposta ao usuario que sua operação não foi realizada.
+            console.log('Erro ao listar todos os clientes: ' + error);
+            // Tratamento de erros durante o "Try"
+            return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
+        }
+
     },
 
     listaCLiente: async (req, res) => {
