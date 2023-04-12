@@ -31,18 +31,17 @@ const clientesController = {
     
         try {
             //A consulta usa a cláusula COUNT(*) para contar o número de linhas na tabela "clientes" que correspondem aos valores especificados para o nome e número do cliente.
-            const queryVerificaCliente = 'SELECT COUNT(*) as total FROM clientes WHERE numero = ?';
-            const response = await pool.query(queryVerificaCliente, [numero]);
+            const queryVerificaNumero = 'SELECT COUNT(*) as total FROM clientes WHERE numero = ?';
+            const response = await pool.query(queryVerificaNumero, [numero]);
             const totalClientes = response[0].total;
-            console.log(totalClientes);
-    
+
             if (totalClientes > 0) {
-                return res.status(400).json({ status: 400, message: 'Cliente já cadastrado.' });
+               return res.status(400).json({ status: 400, message: 'Cliente já cadastrado.' });
             }
-    
+
             const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)';
             const response2 = await pool.query(queryInsereCliente, [nome, numero]);
-    
+
             return res.status(201).json({ message: 'Cliente cadastrado com sucesso!' });
         } catch (error) {
             console.log('Erro ao cadastrar cliente' + error);
