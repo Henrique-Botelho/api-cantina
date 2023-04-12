@@ -7,9 +7,6 @@ const validarNome = /^[a-zA-ZÀ-ú]+([ '-][a-zA-ZÀ-ú]+)*$/;
 // Expressão regular para validar se o numero contém apenas números.
 const validarNumero = /^[0-9]{11}$/;
 
-// é criado um array chamado numerosCadastrados, que armazena todos os números de telefone já cadastrados
-const numerosCadastrados = [];
-
 // Criando objeto "clientesController"
 const clientesController = {
     cadastraCliente: async (req, res) => {
@@ -31,17 +28,9 @@ const clientesController = {
             return res.status(400).json({ status: 400, message: 'Numero deve conter apenas números.' });
         }
 
-        // Verifica se o número já foi cadastrado
-        if (numerosCadastrados.includes(numero)) {
-            return res.status(400).json({ status: 400, message: 'Número de telefone já cadastrado.' });
-        }
-
         try {
             const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)';
             const response2 = await pool.query(queryInsereCliente, [nome, numero]);
-
-            // Adiciona o número ao array de números cadastrados
-            numerosCadastrados.push(numero);
 
             return res.status(201).json({ message: 'Cliente cadastrado com sucesso!' });
         } catch (error) {
