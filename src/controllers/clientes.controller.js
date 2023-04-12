@@ -4,7 +4,7 @@ const pool = require('../database/index');
 // Expressão regular para validar se o nome contém apenas letras, espaços e hífens.
 const validarNome = /^[a-zA-ZÀ-ú]+([ '-][a-zA-ZÀ-ú]+)*$/;
 
-// Expressão regular para validar se o telefone contém apenas números.
+// Expressão regular para validar se o numero contém apenas números.
 const validarNumero = /^[0-9]{11}$/;
 
 
@@ -125,7 +125,7 @@ const clientesController = {
             }
             // Verificando se quantidade de caracteres inseridos no telefone está entre o mínimo e o máximo pedido.
             if (numero.length < 11 || numero.length > 11) {
-                return res.status(400).json({ status: 400, message: 'Quantidade de caracteres inválida para o telefone.' });
+                return res.status(400).json({ status: 400, message: 'Quantidade de caracteres inválida para o numero.' });
             }
             // Verificando se todos os dados inseridos são do tipo string.
             if (typeof nome !== 'string' || typeof numero !== 'string') {
@@ -136,7 +136,7 @@ const clientesController = {
                 return res.status(400).json({ status: 400, message: 'Nome deve conter apenas letras e espaços.' });
             }
             if (!validarNumero.test(numero)) {
-                return res.status(400).json({ status: 400, message: 'Telefone deve conter apenas números.' });
+                return res.status(400).json({ status: 400, message: 'Numero deve conter apenas números.' });
             }
 
 
@@ -160,14 +160,14 @@ const clientesController = {
 
             if (!nome && !numero) {
                 // Caso não seja inserido algum dos dados, reposta ao cliente que é necessário ser inserido.
-                console.log('É necessário informar o nome e/ou o telefone do cliente a ser alterado.')
-                return res.status(400).json({ status: 400, message: 'É necessário informar o nome e/ou o telefone do cliente a ser alterado.' });
+                console.log('É necessário informar o nome e/ou o numero do cliente a ser alterado.')
+                return res.status(400).json({ status: 400, message: 'É necessário informar o nome e/ou o numero do cliente a ser alterado.' });
 
             } else if (!nome) {
 
                 // Verificando se quantidade de caracteres inseridos no telefone está entre o mínimo e o máximo pedido.
                 if (numero.length < 11 || numero.length > 11) {
-                    return res.status(400).json({ status: 400, message: 'Quantidade de caracteres inválida para o telefone.' });
+                    return res.status(400).json({ status: 400, message: 'Quantidade de caracteres inválida para o numero.' });
                 }
                 // Verificando se os dados inseridos são do tipo string.
                 if (typeof numero !== 'string') {
@@ -175,7 +175,7 @@ const clientesController = {
                 }
 
                 if (!validarNumero.test(numero)) {
-                    return res.status(400).json({ status: 400, message: 'Telefone deve conter apenas números.' });
+                    return res.status(400).json({ status: 400, message: 'Numero deve conter apenas números.' });
                 }
 
                 // Atualizando os dados "numero" da tabela "clientes" onde o id seja igual ao inserido.
