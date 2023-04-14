@@ -25,7 +25,7 @@ const comprasController = {
     const [response] = await = pool.query(query, [idCliente]);
     return response;
   },
-  //==================================//
+  
   // função que manipula a requisição HTTP para listar as compras de um cliente específico
   listarComprasPorUsuario(req, res) {
     try {
@@ -48,7 +48,7 @@ const comprasController = {
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
-
+  //==================================//
   criarCompra: async (req, res) => {
     const { id_cliente, compra, total, dataHora } = req.body;
 
