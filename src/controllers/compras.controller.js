@@ -25,7 +25,7 @@ const comprasController = {
     const [response] = await = pool.query(query, [idCliente]);
     return response;
   },
-  
+
   // função que manipula a requisição HTTP para listar as compras de um cliente específico
   listarComprasPorUsuario(req, res) {
     try {
@@ -73,17 +73,17 @@ const comprasController = {
   alterarCompra(req, res) {
     const { id } = req.params;
     const { id_cliente, compra, total, dataHora } = req.body;
-  
+
     if (!id || !id_cliente || !compra || !total || !dataHora) {
       return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
     }
-  
+
     const idCliente = await = findClienteByNumero(numero);
-  
+
     if (!idCliente) {
       return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' });
     }
-  
+
     const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora= ? WHERE id = ?';
     try {
       await = pool.query(queryAtualizaCompra, [id, idCliente, compra, total, dataHora]);
@@ -92,7 +92,7 @@ const comprasController = {
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
-  
+
   // Criando a função "excluirCompra"
   excluirCompra: async (req, res) => {
     const { id } = req.params;
@@ -130,8 +130,10 @@ const comprasController = {
       }
       if (algumaCompraExcluida) {
         return res.status(200).json({ status: 200, message: 'Compras excluídas com sucesso!' });
-      } else {
+      } else if (clientes.length === 1) {
         return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para este cliente.' });
+      } else {
+        return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para nenhum dos clientes.' });
       }
     } catch (error) {
       console.log("Erro ao Deletar todas as compras" + error);
