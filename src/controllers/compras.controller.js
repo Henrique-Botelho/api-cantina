@@ -40,7 +40,7 @@ const comprasController = {
       return res.status(404).json({ status: 400, message: 'Tipo dos dados incorreto.' })
     }
 
-    const queryInsereCompra = 'INSERT INTO compras (id_cliente, compra, total, dataHora) VALUES ((SELECT id FROM clientes WHERE numero = ?), ?, ?, ?)';
+    const queryInsereCompra = 'INSERT INTO compras (id_cliente, compra, total, dataHora) VALUES (?, ?, ?, ?)';
     try {
       await pool.query(queryInsereCompra, [id_cliente, compra, total, dataHora]);
       res.status(200).json({ status: 200, message: 'Compra criada com sucesso!' });
