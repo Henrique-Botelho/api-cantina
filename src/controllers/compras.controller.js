@@ -117,16 +117,22 @@ const comprasController = {
     const queryVerificaCliente = 'SELECT id FROM clientes WHERE numero=?';
     const queryExcluirCompras = 'DELETE FROM compras WHERE id_cliente=?';
     try {
-      const [response] = await pool.query(queryVerificaCliente, [numero]);
-      if (response.length === 0) {
+      const [clientes] = await pool.query(queryVerificaCliente, [numero]);
+      if (clientes.length === 0) {
         return res.status(401).json({ status: 401, message: 'Este cliente não existe.' });
       }
-      const id_cliente = response[0].id;
-      const resultado = await pool.query(queryExcluirCompras, [id_cliente]);
-      if (resultado.affectedRows === 0) {
+      let algumaCompraExcluida = false;
+      for (const cliente of clientes) {
+        const resultado = await pool.query(queryExcluirCompras, [cliente.id]);
+        if (resultado.affectedRows !== 0) {
+          algumaCompraExcluida = true;
+        }
+      }
+      if (algumaCompraExcluida) {
+        return res.status(200).json({ status: 200, message: 'Compras excluídas com sucesso!' });
+      } else {
         return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para este cliente.' });
       }
-      return res.status(200).json({ status: 200, message: 'Compras excluídas com sucesso!' });
     } catch (error) {
       console.log("Erro ao Deletar todas as compras" + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
