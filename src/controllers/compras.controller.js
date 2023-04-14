@@ -31,17 +31,17 @@ const comprasController = {
     try {
       const { numero } = req.params;
       const idCliente = await = findClienteByNumero(numero);
-
+  
       if (!idCliente) {
         return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' });
       }
-
+  
       const compras = await = listarComprasPorCliente(idCliente);
-
+  
       if (!compras.length) {
         return res.status(404).json({ status: 404, message: 'O usuário não tem compras.' });
       }
-
+  
       return res.status(200).json({ status: 200, compras });
     } catch (error) {
       console.log("Erro ao listar compras do usuário: " + error);
