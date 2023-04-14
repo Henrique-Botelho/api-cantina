@@ -78,14 +78,14 @@ const comprasController = {
       return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
     }
   
-    const idCliente = await comprasController.findClienteByNumero(id_cliente);
-  
-    if (!idCliente) {
-      return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' });
-    }
-  
-    const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora= ? WHERE id = ?';
     try {
+      const idCliente = await comprasController.findClienteByNumero(id_cliente);
+  
+      if (!idCliente) {
+        return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' });
+      }
+  
+      const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora= ? WHERE id = ?';
       await pool.query(queryAtualizaCompra, [idCliente, compra, total, dataHora, id]);
       res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
     } catch (error) {
@@ -93,7 +93,6 @@ const comprasController = {
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
-  
   
   // Criando a função "excluirCompra"
   excluirCompra: async (req, res) => {
