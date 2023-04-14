@@ -11,28 +11,38 @@ const comprasController = {
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
+  //==================================//
+  // função que verifica se um cliente com o número fornecido existe no banco de dados
+  findClienteByNumero(numero) {
+    const query = 'SELECT id FROM clientes WHERE numero = ?';
+    const [response] = await = pool.query(query, [numero]);
+    return response[0]?.id;
+  },
 
-  listarComprasPorUsuario: async (req, res) => {
-    const { numero } = req.params;
-    const queryVerificaCliente = 'SELECT id FROM clientes WHERE numero = ?';
-    const queryListarComprasPorUsuario = 'SELECT * FROM compras WHERE id_cliente = ?';
-  
+  // função que lista as compras feitas por um cliente com o ID fornecido
+  listarComprasPorCliente(idCliente) {
+    const query = 'SELECT * FROM compras WHERE id_cliente = ?';
+    const [response] = await = pool.query(query, [idCliente]);
+    return response;
+  },
+  //==================================//
+  // função que manipula a requisição HTTP para listar as compras de um cliente específico
+  listarComprasPorUsuario(req, res) {
     try {
-      const [responseUsuario] = await pool.query(queryVerificaCliente, [numero]);
+      const { numero } = req.params;
+      const idCliente = await = findClienteByNumero(numero);
   
-      if (!responseUsuario.length) {
+      if (!idCliente) {
         return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' });
       }
   
-      const idCliente = responseUsuario[0].id;
+      const compras = await = listarComprasPorCliente(idCliente);
   
-      const [response] = await pool.query(queryListarComprasPorUsuario, [idCliente]);
-  
-      if (!response.length) {
+      if (!compras.length) {
         return res.status(404).json({ status: 404, message: 'O usuário não tem compras.' });
       }
   
-      return res.status(200).json({ status: 200, response });
+      return res.status(200).json({ status: 200, compras });
     } catch (error) {
       console.log("Erro ao listar compras do usuário: " + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
