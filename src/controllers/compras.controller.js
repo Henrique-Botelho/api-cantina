@@ -31,17 +31,17 @@ const comprasController = {
     try {
       const { numero } = req.params;
       const idCliente = await = findClienteByNumero(numero);
-  
+
       if (!idCliente) {
         return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' });
       }
-  
+
       const compras = await = listarComprasPorCliente(idCliente);
-  
+
       if (!compras.length) {
         return res.status(404).json({ status: 404, message: 'O usuário não tem compras.' });
       }
-  
+
       return res.status(200).json({ status: 200, compras });
     } catch (error) {
       console.log("Erro ao listar compras do usuário: " + error);
@@ -74,27 +74,30 @@ const comprasController = {
     const { id } = req.params;
     const { id_cliente, compra, total, dataHora, numero } = req.body;
 
-    if (!id_cliente || !compra || !total || !dataHora) {
+    if (!id_cliente || !compra || !total || !dataHora || !numero) {
       return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
     }
 
     if (typeof compra !== "string" || typeof total !== "string") {
-      return res.status(404).json({ status: 400, message: 'Tipo dos dados incorreto.' })
+      return res.status(400).json({ status: 400, message: 'Tipo dos dados incorreto.' })
     }
 
-    const queryAtualizaCompra = 'UPDATE compras SET id_cliente = (SELECT id FROM clientes WHERE numero = ?), compra = ?, total = ?, dataHora= ? WHERE id = ?';
+    const idCliente = await findClienteByNumero(numero);
+
+    if (!idCliente) {
+      return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' })
+    }
+
+    const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora= ? WHERE id = ?';
     try {
-      const [response] = await pool.query('SELECT id FROM clientes WHERE numero = ?', [numero])
-      if (response.length === 0) {
-        return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' })
-      }
-      await pool.query(queryAtualizaCompra, [numero, compra, total, dataHora, id]);
+      await pool.query(queryAtualizaCompra, [idCliente, compra, total, dataHora, id]);
       res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
     } catch (error) {
       console.log("Não foi possível atualizar..." + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' })
     }
   },
+
   // Criando a função "excluirCompra"
   excluirCompra: async (req, res) => {
     const { id } = req.params;
