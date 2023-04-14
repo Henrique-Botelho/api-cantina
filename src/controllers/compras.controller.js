@@ -81,11 +81,6 @@ const comprasController = {
       return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
     }
   
-    if (typeof compra !== 'string' || typeof total !== 'string') {
-      console.log('Tipo dos dados incorreto.');
-      return res.status(400).json({ status: 400, message: 'Tipo dos dados incorreto.' });
-    }
-  
     const idCliente = await = findClienteByNumero(numero);
   
     console.log('idCliente encontrado:', idCliente);
