@@ -113,7 +113,7 @@ const comprasController = {
   // Criando a função "excluirComprasPorCliente"
   excluirComprasPorCliente: async (req, res) => {
     const { numero } = req.params;
-
+  
     const queryVerificaCliente = 'SELECT id FROM clientes WHERE numero=?';
     const queryExcluirCompras = 'DELETE FROM compras WHERE id_cliente=?';
     try {
@@ -131,7 +131,7 @@ const comprasController = {
       console.log("Erro ao Deletar todas as compras" + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
-  },
+  },  
 };
 
 module.exports = comprasController;
