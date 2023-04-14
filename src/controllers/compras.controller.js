@@ -80,8 +80,6 @@ const comprasController = {
     // Recebendo "id" dos parâmetros
     const { id } = req.params;
 
-    console.log(typeof id);
-
     // Deletando compras onde o "id" seja igual ao inserido.
     const queryExcluirCompra = 'DELETE FROM compras WHERE id=?';
     try {
