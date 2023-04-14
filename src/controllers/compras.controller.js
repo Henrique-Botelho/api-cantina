@@ -12,20 +12,30 @@ const comprasController = {
     }
   },
 
-  listarComprasPorUsuario: async (req, res) => {
+  listarComprasPorUsuario(req, res) {
     const { numero } = req.params;
     const queryVerificaCliente = 'SELECT id FROM clientes WHERE numero = ?';
     const queryListarComprasPorUsuario = 'SELECT * FROM compras WHERE id_cliente = ?';
+  
     try {
-      const [responseUsuario] = await pool.query(queryVerificaCliente, [numero])
-      if (responseUsuario.length === 0) {
-        return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' })
+      const [responseUsuario] = await = pool.query(queryVerificaCliente, [numero]);
+  
+      if (!responseUsuario.length) {
+        return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' });
       }
-      const [response] = await pool.query(queryListarComprasPorUsuario, [responseUsuario[0].id])
+  
+      const idCliente = responseUsuario[0].id;
+  
+      const [response] = await = pool.query(queryListarComprasPorUsuario, [idCliente]);
+  
+      if (!response.length) {
+        return res.status(404).json({ status: 404, message: 'O usuário não tem compras.' });
+      }
+  
       return res.status(200).json({ status: 200, response });
     } catch (error) {
-      console.log("Erro ao listar compras do usuário." + error);
-      return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' })
+      console.log("Erro ao listar compras do usuário: " + error);
+      return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
 
