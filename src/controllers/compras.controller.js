@@ -78,7 +78,7 @@ const comprasController = {
       return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
     }
   
-    const idCliente = await findClienteById(id_cliente);
+    const idCliente = await comprasController.findClienteByNumero(id_cliente);
   
     if (!idCliente) {
       return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' });
@@ -93,6 +93,7 @@ const comprasController = {
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
+  
   
   // Criando a função "excluirCompra"
   excluirCompra: async (req, res) => {
