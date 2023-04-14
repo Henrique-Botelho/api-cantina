@@ -74,7 +74,7 @@ const comprasController = {
     const { id } = req.params;
     const { id_cliente, compra, total, dataHora } = req.body;
   
-    if (!id_cliente || !compra || !total || !dataHora) {
+    if (!id || !id_cliente || !compra || !total || !dataHora) {
       return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
     }
   
@@ -86,7 +86,7 @@ const comprasController = {
   
     const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora= ? WHERE id = ?';
     try {
-      await = pool.query(queryAtualizaCompra, [idCliente, compra, total, dataHora, id]);
+      await = pool.query(queryAtualizaCompra, [id, idCliente, compra, total, dataHora]);
       res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
     } catch (error) {
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
