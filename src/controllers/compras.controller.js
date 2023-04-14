@@ -12,13 +12,13 @@ const comprasController = {
     }
   },
 
-  listarComprasPorUsuario(req, res) {
+  listarComprasPorUsuario: async (req, res) => {
     const { numero } = req.params;
     const queryVerificaCliente = 'SELECT id FROM clientes WHERE numero = ?';
     const queryListarComprasPorUsuario = 'SELECT * FROM compras WHERE id_cliente = ?';
   
     try {
-      const [responseUsuario] = await = pool.query(queryVerificaCliente, [numero]);
+      const [responseUsuario] = await pool.query(queryVerificaCliente, [numero]);
   
       if (!responseUsuario.length) {
         return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' });
@@ -26,7 +26,7 @@ const comprasController = {
   
       const idCliente = responseUsuario[0].id;
   
-      const [response] = await = pool.query(queryListarComprasPorUsuario, [idCliente]);
+      const [response] = await pool.query(queryListarComprasPorUsuario, [idCliente]);
   
       if (!response.length) {
         return res.status(404).json({ status: 404, message: 'O usuário não tem compras.' });
