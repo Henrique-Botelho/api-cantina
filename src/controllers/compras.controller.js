@@ -72,31 +72,23 @@ const comprasController = {
 
   alterarCompra(req, res) {
     const { id } = req.params;
-    const { id_cliente, compra, total, dataHora, numero } = req.body;
+    const { id_cliente, compra, total, dataHora } = req.body;
   
-    console.log('Dados recebidos na requisição:', req.body);
-  
-    if (!id_cliente || !compra || !total || !dataHora || !numero) {
-      console.log('Algum campo obrigatório não foi preenchido.');
+    if (!id_cliente || !compra || !total || !dataHora) {
       return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
     }
   
     const idCliente = await = findClienteByNumero(numero);
   
-    console.log('idCliente encontrado:', idCliente);
-  
     if (!idCliente) {
-      console.log('Cliente não encontrado.');
       return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' });
     }
   
     const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora= ? WHERE id = ?';
     try {
       await = pool.query(queryAtualizaCompra, [idCliente, compra, total, dataHora, id]);
-      console.log('Compra atualizada com sucesso!');
       res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
     } catch (error) {
-      console.log('Não foi possível atualizar...', error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
