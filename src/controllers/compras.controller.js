@@ -86,14 +86,14 @@ const comprasController = {
       }
   
       const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora= ? WHERE id = ?';
-      await pool.query(queryAtualizaCompra, [idCliente, compra, total, dataHora, id]);
+      await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id]);
       res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
     } catch (error) {
       console.log("Erro ao atualizar compra: " + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
-  
+    
   // Criando a função "excluirCompra"
   excluirCompra: async (req, res) => {
     const { id } = req.params;
