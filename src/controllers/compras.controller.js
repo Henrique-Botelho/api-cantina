@@ -113,7 +113,7 @@ const comprasController = {
   // Criando a função "excluirComprasPorCliente"
   excluirComprasPorCliente: async (req, res) => {
     const { numero } = req.params;
-  
+
     const queryVerificaCliente = 'SELECT id FROM clientes WHERE numero=?';
     const queryExcluirCompras = 'DELETE FROM compras WHERE id_cliente=?';
     try {
@@ -130,16 +130,14 @@ const comprasController = {
       }
       if (algumaCompraExcluida) {
         return res.status(200).json({ status: 200, message: 'Compras excluídas com sucesso!' });
-      } else if (clientes.length === 1) {
-        return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para este cliente.' });
       } else {
-        return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para nenhum dos clientes.' });
-      }
+        return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para este cliente.' });
+      }      
     } catch (error) {
       console.log("Erro ao Deletar todas as compras" + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
-  },  
+  },
 };
 
 module.exports = comprasController;
