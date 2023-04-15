@@ -136,9 +136,8 @@ const comprasController = {
         const [compras] = await pool.query('SELECT * FROM compras WHERE id_cliente IN (SELECT id FROM clientes WHERE numero=?)', [numero]);
         if (compras.length === 0) {
           return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para este cliente.' });
-        } else {
-          return res.status(200).json({ status: 200, message: 'Nenhuma compra foi excluída para este cliente.' });
         }
+        return res.status(200).json({ status: 200, message: 'Compras excluídas com sucesso!' });
       }      
     } catch (error) {
       console.log("Erro ao Deletar todas as compras" + error);
