@@ -13,16 +13,16 @@ const comprasController = {
   },
   //==================================//
   // função que verifica se um cliente com o número fornecido existe no banco de dados
-  findClienteByNumero(numero) {
+  async findClienteByNumero(numero) {
     const query = 'SELECT id FROM clientes WHERE numero = ?';
-    const [response] = await = pool.query(query, [numero]);
+    const [response] = await pool.query(query, [numero]);
     return response[0]?.id;
   },
 
   // função que lista as compras feitas por um cliente com o ID fornecido
-  listarComprasPorCliente(idCliente) {
+  async listarComprasPorCliente(idCliente) {
     const query = 'SELECT * FROM compras WHERE id_cliente = ?';
-    const [response] = await = pool.query(query, [idCliente]);
+    const [response] = await pool.query(query, [idCliente]);
     return response;
   },
 
@@ -47,7 +47,7 @@ const comprasController = {
     }
   },  
   //==================================//
-  
+
   criarCompra: async (req, res) => {
     const { id_cliente, compra, total, dataHora } = req.body;
 
