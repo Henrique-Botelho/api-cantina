@@ -73,22 +73,22 @@ const comprasController = {
     try {
       const { id } = req.params;
       const { id_cliente, compra, total, dataHora } = req.body;
-  
+
       // Verifica se todos os campos necessários estão presentes
       if (!id || !id_cliente || !compra || !total || !dataHora) {
         return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
       }
-  
+
       // Verifica se o cliente com o número fornecido existe no banco de dados
       const idCliente = await comprasController.findClienteByNumero(id_cliente);
       if (!idCliente) {
         return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
       }
-  
+
       // Executa a consulta SQL para atualizar a compra
       const query = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id = ?';
       await pool.query(query, [idCliente, compra, total, dataHora, id]);
-  
+
       // Retorna uma resposta de sucesso
       res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
     } catch (error) {
