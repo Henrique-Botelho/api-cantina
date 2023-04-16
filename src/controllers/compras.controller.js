@@ -27,27 +27,26 @@ const comprasController = {
   },
 
   // função que manipula a requisição HTTP para listar as compras de um cliente específico
-  listarComprasPorUsuario(req, res) {
+  async listarComprasPorUsuario(req, res) {
     try {
       const { numero } = req.params;
-      const idCliente = await = findClienteByNumero(numero);
-
-      if (!idCliente) {
-        return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' });
+      const query = 'SELECT id FROM clientes WHERE numero = ? AND idioma = ?';
+      const [cliente] = await pool.query(query, [numero, 'português']);
+  
+      if (!cliente || !cliente.length) {
+        return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
       }
-
-      const compras = await = listarComprasPorCliente(idCliente);
-
-      if (!compras.length) {
-        return res.status(404).json({ status: 404, message: 'O usuário não tem compras.' });
-      }
-
+  
+      const comprasQuery = 'SELECT * FROM compras WHERE id_cliente = ?';
+      const [compras] = await pool.query(comprasQuery, [cliente[0].id]);
+  
       return res.status(200).json({ status: 200, compras });
     } catch (error) {
       console.log("Erro ao listar compras do usuário: " + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
+  
 
   //==================================//
   criarCompra: async (req, res) => {
