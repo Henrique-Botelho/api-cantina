@@ -31,23 +31,24 @@ const comprasController = {
     try {
       const { numero } = req.params;
       const idCliente = await = findClienteByNumero(numero);
-  
+
       if (!idCliente) {
         return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' });
       }
-  
+
       const compras = await = listarComprasPorCliente(idCliente);
-  
+
       if (!compras.length) {
         return res.status(404).json({ status: 404, message: 'O usuário não tem compras.' });
       }
-  
+
       return res.status(200).json({ status: 200, compras });
     } catch (error) {
       console.log("Erro ao listar compras do usuário: " + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
+
   //==================================//
   criarCompra: async (req, res) => {
     const { id_cliente, compra, total, dataHora } = req.body;
@@ -73,18 +74,18 @@ const comprasController = {
   alterarCompra: async (req, res) => {
     const { id } = req.params;
     const { id_cliente, compra, total, dataHora } = req.body;
-  
+
     if (!id || !id_cliente || !compra || !total || !dataHora) {
       return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
     }
-  
+
     try {
       const idCliente = await comprasController.findClienteByNumero(id_cliente);
-  
+
       if (!idCliente) {
         return res.status(404).json({ status: 404, message: 'Usuário não encontrado.' });
       }
-  
+
       const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora= ? WHERE id = ?';
       await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id]);
       res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
@@ -93,7 +94,7 @@ const comprasController = {
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
-    
+
   // Criando a função "excluirCompra"
   excluirCompra: async (req, res) => {
     const { id } = req.params;
@@ -138,7 +139,7 @@ const comprasController = {
           return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para este cliente.' });
         }
         return res.status(200).json({ status: 200, message: 'Compras excluídas com sucesso!' });
-      }      
+      }
     } catch (error) {
       console.log("Erro ao Deletar todas as compras" + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
