@@ -37,17 +37,17 @@ const comprasController = {
         return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
       }
   
-      const comprasQuery = 'SELECT * FROM compras WHERE id_cliente = ?';
-      const [compras] = await pool.query(comprasQuery, [cliente[0].id]);
+      const idCliente = cliente[0].id;
+      const compras = await comprasController.listarComprasPorCliente(idCliente);
   
       return res.status(200).json({ status: 200, compras });
     } catch (error) {
       console.log("Erro ao listar compras do usuário: " + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
-  },
-  
+  },  
   //==================================//
+  
   criarCompra: async (req, res) => {
     const { id_cliente, compra, total, dataHora } = req.body;
 
