@@ -13,7 +13,7 @@ router.get("/:numero", verificaUsuario, comprasController.listarComprasPorUsuari
 router.post('/', verificaUsuario, comprasController.criarCompra);
 
 // Rota de alterar a compra
-router.put('/:id', verificaUsuario, comprasController.alterarCompra);
+router.put('/compras/:id', verificaUsuario, comprasController.alterarCompra);
 
 // Rota de excluir a compra
 router.delete('/:id', verificaUsuario, comprasController.excluirCompra);
