@@ -31,14 +31,14 @@ const comprasController = {
     try {
       const { numero } = req.params;
       const query = 'SELECT id FROM clientes WHERE numero = ? AND idioma = ?';
-      const [cliente] = await  pool.query(query, [numero, 'português']);
+      const [cliente] = await pool.query(query, [numero, 'português']);
   
       if (!cliente || !cliente.length) {
         return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
       }
   
       const comprasQuery = 'SELECT * FROM compras WHERE id_cliente = ?';
-      const [compras] = await  pool.query(comprasQuery, [cliente[0].id]);
+      const [compras] = await pool.query(comprasQuery, [cliente[0].id]);
   
       return res.status(200).json({ status: 200, compras });
     } catch (error) {
@@ -47,7 +47,6 @@ const comprasController = {
     }
   },
   
-
   //==================================//
   criarCompra: async (req, res) => {
     const { id_cliente, compra, total, dataHora } = req.body;
