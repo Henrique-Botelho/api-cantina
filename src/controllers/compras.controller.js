@@ -47,7 +47,7 @@ const comprasController = {
     }
   },  
   //==================================//
-
+  
   criarCompra: async (req, res) => {
     const { id_cliente, compra, total, dataHora } = req.body;
 
