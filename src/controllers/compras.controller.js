@@ -27,18 +27,18 @@ const comprasController = {
   },
 
   // função que manipula a requisição HTTP para listar as compras de um cliente específico
-  listarComprasPorUsuario(req, res) {
+  async listarComprasPorUsuario(req, res) {
     try {
       const { numero } = req.params;
       const query = 'SELECT id FROM clientes WHERE numero = ? AND idioma = ?';
-      const [cliente] = await = pool.query(query, [numero, 'português']);
+      const [cliente] = await  pool.query(query, [numero, 'português']);
   
       if (!cliente || !cliente.length) {
         return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
       }
   
       const comprasQuery = 'SELECT * FROM compras WHERE id_cliente = ?';
-      const [compras] = await = pool.query(comprasQuery, [cliente[0].id]);
+      const [compras] = await  pool.query(comprasQuery, [cliente[0].id]);
   
       return res.status(200).json({ status: 200, compras });
     } catch (error) {
