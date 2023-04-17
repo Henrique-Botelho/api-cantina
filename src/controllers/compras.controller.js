@@ -14,9 +14,9 @@ const comprasController = {
   //==================================//
   // função que verifica se um cliente com o número fornecido existe no banco de dados
   async findClienteByNumero(numero) {
-    const query = 'SELECT id FROM clientes WHERE numero = ?';
+    const query = 'SELECT * FROM clientes WHERE numero = ?';
     const [response] = await pool.query(query, [numero]);
-    return response[0]?.id;
+    return response[0];
   },
 
   // função que lista as compras feitas por um cliente com o ID fornecido
