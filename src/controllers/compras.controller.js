@@ -24,9 +24,9 @@ const comprasController = {
 
   // função que lista as compras feitas por um cliente com o ID fornecido
   async listarCompraPorCliente(idCliente) {
-    const query = 'SELECT * FROM compras WHERE id_cliente = ? LIMIT 1';
+    const query = 'SELECT * FROM compras WHERE id_cliente = ?';
     const [response] = await pool.query(query, [idCliente]);
-    return response[0];
+    return response;
   },
 
   // função que manipula a requisição HTTP para listar as compras de um cliente específico
