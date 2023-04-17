@@ -78,18 +78,6 @@ const comprasController = {
       return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
     }
   
-    if (typeof compra !== "string" || typeof total !== "number") {
-      return res.status(400).json({ status: 400, message: 'Tipo dos dados incorreto.' });
-    }
-  
-    if (!id_cliente || typeof id_cliente !== 'number') {
-      return res.status(400).json({ status: 400, message: 'Id do cliente inválido.' });
-    }
-  
-    if (isNaN(Date.parse(dataHora))) {
-      return res.status(400).json({ status: 400, message: 'Data e hora inválidas.' });
-    }
-  
     if (isNaN(parseInt(id))) {
       return res.status(400).json({ status: 400, message: 'Id da compra inválido.' });
     }
