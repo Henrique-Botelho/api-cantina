@@ -32,9 +32,9 @@ const comprasController = {
   // função que manipula a requisição HTTP para listar as compras de um cliente específico
   async listarComprasPorUsuario(req, res) {
     try {
-      const { numero } = req.params;
+      const { id } = req.params;
       const query = 'SELECT id FROM clientes WHERE numero = ? AND idioma = ?';
-      const [cliente] = await pool.query(query, [numero, 'português']);
+      const [cliente] = await pool.query(query, [id, 'português']);
 
       if (!cliente || !cliente.length) {
         return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
