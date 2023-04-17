@@ -41,7 +41,7 @@ const comprasController = {
       }
   
       const idCliente = cliente[0].id;
-      const compra = await comprasController.listarCompraPorCliente(idCliente);
+      const compra = await comprasController.listarCompraPorCliente(cliente);
   
       return res.status(200).json({ status: 200, compra });
     } catch (error) {
