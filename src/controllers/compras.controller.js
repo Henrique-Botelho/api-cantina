@@ -120,7 +120,7 @@ const comprasController = {
   // Criando a função "excluirComprasPorCliente"
   excluirComprasPorCliente: async (req, res) => {
     const { numero } = req.params;
-
+  
     const queryVerificaCliente = 'SELECT id FROM clientes WHERE numero=?';
     const queryExcluirCompras = 'DELETE FROM compras WHERE id_cliente=?';
     try {
@@ -146,6 +146,7 @@ const comprasController = {
         return res.status(200).json({ status: 200, message: 'Compras excluídas com sucesso!' });
       }
     } catch (error) {
+      console.log("Erro ao Deletar todas as compras" + error);
       if (error.code === 'ER_BAD_FIELD_ERROR' && error.message.includes('compras.id_cliente')) {
         return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para este cliente.' });
       }
