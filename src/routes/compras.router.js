@@ -7,7 +7,7 @@ const { verificaUsuario } = require('../middleware/auth.middleware');
 router.get("/", verificaUsuario, comprasController.listarCompras);
 
 // Rota para listar todas as compras de um cliente específico
-router.get("/:id", verificaUsuario, comprasController.listarComprasPorUsuario);
+router.get("/:id/compras", verificaUsuario, comprasController.listarComprasPorUsuario);
 
 // Rota de criar nova compra
 router.post('/', verificaUsuario, comprasController.criarCompra);
