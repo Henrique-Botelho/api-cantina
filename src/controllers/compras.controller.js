@@ -33,7 +33,7 @@ const comprasController = {
   async listarComprasPorUsuario(req, res) {
     try {
       const { id } = req.params;
-      const query = 'SELECT id FROM clientes WHERE numero = ? AND idioma = ?';
+      const query = 'SELECT id FROM clientes WHERE = ? AND idioma = ?';
       const [cliente] = await pool.query(query, [id, 'português']);
   
       if (!cliente || !cliente.length) {
