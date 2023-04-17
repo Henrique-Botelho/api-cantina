@@ -71,10 +71,10 @@ const comprasController = {
   },
 
   alterarCompra: async (req, res) => {
-    const { idCompra } = req.params;
-    const { id_cliente, descricaoCompra, total, dataHora } = req.body;
+    const { id } = req.params;
+    const { id_cliente, compra, total, dataHora } = req.body;
   
-    if ([id_cliente, descricaoCompra, total, dataHora].some((campo) => campo == null)) {
+    if ([id_cliente, compra, total, dataHora].some((campo) => campo == null)) {
       return res.status(400).json({ erro: { status: 400, mensagem: 'Preencha todos os campos.' } });
     }
   
@@ -84,14 +84,14 @@ const comprasController = {
   
     try {
       // Verifica se a compra existe
-      const [compraExistente] = await comprasController.listarCompraPorId(idCompra);
+      const [compraExistente] = await comprasController.listarCompraPorId(id);
       if (!compraExistente) {
         return res.status(404).json({ erro: { status: 404, mensagem: 'Compra não encontrada.' } });
       }
   
       // Edita a compra
       const queryEditaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id = ?';
-      await pool.query(queryEditaCompra, [id_cliente, descricaoCompra, total, dataHora, idCompra]);
+      await pool.query(queryEditaCompra, [id_cliente, compra, total, dataHora, id]);
   
       return res.status(200).json({ sucesso: { status: 200, mensagem: 'Compra editada com sucesso!' } });
     } catch (error) {
