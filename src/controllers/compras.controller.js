@@ -73,26 +73,19 @@
     //aqui editarCompra
     editarCompra: async (req, res) => {
       const { id } = req.params;
-      const { compra, total, dataHora } = req.body;
+      const { id_cliente, compra, total, dataHora } = req.body;
     
-      if (!compra || !total || !dataHora) {
+      if (!id_cliente || !compra || !total || !dataHora) {
         return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
       }
     
-      if (typeof compra !== "string" || typeof total !== "string" || typeof dataHora !== "string") {
+      if (typeof compra !== "string" || typeof total !== "string") {
         return res.status(400).json({ status: 400, message: 'Tipo dos dados incorreto.' })
       }
     
+      const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id = ?';
       try {
-        const cliente = await comprasController.findClienteById(id);
-    
-        if (!cliente) {
-          return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
-        }
-    
-        const queryAtualizaCompra = 'UPDATE compras SET compra = ?, total = ?, dataHora = ? WHERE id_cliente = ?';
-    
-        const [result] = await pool.query(queryAtualizaCompra, [compra, total, dataHora, id]);
+        const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id]);
         if (result.affectedRows === 0) {
           return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
         }
@@ -101,7 +94,7 @@
         console.log("Erro ao atualizar compra: " + error);
         return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
       }
-    },
+    },    
     
     // Criando a função "excluirCompra"
     excluirCompra: async (req, res) => {
