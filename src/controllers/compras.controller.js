@@ -13,15 +13,15 @@ const comprasController = {
   },
   //==================================//
   // função que verifica se um cliente com o número fornecido existe no banco de dados
-  async findClienteByNumero(numero) {
-    const query = 'SELECT * FROM clientes WHERE numero = ?';
-    const [response] = await pool.query(query, [numero]);
+  async findClienteById(id) {
+    const query = 'SELECT * FROM clientes WHERE id = ?';
+    const [response] = await pool.query(query, [id]);
     if (response.length === 0) {
       return null; // ou undefined
     }
     return response[0];
   },
-
+  
   // função que lista as compras feitas por um cliente com o ID fornecido
   async listarCompraPorCliente(idCliente) {
     const query = 'SELECT * FROM compras WHERE id_cliente = ?';
@@ -33,22 +33,20 @@ const comprasController = {
   async listarComprasPorUsuario(req, res) {
     try {
       const { id } = req.params;
-      const query = 'SELECT id FROM clientes WHERE = ?';
-      const [cliente] = await pool.query(query, [id]);
+      const cliente = await comprasController.findClienteById(id);
   
-      if (!cliente || !cliente.length) {
+      if (!cliente) {
         return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
       }
   
-      const idCliente = cliente[0].id;
-      const compra = await comprasController.listarCompraPorCliente(idCliente);
+      const compras = await comprasController.listarCompraPorCliente(cliente.id);
   
-      return res.status(200).json({ status: 200, compra });
+      return res.status(200).json({ status: 200, compras });
     } catch (error) {
       console.log("Erro ao listar compras do usuário: " + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
-  },
+  },  
   //==================================//
 
   criarCompra: async (req, res) => {
