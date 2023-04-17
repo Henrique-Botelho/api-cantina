@@ -84,8 +84,8 @@ const comprasController = {
   
     try {
       // Verifica se a compra existe
-      const [compras] = await pool.query('SELECT * FROM compras WHERE id = ?', [id]);
-      if (compras.length === 0) {
+      const [compra] = await comprasController.listarCompraPorId(id);
+      if (!compra) {
         return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
       }
   
