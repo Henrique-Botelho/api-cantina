@@ -17,7 +17,7 @@ const comprasController = {
     const query = 'SELECT * FROM clientes WHERE numero = ?';
     const [response] = await pool.query(query, [numero]);
     if (response.length === 0) {
-        return null; // ou undefined
+      return null; // ou undefined
     }
     return response[0];
   },
@@ -73,29 +73,30 @@ const comprasController = {
   },
 
   alterarCompra: async (req, res) => {
+    const { id } = req.params;
+    const { id_cliente, compra, total, dataHora } = req.body;
+  
+    if (!id_cliente || !compra || !total || !dataHora) {
+      return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
+    }
+  
+    if (typeof compra !== "string" || typeof total !== "string") {
+      return res.status(400).json({ status: 400, message: 'Tipo dos dados incorreto.' });
+    }
+  
     try {
-      const { id } = req.params;
-      const { id_cliente, compra, total, dataHora } = req.body;
-  
-      // Verifica se todos os campos necessários estão presentes
-      if (!id || !id_cliente || !compra || !total || !dataHora) {
-        return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
+      // Verifica se a compra existe
+      const [compras] = await pool.query('SELECT * FROM compras WHERE id = ?', [id]);
+      if (compras.length === 0) {
+        return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
       }
   
-      // Verifica se o cliente com o número fornecido existe no banco de dados
-      const cliente = await comprasController.findClienteByNumero(id_cliente);
-      if (!cliente) {
-        return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
-      }
+      // Atualiza a compra
+      const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id = ?';
+      await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id]);
   
-      // Executa a consulta SQL para atualizar a compra
-      const query = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id = ?';
-      await pool.query(query, [cliente.id, compra, total, dataHora, id]);
-  
-      // Retorna uma resposta de sucesso
-      res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
+      return res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
     } catch (error) {
-      // Captura o erro e retorna uma resposta de erro
       console.log("Erro ao atualizar compra: " + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
