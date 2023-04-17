@@ -73,20 +73,20 @@
     //aqui editarCompra
     editarCompra: async (req, res) => {
       const { id } = req.params;
-      const { compra } = req.body;
+      const { compra, total, dataHora, id_cliente } = req.body;
     
-      if (!compra) {
+      if (!compra || !total || !dataHora || !id_cliente) {
         return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
       }
     
-      if (typeof compra !== "string") {
+      if (typeof compra !== "string" || typeof total !== "string" || typeof dataHora !== "string" || typeof id_cliente !== "number") {
         return res.status(400).json({ status: 400, message: 'Tipo dos dados incorreto.' })
       }
     
-      const queryAtualizaCompra = 'UPDATE compras SET compra = ? WHERE id = ?';
+      const queryAtualizaCompra = 'UPDATE compras SET compra = ?, total = ?, dataHora = ?, id_cliente = ? WHERE id = ?';
     
       try {
-        const [result] = await pool.query(queryAtualizaCompra, [compra, id]);
+        const [result] = await pool.query(queryAtualizaCompra, [compra, total, dataHora, id_cliente, id]);
         if (result.affectedRows === 0) {
           return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
         }
@@ -96,7 +96,7 @@
         return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
       }
     },
-    
+
     // Criando a função "excluirCompra"
     excluirCompra: async (req, res) => {
       const { id } = req.params;
