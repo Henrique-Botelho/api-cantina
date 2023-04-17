@@ -101,17 +101,17 @@ const comprasController = {
         return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
       }
   
-      // Atualiza a compra
-      const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id = ?';
-      await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id]);
+      // Edita a compra
+      const queryEditaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id = ?';
+      await pool.query(queryEditaCompra, [id_cliente, compra, total, dataHora, id]);
   
-      return res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
+      return res.status(200).json({ status: 200, message: 'Compra editada com sucesso!' });
     } catch (error) {
-      console.log("Erro ao atualizar compra: " + error);
+      console.log("Erro ao editar compra: " + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
-    
+      
   // Criando a função "excluirCompra"
   excluirCompra: async (req, res) => {
     const { id } = req.params;
