@@ -83,9 +83,14 @@
         return res.status(400).json({ status: 400, message: 'Tipo dos dados incorreto.' })
       }
     
-      const queryAtualizaCompra = 'UPDATE compras SET compra = ?, total = ?, dataHora = ?, id_cliente = ? WHERE id = ?';
-    
       try {
+        const cliente = await comprasController.findClienteById(id_cliente);
+    
+        if (!cliente) {
+          return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
+        }
+    
+        const queryAtualizaCompra = 'UPDATE compras SET compra = ?, total = ?, dataHora = ?, id_cliente = ? WHERE id = ?';
         const [result] = await pool.query(queryAtualizaCompra, [compra, total, dataHora, id_cliente, id]);
         if (result.affectedRows === 0) {
           return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
