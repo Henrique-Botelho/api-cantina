@@ -120,14 +120,21 @@ const comprasController = {
   // Criando a função "excluirComprasPorCliente"
   excluirComprasPorCliente: async (req, res) => {
     const { numero } = req.params;
-
+  
     const queryVerificaCliente = 'SELECT id FROM clientes WHERE numero=?';
     const queryExcluirCompras = 'DELETE FROM compras WHERE id_cliente=?';
+    
     try {
       const [clientes] = await pool.query(queryVerificaCliente, [numero]);
       if (clientes.length === 0) {
         return res.status(401).json({ status: 401, message: 'Este cliente não existe.' });
       }
+      
+      const [compras] = await pool.query('SELECT * FROM compras WHERE id_cliente IN (SELECT id FROM clientes WHERE numero=?)', [numero]);
+      if (compras.length === 0) {
+        return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para este cliente.' });
+      }
+      
       let algumaCompraExcluida = false;
       for (const cliente of clientes) {
         const resultado = await pool.query(queryExcluirCompras, [cliente.id]);
@@ -135,21 +142,18 @@ const comprasController = {
           algumaCompraExcluida = true;
         }
       }
+      
       if (algumaCompraExcluida) {
         return res.status(200).json({ status: 200, message: 'Compras excluídas com sucesso!' });
       } else {
-        // Verifica se nenhuma compra foi excluída
-        const [compras] = await pool.query('SELECT * FROM compras WHERE id_cliente IN (SELECT id FROM clientes WHERE numero=?)', [numero]);
-        if (compras.length === 0) {
-          return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para este cliente.' });
-        }
-        return res.status(200).json({ status: 200, message: 'Compras excluídas com sucesso!' });
+        return res.status(200).json({ status: 200, message: 'Nenhuma compra encontrada para este cliente.' });
       }
+      
     } catch (error) {
       console.log("Erro ao Deletar todas as compras" + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
-  },
+  },  
 };
 
 module.exports = comprasController;
