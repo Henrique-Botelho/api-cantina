@@ -21,7 +21,7 @@ const comprasController = {
     }
     return response[0];
   },
-  
+
   // função que lista as compras feitas por um cliente com o ID fornecido
   async listarCompraPorCliente(idCliente) {
     const query = 'SELECT * FROM compras WHERE id_cliente = ?';
@@ -34,19 +34,19 @@ const comprasController = {
     try {
       const { id } = req.params;
       const cliente = await comprasController.findClienteById(id);
-  
+
       if (!cliente) {
         return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
       }
-  
+
       const compras = await comprasController.listarCompraPorCliente(cliente.id);
-  
+
       return res.status(200).json({ status: 200, compras });
     } catch (error) {
       console.log("Erro ao listar compras do usuário: " + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
-  },  
+  },
   //==================================//
 
   criarCompra: async (req, res) => {
@@ -73,33 +73,33 @@ const comprasController = {
   alterarCompra: async (req, res) => {
     const { id } = req.params;
     const { id_cliente, compra, total, dataHora } = req.body;
-  
+
     if (!id_cliente || !compra || !total || !dataHora) {
       return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
     }
-  
+
     if (isNaN(parseInt(id))) {
       return res.status(400).json({ status: 400, message: 'Id da compra inválido.' });
     }
-  
+
     try {
       // Verifica se a compra existe
       const [compra] = await comprasController.listarCompraPorId(id);
       if (!compra) {
         return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
       }
-  
+
       // Edita a compra
       const queryEditaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id = ?';
       await pool.query(queryEditaCompra, [id_cliente, compra, total, dataHora, id]);
-  
+
       return res.status(200).json({ status: 200, message: 'Compra editada com sucesso!' });
     } catch (error) {
       console.log("Erro ao editar compra: " + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
-      
+
   // Criando a função "excluirCompra"
   excluirCompra: async (req, res) => {
     const { id } = req.params;
@@ -146,6 +146,9 @@ const comprasController = {
         return res.status(200).json({ status: 200, message: 'Compras excluídas com sucesso!' });
       }
     } catch (error) {
+      if (error.code === 'ER_BAD_FIELD_ERROR' && error.message.includes('compras.id_cliente')) {
+        return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para este cliente.' });
+      }
       console.log("Erro ao Deletar todas as compras" + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
