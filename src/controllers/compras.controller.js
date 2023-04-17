@@ -16,6 +16,9 @@ const comprasController = {
   async findClienteByNumero(numero) {
     const query = 'SELECT * FROM clientes WHERE numero = ?';
     const [response] = await pool.query(query, [numero]);
+    if (response.length === 0) {
+        return null; // ou undefined
+    }
     return response[0];
   },
 
