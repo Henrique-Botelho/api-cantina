@@ -86,8 +86,7 @@ const comprasController = {
 
     if (!id_cliente || typeof id_cliente !== 'number') {
       return res.status(400).json({ status: 400, message: 'Id do cliente inválido.' });
-    }
-    
+    }    
   
     try {
       // Verifica se a compra existe
