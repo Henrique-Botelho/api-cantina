@@ -23,10 +23,10 @@ const comprasController = {
   },
 
   // função que lista as compras feitas por um cliente com o ID fornecido
-  async listarComprasPorCliente(idCliente) {
-    const query = 'SELECT * FROM compras WHERE id_cliente = ?';
+  async listarCompraPorCliente(idCliente) {
+    const query = 'SELECT * FROM compras WHERE id_cliente = ? LIMIT 1';
     const [response] = await pool.query(query, [idCliente]);
-    return response;
+    return response[0];
   },
 
   // função que manipula a requisição HTTP para listar as compras de um cliente específico
@@ -35,15 +35,15 @@ const comprasController = {
       const { id } = req.params;
       const query = 'SELECT id FROM clientes WHERE numero = ? AND idioma = ?';
       const [cliente] = await pool.query(query, [id, 'português']);
-
+  
       if (!cliente || !cliente.length) {
         return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
       }
-
+  
       const idCliente = cliente[0].id;
-      const compras = await comprasController.listarComprasPorCliente(idCliente);
-
-      return res.status(200).json({ status: 200, compras });
+      const compra = await comprasController.listarCompraPorCliente(idCliente);
+  
+      return res.status(200).json({ status: 200, compra });
     } catch (error) {
       console.log("Erro ao listar compras do usuário: " + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
