@@ -83,6 +83,12 @@
         return res.status(400).json({ status: 400, message: 'Tipo dos dados incorreto.' })
       }
     
+      // Verifica se a compra com o ID fornecido existe
+      const compraExistente = await comprasController.findCompraById(id);
+      if (!compraExistente) {
+        return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
+      }
+    
       const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id = ?';
       try {
         const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id]);
@@ -94,8 +100,8 @@
         console.log("Erro ao atualizar compra: " + error);
         return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
       }
-    },    
-    
+    },
+        
     // Criando a função "excluirCompra"
     excluirCompra: async (req, res) => {
       const { id } = req.params;
