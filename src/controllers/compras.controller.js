@@ -33,8 +33,8 @@ const comprasController = {
   async listarComprasPorUsuario(req, res) {
     try {
       const { id } = req.params;
-      const query = 'SELECT id FROM clientes WHERE = ? AND idioma = ?';
-      const [cliente] = await pool.query(query, [id, 'português']);
+      const query = 'SELECT id FROM clientes WHERE = ?';
+      const [cliente] = await pool.query(query, [id]);
   
       if (!cliente || !cliente.length) {
         return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
