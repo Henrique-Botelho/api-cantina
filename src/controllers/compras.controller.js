@@ -83,10 +83,10 @@ const comprasController = {
     if (typeof compra !== "string" || typeof total !== "string") {
       return res.status(400).json({ status: 400, message: 'Tipo dos dados incorreto.' });
     }
-
+  
     if (!id_cliente || typeof id_cliente !== 'number') {
       return res.status(400).json({ status: 400, message: 'Id do cliente inválido.' });
-    }    
+    }
   
     try {
       // Verifica se a compra existe
@@ -105,7 +105,7 @@ const comprasController = {
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
-
+  
   // Criando a função "excluirCompra"
   excluirCompra: async (req, res) => {
     const { id } = req.params;
