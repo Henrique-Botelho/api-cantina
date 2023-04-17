@@ -82,8 +82,8 @@
       if (typeof compra !== "string" || typeof total !== "string") {
         return res.status(400).json({ status: 400, message: 'Tipo de dados incorreto.' })
       }
-    
-      const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id = ?';
+      
+      const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id= ?';
       try {
         const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id]);
         if (result.affectedRows === 0) {
