@@ -147,16 +147,9 @@ const comprasController = {
       }
     } catch (error) {
       console.log("Erro ao Deletar todas as compras" + error);
-      if (error.code === 'ER_BAD_FIELD_ERROR' && error.message.includes('compras.id_cliente')) {
-        return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para este cliente.' });
-      }
-      console.log("Erro ao Deletar todas as compras" + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
-    // Retorna uma resposta de erro caso nenhuma compra seja encontrada
-    return res.status(404).json({ status: 404, message: 'Nenhuma compra encontrada para este cliente.' });
   },
-
 };
 
 module.exports = comprasController;
