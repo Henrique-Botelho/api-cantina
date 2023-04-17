@@ -75,28 +75,28 @@ const comprasController = {
     const { id_cliente, compra, total, dataHora } = req.body;
   
     if ([id_cliente, compra, total, dataHora].some((campo) => campo == null)) {
-      return res.status(400).json({ erro: { status: 400, mensagem: 'Preencha todos os campos.' } });
+      return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
     }
   
-    if (isNaN(parseInt(idCompra))) {
-      return res.status(400).json({ erro: { status: 400, mensagem: 'Id da compra inválido.' } });
+    if (isNaN(parseInt(id))) {
+      return res.status(400).json({ status: 400, message: 'Id da compra inválido.' });
     }
   
     try {
       // Verifica se a compra existe
       const [compraExistente] = await comprasController.listarCompraPorId(id);
       if (!compraExistente) {
-        return res.status(404).json({ erro: { status: 404, mensagem: 'Compra não encontrada.' } });
+        return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
       }
   
       // Edita a compra
       const queryEditaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id = ?';
       await pool.query(queryEditaCompra, [id_cliente, compra, total, dataHora, id]);
   
-      return res.status(200).json({ sucesso: { status: 200, mensagem: 'Compra editada com sucesso!' } });
+      return res.status(200).json({ status: 200, message: 'Compra editada com sucesso!' });
     } catch (error) {
       console.error("Erro ao editar compra: " + error);
-      return res.status(500).json({ erro: { status: 500, mensagem: 'Erro no contato com o servidor.' } });
+      return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
 
