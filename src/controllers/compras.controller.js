@@ -81,7 +81,7 @@ const comprasController = {
     const { id } = req.params;
     const { id_cliente, compra, total, dataHora } = req.body;
   
-    if (!id_cliente || !compra || !total || !dataHora) {
+    if (!id_cliente || !compra || !total) {
       return res.status(400).json({ status: 400, message: 'Por favor, preencha todos os campos.' });
     }
   
@@ -102,7 +102,7 @@ const comprasController = {
     }
   
     // atualiza a compra no banco de dados
-    const queryAtualizaCompra = 'UPDATE compras SET id_cliente= ?, compra= ?, total= ?, dataHora= ? WHERE id= ?';
+    const queryAtualizaCompra = 'UPDATE compras SET id_cliente= ?, compra= ?, total= ? WHERE id= ?';
     try {
       const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id]);
       if (result.affectedRows === 0) {
