@@ -23,6 +23,9 @@ app.use('/api/compras', comprasRouter); //api/produtos. Ela usa o método use() 
 
 
 //Ele usa o método listen() do objeto app e uma função de retorno de chamada para imprimir uma mensagem no console.log, informando que o servidor está em execução.
-app.listen(3000, () => {
+app.listen({
+  host: '0.0.0.0',
+  port: 3000
+}, () => {
     console.log(`Servidor rodando na porta ${3000}...`);
 });
