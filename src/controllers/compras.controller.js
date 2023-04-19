@@ -106,13 +106,14 @@ const comprasController = {
     try {
       const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, id]);
       if (result.affectedRows === 0) {
-        return res.status(500).json({ status: 500, message: 'Não foi possível atualizar a compra.' });
+        return res.status(500).json({ status: 500, message: 'Não foi possível atualizar a compra. As informações do cliente não foram alteradas.' });
       }
       return res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
     } catch (error) {
       console.log("Erro ao atualizar compra: " + error);
       return res.status(500).json({ status: 500, message: 'Não foi possível atualizar a compra no banco de dados.' });
     }
+
   },
   
   // Criando a função "excluirCompra"
