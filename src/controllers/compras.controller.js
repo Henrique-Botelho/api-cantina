@@ -79,10 +79,6 @@
         return res.status(400).json({ status: 400, message: 'Por favor, preencha todos os campos.' });
       }
     
-      if (typeof compra !== "string" || typeof total !== "number" || typeof dataHora !== "string") {
-        return res.status(400).json({ status: 400, message: 'Tipo de dados incorretos.' })
-      }
-    
       const queryBuscaCompra = 'SELECT * FROM compras WHERE id_cliente = ? AND id = ?';
       try {
         const [result] = await pool.query(queryBuscaCompra, [id_cliente, id]);
