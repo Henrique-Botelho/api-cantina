@@ -31,19 +31,19 @@ const clientesController = {
         try {
             const queryBuscaCliente = 'SELECT * FROM clientes WHERE numero = ?';
             const [rows] = await pool.query(queryBuscaCliente, [numero]);
-        
+
             if (rows.length > 0) {
                 return res.status(400).json({ status: 400, message: 'Já existe um cliente cadastrado com este número de telefone.' });
             }
-        
+
             const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)';
             const response2 = await pool.query(queryInsereCliente, [nome, numero]);
-        
+
             return res.status(201).json({ message: 'Cliente cadastrado com sucesso!' });
         } catch (error) {
             console.log('Erro ao cadastrar cliente' + error);
             return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
-        }        
+        }
     },
 
     listaClientes: async (req, res) => {
@@ -89,20 +89,20 @@ const clientesController = {
     atualizaCliente: async (req, res) => {
         const { id } = req.params;
         const { nome, numero } = req.body;
-    
+
         if (!id) {
             return res.status(400).json({ status: 400, message: 'É necessário informar o id do cliente a ser atualizado.' });
         }
-    
+
         const verificaID = 'SELECT * FROM clientes WHERE id = ?';
-    
+
         try {
             const [rows] = await pool.query(verificaID, [id]);
-    
+
             if (rows.length === 0) {
                 return res.status(404).json({ status: 404, message: 'Cliente não encontrado. Não é possível atualizar.' });
             }
-    
+
             if (nome) {
                 if (!validarNome.test(nome)) {
                     return res.status(400).json({ status: 400, message: 'Nome deve conter apenas letras e espaços.' });
@@ -111,7 +111,7 @@ const clientesController = {
                     return res.status(400).json({ status: 400, message: 'Quantidade de caracteres para nome inválida.' });
                 }
             }
-    
+
             if (numero) {
                 if (!validarNumero.test(numero)) {
                     return res.status(400).json({ status: 400, message: 'Número deve conter apenas números.' });
@@ -120,22 +120,22 @@ const clientesController = {
                     return res.status(400).json({ status: 400, message: 'Quantidade de caracteres para número inválida.' });
                 }
             }
-    
+
             // verifica se há mudanças antes de atualizar
             if (nome === rows[0].nome && numero === rows[0].numero) {
                 return res.status(200).json({ message: 'As informações do cliente não foram alteradas.' });
             }
-    
+
             const queryAtualizaCliente = 'UPDATE clientes SET nome = ?, numero = ? WHERE id = ?';
             const response = await pool.query(queryAtualizaCliente, [nome, numero, id]);
-    
+
             return res.status(200).json({ message: 'Cliente atualizado com sucesso!' });
         } catch (error) {
             console.log('Erro ao atualizar cliente: ' + error);
             return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
         }
     },
-    
+
     deletaCliente: async (req, res) => {
         const { id } = req.params;
         const ID = parseInt(id);

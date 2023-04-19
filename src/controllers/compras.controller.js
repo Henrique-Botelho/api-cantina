@@ -93,6 +93,8 @@ const comprasController = {
       if (result[0].id_cliente != id_cliente) {
         return res.status(400).json({ status: 400, message: 'A compra não pertence ao cliente informado.' });
       }
+      // added code
+      return res.status(200).json({ status: 200, message: 'Compra encontrada!' });
     } catch (error) {
       console.log("Erro ao buscar compra: " + error);
       return res.status(500).json({ status: 500, message: 'Não foi possível buscar a compra no banco de dados.' });
