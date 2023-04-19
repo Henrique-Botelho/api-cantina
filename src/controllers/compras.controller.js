@@ -80,15 +80,15 @@ const comprasController = {
   editarCompra: async (req, res) => {
     const { id } = req.params;
     const { id_cliente, compra, total, dataHora } = req.body;
-  
+
     if (!id_cliente || !compra || !total) {
       return res.status(400).json({ status: 400, message: 'Por favor, preencha todos os campos.' });
     }
-  
+
     if (typeof compra !== "string" || typeof total !== "string") {
       return res.status(400).json({ status: 400, message: 'Tipo de dados incorreto.' })
     }
-  
+
     // verifica se a compra existe e pertence ao cliente informado
     const queryBuscaCompra = 'SELECT * FROM compras WHERE id = ? AND id_cliente = ?';
     try {
@@ -100,20 +100,19 @@ const comprasController = {
       console.log("Erro ao buscar compra: " + error);
       return res.status(500).json({ status: 500, message: 'Não foi possível buscar a compra no banco de dados.' });
     }
-  
+
     // atualiza a compra no banco de dados
     const queryAtualizaCompra = 'UPDATE compras SET id_cliente= ?, compra= ?, total= ? WHERE id= ?';
     try {
       const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, id]);
       if (result.affectedRows === 0) {
-        return res.status(500).json({ status: 500, message: 'Não foi possível atualizar a compra. As informações do cliente não foram alteradas.' });
+        return res.status(500).json({ status: 500, message: 'Não foi possível atualizar a compra. As informações da compra não foram alteradas.' });
       }
       return res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
     } catch (error) {
       console.log("Erro ao atualizar compra: " + error);
       return res.status(500).json({ status: 500, message: 'Não foi possível atualizar a compra no banco de dados.' });
     }
-
   },
   
   // Criando a função "excluirCompra"
