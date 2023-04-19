@@ -85,7 +85,7 @@
         return res.status(400).json({ status: 400, message: 'Tipo de dados incorreto.' })
       }
     
-      // busca a compra no banco de dados para verificar se ela existe
+      // verifica se a compra pertence ao cliente informado
       const queryBuscaCompra = 'SELECT * FROM compras WHERE id_cliente = ? AND id = ?';
       try {
         const [result] = await pool.query(queryBuscaCompra, [id_cliente, id]);
@@ -98,13 +98,13 @@
       }
     
       // atualiza a compra no banco de dados
-      const queryAtualizaCompra = 'UPDATE compras SET id_cliente= ?, compra= ?, total= ?, dataHora= ? WHERE id_cliente= ? AND id= ?';
+      const queryAtualizaCompra = 'UPDATE compras SET id_cliente= ?, compra= ?, total= ?, dataHora= ? WHERE id= ?';
       try {
-        const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id_cliente, id]);
+        const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id]);
         if (result.affectedRows === 0) {
-          return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
+          return res.status(500).json({ status: 500, message: 'Não foi possível atualizar a compra.' });
         }
-        res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
+        return res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
       } catch (error) {
         console.log("Erro ao atualizar compra: " + error);
         return res.status(500).json({ status: 500, message: 'Erro ao entrar em contato com o servidor.' });
