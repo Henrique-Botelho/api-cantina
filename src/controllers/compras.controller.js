@@ -71,7 +71,6 @@ const comprasController = {
   },
 
   //aqui editarCompra
-  //aqui editarCompra
   editarCompra: async (req, res) => {
     const { id } = req.params; // extrai o id da compra a ser atualizada a partir dos parâmetros da requisição
     const { id_cliente, compra, total, dataHora } = req.body; // extrai os novos valores da compra do corpo da requisição
