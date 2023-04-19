@@ -72,17 +72,20 @@
 
     //aqui editarCompra
     editarCompra: async (req, res) => {
-      const { id } = req.params;
-      const { id_cliente, compra, total, dataHora } = req.body;
+      const { id } = req.params; // extrai o id da compra a ser atualizada a partir dos parâmetros da requisição
+      const { id_cliente, compra, total, dataHora } = req.body; // extrai os novos valores da compra do corpo da requisição
     
+      // verifica se todos os campos foram preenchidos
       if (!id_cliente || !compra || !total || !dataHora) {
         return res.status(400).json({ status: 400, message: 'Por favor, preencha todos os campos.' });
       }
     
+      // verifica se os tipos de dados são válidos
       if (typeof compra !== "string" || typeof total !== "string") {
         return res.status(400).json({ status: 400, message: 'Tipo de dados incorreto.' })
       }
     
+      // busca a compra no banco de dados para verificar se ela existe
       const queryBuscaCompra = 'SELECT * FROM compras WHERE id_cliente = ? AND id = ?';
       try {
         const [result] = await pool.query(queryBuscaCompra, [id_cliente, id]);
@@ -94,6 +97,7 @@
         return res.status(500).json({ status: 500, message: 'Erro ao entrar em contato com o servidor.' });
       }
     
+      // atualiza a compra no banco de dados
       const queryAtualizaCompra = 'UPDATE compras SET id_cliente= ?, compra= ?, total= ?, dataHora= ? WHERE id_cliente= ? AND id= ?';
       try {
         const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id_cliente, id]);
@@ -105,7 +109,7 @@
         console.log("Erro ao atualizar compra: " + error);
         return res.status(500).json({ status: 500, message: 'Erro ao entrar em contato com o servidor.' });
       }
-    },               
+    },            
     
     // Criando a função "excluirCompra"
     excluirCompra: async (req, res) => {
