@@ -84,14 +84,11 @@ const comprasController = {
     }
   
     // verifica se a compra existe e pertence ao cliente informado
-    const queryBuscaCompra = 'SELECT * FROM compras WHERE id = ?';
+    const queryBuscaCompra = 'SELECT * FROM compras WHERE id = ? AND id_cliente = ?';
     try {
-      const [result] = await pool.query(queryBuscaCompra, [id]);
+      const [result] = await pool.query(queryBuscaCompra, [id, id_cliente]);
       if (result.length === 0) {
         return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
-      }
-      if (result[0].id_cliente != id_cliente) {
-        return res.status(400).json({ status: 400, message: 'A compra não pertence ao cliente informado.' });
       }
     } catch (error) {
       console.log("Erro ao buscar compra: " + error);
@@ -107,11 +104,11 @@ const comprasController = {
       }
       return res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
     } catch (error) {
-      console.log("Não foi possível atualizar a compra." + error);
-      return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' })
+      console.log("Erro ao atualizar compra: " + error);
+      return res.status(500).json({ status: 500, message: 'Não foi possível atualizar a compra no banco de dados.' });
     }
   },
-
+  
   // Criando a função "excluirCompra"
   excluirCompra: async (req, res) => {
     const { id } = req.params;
