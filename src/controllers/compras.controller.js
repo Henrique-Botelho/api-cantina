@@ -104,7 +104,7 @@ const comprasController = {
     // atualiza a compra no banco de dados
     const queryAtualizaCompra = 'UPDATE compras SET id_cliente= ?, compra= ?, total= ? WHERE id= ?';
     try {
-      const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id]);
+      const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, id]);
       if (result.affectedRows === 0) {
         return res.status(500).json({ status: 500, message: 'Não foi possível atualizar a compra.' });
       }
