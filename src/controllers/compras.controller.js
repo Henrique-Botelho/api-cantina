@@ -97,6 +97,7 @@
       const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id_cliente = ? AND id = ?';
       try {
         const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id_cliente, id]);
+        console.log(result);
         if (result.affectedRows === 0) {
           return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
         }
