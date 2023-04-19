@@ -74,16 +74,16 @@ const comprasController = {
   editarCompra: async (req, res) => {
     const { id } = req.params;
     const { id_cliente, compra, total, dataHora } = req.body;
-
+  
     if (!id_cliente || !compra || !total || !dataHora) {
       return res.status(400).json({ status: 400, message: 'Por favor, preencha todos os campos.' });
     }
-
+  
     if (typeof compra !== "string" || typeof total !== "string") {
       return res.status(400).json({ status: 400, message: 'Tipo de dados incorreto.' })
     }
-
-    //verifica se a compra existe e pertence ao cliente informado
+  
+    // verifica se a compra existe e pertence ao cliente informado
     const queryBuscaCompra = 'SELECT * FROM compras WHERE id = ?';
     try {
       const [result] = await pool.query(queryBuscaCompra, [id]);
@@ -93,13 +93,11 @@ const comprasController = {
       if (result[0].id_cliente != id_cliente) {
         return res.status(400).json({ status: 400, message: 'A compra não pertence ao cliente informado.' });
       }
-      // added code
-      return res.status(200).json({ status: 200, message: 'Compra encontrada!' });
     } catch (error) {
       console.log("Erro ao buscar compra: " + error);
       return res.status(500).json({ status: 500, message: 'Não foi possível buscar a compra no banco de dados.' });
     }
-
+  
     // atualiza a compra no banco de dados
     const queryAtualizaCompra = 'UPDATE compras SET id_cliente= ?, compra= ?, total= ?, dataHora= ? WHERE id= ?';
     try {
