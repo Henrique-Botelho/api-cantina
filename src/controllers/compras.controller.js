@@ -105,7 +105,7 @@
         console.log("Erro ao atualizar compra: " + error);
         return res.status(500).json({ status: 500, message: 'Erro ao entrar em contato com o servidor.' });
       }
-    },
+    },    
     
     // Criando a função "excluirCompra"
     excluirCompra: async (req, res) => {
