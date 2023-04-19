@@ -94,7 +94,7 @@
         return res.status(500).json({ status: 500, message: 'Erro ao entrar em contato com o servidor.' });
       }
     
-      const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id= ?';
+      const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id = ?';
       try {
         const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id]);
         if (result.affectedRows === 0) {
@@ -105,7 +105,7 @@
         console.log("Erro ao atualizar compra: " + error);
         return res.status(500).json({ status: 500, message: 'Erro ao entrar em contato com o servidor.' });
       }
-    },    
+    },
     
     // Criando a função "excluirCompra"
     excluirCompra: async (req, res) => {
