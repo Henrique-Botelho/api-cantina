@@ -82,7 +82,7 @@
       if (typeof compra !== "string" || typeof total !== "string") {
         return res.status(400).json({ status: 400, message: 'Tipo de dados incorreto.' })
       }
-      
+    
       const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id= ?';
       try {
         const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id]);
@@ -91,11 +91,11 @@
         }
         res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
       } catch (error) {
-        console.log("Erro ao atualizar compra: " + error);
+        console.log("Error updating purchase: " + error);
         return res.status(500).json({ status: 500, message: 'Erro ao entrar em contato com o servidor.' });
       }
     },
-
+    
     // Criando a função "excluirCompra"
     excluirCompra: async (req, res) => {
       const { id } = req.params;
