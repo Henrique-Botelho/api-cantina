@@ -83,18 +83,22 @@
         return res.status(400).json({ status: 400, message: 'Tipo de dados incorreto.' })
       }
     
+      const queryVerificaCompra = 'SELECT * FROM compras WHERE id = ?';
+      const [compraEncontrada] = await pool.query(queryVerificaCompra, [id]);
+    
+      if (compraEncontrada.length === 0) {
+        return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
+      }
+    
       const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id= ?';
       try {
         const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id]);
-        if (result.affectedRows === 0) {
-          return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
-        }
         res.status(200).json({ status: 200, message: 'Compra atualizada com sucesso!' });
       } catch (error) {
         console.log("Error updating purchase: " + error);
         return res.status(500).json({ status: 500, message: 'Erro ao entrar em contato com o servidor.' });
       }
-    },
+    },    
     
     // Criando a função "excluirCompra"
     excluirCompra: async (req, res) => {
