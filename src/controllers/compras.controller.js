@@ -50,32 +50,32 @@ const comprasController = {
   //==================================//
 
   criarCompra: async (req, res) => {
-    const { id_cliente, compra, total, dataHora } = req.body;
-
-    if (!id_cliente || !compra || !total || !dataHora) {
+    const { id_cliente, compra, total } = req.body;
+  
+    if (!id_cliente || !compra || !total) {
       return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
     }
-
-    if (typeof compra !== "string" || typeof total !== "string") {
-      return res.status(400).json({ status: 400, message: 'Tipo dos dados incorreto.' })
+  
+    if (typeof compra !== 'string' || typeof total !== 'number') {
+      return res.status(400).json({ status: 400, message: 'Tipo dos dados incorreto.' });
     }
-
+  
     const cliente = await comprasController.findClienteById(id_cliente);
-
+  
     if (!cliente) {
-        return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
+      return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
     }
-
-    const queryInsereCompra = 'INSERT INTO compras (id_cliente, compra, total, dataHora) VALUES (?, ?, ?, ?)';
+  
+    const queryInsereCompra = 'INSERT INTO compras (id_cliente, compra, total) VALUES (?, ?, ?)';
     try {
-        await pool.query(queryInsereCompra, [id_cliente, compra, total, dataHora]);
-        res.status(200).json({ status: 200, message: 'Compra criada com sucesso!' });
+      await pool.query(queryInsereCompra, [id_cliente, compra, total]);
+      res.status(201).json({ status: 201, message: 'Compra criada com sucesso!' });
     } catch (error) {
-        console.log("Não foi possível inserir..." + error);
-        return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' })
+      console.log('Não foi possível inserir...' + error);
+      return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
-
+  
   //aqui editarCompra
   editarCompra: async (req, res) => {
     const { id } = req.params;
