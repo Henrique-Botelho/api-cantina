@@ -79,8 +79,8 @@
         return res.status(400).json({ status: 400, message: 'Por favor, preencha todos os campos.' });
       }
     
-      if (typeof compra !== "string" || typeof total !== "string") {
-        return res.status(400).json({ status: 400, message: 'Tipo de dados incorreto.' })
+      if (typeof compra !== "string" || typeof total !== "number") {
+        return res.status(400).json({ status: 400, message: 'Tipo de dados incorretos.' })
       }
     
       const queryBuscaCompra = 'SELECT * FROM compras WHERE id_cliente = ? AND id = ?';
@@ -106,7 +106,7 @@
         console.log("Erro ao atualizar compra: " + error);
         return res.status(500).json({ status: 500, message: 'Erro ao entrar em contato com o servidor.' });
       }
-    },      
+    },         
     
     // Criando a função "excluirCompra"
     excluirCompra: async (req, res) => {
