@@ -161,7 +161,6 @@ const clientesController = {
             return res.status(400).json({ message: 'Erro no contato com o servidor ou existem compras relacionadas ao cliente.' }).status(500);
         }
     }
-
 };
 
 module.exports = clientesController;
