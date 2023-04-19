@@ -79,7 +79,7 @@
         return res.status(400).json({ status: 400, message: 'Por favor, preencha todos os campos.' });
       }
     
-      if (typeof compra !== "string" || typeof total !== "number") {
+      if (typeof compra !== "string" || typeof total !== "number" || typeof dataHora !== "string") {
         return res.status(400).json({ status: 400, message: 'Tipo de dados incorretos.' })
       }
     
@@ -106,7 +106,7 @@
         console.log("Erro ao atualizar compra: " + error);
         return res.status(500).json({ status: 500, message: 'Erro ao entrar em contato com o servidor.' });
       }
-    },         
+    },             
     
     // Criando a função "excluirCompra"
     excluirCompra: async (req, res) => {
