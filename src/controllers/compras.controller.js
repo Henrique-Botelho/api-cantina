@@ -83,9 +83,9 @@
         return res.status(400).json({ status: 400, message: 'Tipo de dados incorreto.' })
       }
     
-      const queryBuscaCompra = 'SELECT * FROM compras WHERE id = ?';
+      const queryBuscaCompra = 'SELECT * FROM compras WHERE id_cliente = ? AND id = ?';
       try {
-        const [result] = await pool.query(queryBuscaCompra, [id]);
+        const [result] = await pool.query(queryBuscaCompra, [id_cliente, id]);
         if (result.length === 0) {
           return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
         }
@@ -94,9 +94,9 @@
         return res.status(500).json({ status: 500, message: 'Erro ao entrar em contato com o servidor.' });
       }
     
-      const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id = ?';
+      const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id_cliente = ? AND id = ?';
       try {
-        const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id]);
+        const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id_cliente, id]);
         if (result.affectedRows === 0) {
           return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
         }
@@ -105,7 +105,7 @@
         console.log("Erro ao atualizar compra: " + error);
         return res.status(500).json({ status: 500, message: 'Erro ao entrar em contato com o servidor.' });
       }
-    },    
+    },      
     
     // Criando a função "excluirCompra"
     excluirCompra: async (req, res) => {
