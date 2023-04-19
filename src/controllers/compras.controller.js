@@ -94,7 +94,7 @@
         return res.status(500).json({ status: 500, message: 'Erro ao entrar em contato com o servidor.' });
       }
     
-      const queryAtualizaCompra = 'UPDATE compras SET id_cliente = ?, compra = ?, total = ?, dataHora = ? WHERE id_cliente = ? AND id = ?';
+      const queryAtualizaCompra = 'UPDATE compras SET id_cliente= ?, compra= ?, total= ?, dataHora= ? WHERE id_cliente= ? AND id= ?';
       try {
         const [result] = await pool.query(queryAtualizaCompra, [id_cliente, compra, total, dataHora, id_cliente, id]);
         if (result.affectedRows === 0) {
