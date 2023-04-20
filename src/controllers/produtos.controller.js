@@ -98,7 +98,7 @@ const produtosController = {
         const { id } = req.params;
         // Recebendo as variáveis "nome", "preco", "categoria" e "descricao" do body.
         let { nome, preco, categoria, descricao } = req.body;
-
+    
         // Verificando se todos os campos estão preenchidos.
         if (!nome || !preco || !categoria || !descricao) {
             return res.status(400).json({ status: 400, message: 'Todos os campos devem ser enviados.' })
@@ -130,12 +130,15 @@ const produtosController = {
         nome = nome.toLowerCase();
         categoria = categoria.toLowerCase();
         descricao = descricao.toLowerCase();
-
+    
         // Atualizando o produto na tabela "produtos"
         const queryAtualizaProduto = 'UPDATE produtos SET nome = ?, preco= ?, categoria= ?, descricao= ? WHERE id= ?';
         try {
             // Realizando a operação.
-            await pool.query(queryAtualizaProduto, [nome, preco, categoria, descricao, id]);
+            const result = await pool.query(queryAtualizaProduto, [nome, preco, categoria, descricao, id]);
+            if (result.affectedRows === 0) {
+                return res.status(200).json({ message: 'As informações do produto não foram alteradas.' });
+            }
             return res.status(200).json({ message: 'Produto atualizado com sucesso!' });
         } catch (error) {
             // Tratamento de erros durante o "Try"
@@ -143,6 +146,7 @@ const produtosController = {
             return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
         }
     },
+    
     // Criando a função "deletaProduto"
     deletaProduto: async (req, res) => {
         // Recebendo o "id" dos parâmetros
