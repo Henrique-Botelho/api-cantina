@@ -146,35 +146,21 @@ const produtosController = {
     // Criando a função "deletaProduto"
     deletaProduto: async (req, res) => {
         // Recebendo o "id" dos parâmetros
+        const { id } = req.params;
+
         // Verificando se o "id" foi inserido.
         if (!id) {
-            return res.status(400).json({ status: 400, message: 'É necessário informar o id do produto que deseja excluir.' });
+            return res.status(400).json({ status: 400, message: 'É necessário informar o id do produto que deseja alterar.' });
         }
-
-        // Verificando se o produto existe antes de excluí-lo.
-        const queryVerificaProduto = 'SELECT * FROM produtos WHERE id = ?';
+        // Deletando o produto onde o "id" seja igual ao inserido.
+        const queryDeletaProduto = 'DELETE FROM produtos WHERE id= ?';
         try {
-            const [rows, fields] = await pool.query(queryVerificaProduto, [id]);
-
-            // Se o produto não existe, retorna mensagem de erro ao usuário.
-            if (rows.length === 0) {
-                return res.status(404).json({ status: 404, message: 'Produto não encontrado.' });
-            }
-
-            // Deletando o produto onde o "id" seja igual ao inserido.
-            const queryDeletaProduto = 'DELETE FROM produtos WHERE id= ?';
-            try {
-                // Realizando a operação
-                await pool.query(queryDeletaProduto, [id]);
-                return res.status(200).json({ message: 'Produto excluído com sucesso!' });
-            } catch (error) {
-                // Tratamento de erros durante o "Try"
-                console.log('Erro ao tentar deletar esse produto: ' + error);
-                return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
-            }
-
+            // Realizando a operação
+            await pool.query(queryDeletaProduto, [id]);
+            return res.status(200).json({ message: 'Produto excluido com sucesso!' });
         } catch (error) {
-            console.log('Erro ao tentar verificar se o produto existe: ' + error);
+            // Tratamento de erros durante o "Try"
+            console.log('Erro ao tentar deletar esse produto: ' + error);
             return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
         }
     }
