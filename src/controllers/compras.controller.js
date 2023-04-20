@@ -51,21 +51,21 @@ const comprasController = {
 
   criarCompra: async (req, res) => {
     const { id_cliente, compra, total } = req.body;
-  
+
     if (!id_cliente || !compra || !total) {
       return res.status(400).json({ status: 400, message: 'Preencha todos os campos.' });
     }
-  
+
     if (typeof compra !== 'string' || typeof total !== 'number') {
       return res.status(400).json({ status: 400, message: 'Tipo dos dados incorreto.' });
     }
-  
+
     const cliente = await comprasController.findClienteById(id_cliente);
-  
+
     if (!cliente) {
       return res.status(404).json({ status: 404, message: 'Cliente não encontrado.' });
     }
-  
+
     const queryInsereCompra = 'INSERT INTO compras (id_cliente, compra, total) VALUES (?, ?, ?)';
     try {
       await pool.query(queryInsereCompra, [id_cliente, compra, total]);
@@ -75,7 +75,7 @@ const comprasController = {
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
-  
+
   //aqui editarCompra
   editarCompra: async (req, res) => {
     const { id } = req.params;
@@ -96,6 +96,13 @@ const comprasController = {
       if (result.length === 0) {
         return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
       }
+
+      // verifica se as informações da compra foram alteradas
+      const { id_cliente: oldIdCliente, compra: oldCompra, total: oldTotal } = result[0];
+      if (id_cliente === oldIdCliente && compra === oldCompra && total === oldTotal) {
+        return res.status(200).json({ status: 200, message: 'As informações da compra não foram alteradas.' });
+      }
+
     } catch (error) {
       console.log("Erro ao buscar compra: " + error);
       return res.status(500).json({ status: 500, message: 'Não foi possível buscar a compra no banco de dados.' });
@@ -114,7 +121,7 @@ const comprasController = {
       return res.status(500).json({ status: 500, message: 'Não foi possível atualizar a compra no banco de dados.' });
     }
   },
-  
+
   // Criando a função "excluirCompra"
   excluirCompra: async (req, res) => {
     const { id } = req.params;
