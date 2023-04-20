@@ -150,27 +150,17 @@ const produtosController = {
 
         // Verificando se o "id" foi inserido.
         if (!id) {
-            return res.status(400).json({ status: 400, message: 'É necessário informar o id do produto que deseja excluir.' });
+            return res.status(400).json({ status: 400, message: 'É necessário informar o id do produto que deseja alterar.' });
         }
-
+        // Deletando o produto onde o "id" seja igual ao inserido.
+        const queryDeletaProduto = 'DELETE FROM produtos WHERE id= ?';
         try {
-            // Verificando se o produto existe no banco de dados
-            const produto = await pool.query('SELECT * FROM produtos WHERE id = ?', [id]);
-
-            if (produto.length === 0) {
-                return res.status(404).json({ status: 404, message: 'Produto não encontrado.' });
-            }
-
-            // Deletando o produto onde o "id" seja igual ao inserido.
-            const queryDeletaProduto = 'DELETE FROM produtos WHERE id= ?';
-
             // Realizando a operação
             await pool.query(queryDeletaProduto, [id]);
-
-            return res.status(200).json({ message: 'Produto excluído com sucesso!' });
+            return res.status(200).json({ message: 'Produto excluido com sucesso!' });
         } catch (error) {
             // Tratamento de erros durante o "Try"
-            console.log('Erro ao tentar excluir esse produto: ' + error);
+            console.log('Erro ao tentar deletar esse produto: ' + error);
             return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
         }
     }
