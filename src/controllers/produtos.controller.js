@@ -147,23 +147,31 @@ const produtosController = {
     deletaProduto: async (req, res) => {
         // Recebendo o "id" dos parâmetros
         const { id } = req.params;
-
-        // Verificando se o "id" foi inserido.
+        // Verificando se o id foi definido
         if (!id) {
-            return res.status(400).json({ status: 400, message: 'É necessário informar o id do produto que deseja alterar.' });
+            return res.status(400).json({ status: 400, message: 'Envie o ID do produto para realizar a operação.' });
         }
-        // Deletando o produto onde o "id" seja igual ao inserido.
-        const queryDeletaProduto = 'DELETE FROM produtos WHERE id= ?';
+        // Selecionando o produto a ser excluído pelo ID
+        const querySelecionaProduto = 'SELECT * FROM produtos WHERE id = ?';
         try {
             // Realizando a operação
+            const [response] = await pool.query(querySelecionaProduto, [id]);
+            // Verificando se o produto existe
+            if (response.length === 0) {
+                return res.status(404).json({ status: 404, message: 'Produto não encontrado.' });
+            }
+            // Excluindo o produto da tabela produtos
+            const queryDeletaProduto = 'DELETE FROM produtos WHERE id = ?';
             await pool.query(queryDeletaProduto, [id]);
-            return res.status(200).json({ message: 'Produto excluido com sucesso!' });
+            // Resposta ao usuario que seu produto foi excluído com sucesso
+            return res.status(200).json({ message: 'Produto excluído com sucesso!' });
         } catch (error) {
+            // Resposta ao usuario que sua operação não foi realizada 
+            console.log('Erro ao excluir o produto: ' + error);
             // Tratamento de erros durante o "Try"
-            console.log('Erro ao tentar deletar esse produto: ' + error);
-            return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
+            return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' })
         }
-    }
+    }    
 
 }
 
