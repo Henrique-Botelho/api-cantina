@@ -135,7 +135,7 @@ const produtosController = {
             const [result] = await pool.query(querySelecionaProduto, [id]);
             const produto = result[0];
             if (!produto) {
-                return res.status(404).json({ status: 404, message: 'Produto não encontrado.' });
+                return res.status(404).json({ status: 404, message: 'As informações do Produto não foram alteradas.' });
             }
 
             // Comparando os dados do produto no banco de dados com os dados enviados pelo cliente
