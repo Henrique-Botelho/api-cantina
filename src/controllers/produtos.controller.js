@@ -93,19 +93,16 @@ const produtosController = {
     },
 
     // Criando a função "atualizaProduto"
+    // Criando a função "atualizaProduto"
     atualizaProduto: async (req, res) => {
         // Recebendo o "id" dos parâmetros
         const { id } = req.params;
         // Recebendo as variáveis "nome", "preco", "categoria" e "descricao" do body.
         let { nome, preco, categoria, descricao } = req.body;
-    
+
         // Verificando se todos os campos estão preenchidos.
         if (!nome || !preco || !categoria || !descricao) {
-            return res.status(400).json({ status: 400, message: 'Todos os campos devem ser enviados.' })
-        }
-        // Verificando se o "id" foi inserido.
-        if (!id) {
-            return res.status(400).json({ status: 400, message: 'É necessário informar o id do produto que deseja alterar.' });
+            return res.status(400).json({ status: 400, message: 'Todos os campos devem ser enviados.' });
         }
         // Verificando se quantidade de caracteres inseridos no nome está entre o mínimo e o máximo pedido.
         if (nome.length > 50 || categoria.length > 30) {
@@ -114,7 +111,7 @@ const produtosController = {
         // Verificando se o campo preco é do tipo number.
         if (typeof preco !== 'number') {
             preco = parseFloat(preco);
-            if (Number.isNaN(preco)) {
+            if (Number.isNaN(preco)) { // is not number
                 return res.status(400).json({ status: 400, message: 'O campo preço deve ser do tipo número.' });
             }
         }
@@ -130,23 +127,34 @@ const produtosController = {
         nome = nome.toLowerCase();
         categoria = categoria.toLowerCase();
         descricao = descricao.toLowerCase();
-    
-        // Atualizando o produto na tabela "produtos"
-        const queryAtualizaProduto = 'UPDATE produtos SET nome = ?, preco= ?, categoria= ?, descricao= ? WHERE id= ?';
+
+        // Selecionando o produto com o "id" informado
+        const querySelecionaProduto = 'SELECT * FROM produtos WHERE id = ?';
         try {
-            // Realizando a operação.
-            const result = await pool.query(queryAtualizaProduto, [nome, preco, categoria, descricao, id]);
-            if (result.affectedRows === 0) {
-                return res.status(200).json({ message: 'As informações do produto não foram alteradas.' });
+            // Realizando a operação
+            const [result] = await pool.query(querySelecionaProduto, [id]);
+            const produto = result[0];
+            if (!produto) {
+                return res.status(404).json({ status: 404, message: 'Produto não encontrado.' });
             }
-            return res.status(200).json({ message: 'Produto atualizado com sucesso!' });
+
+            // Comparando os dados do produto no banco de dados com os dados enviados pelo cliente
+            if (produto.nome === nome && produto.preco === preco && produto.categoria === categoria && produto.descricao === descricao) {
+                return res.status(200).json({ status: 200, message: 'Produto não foi alterado.' });
+            }
+
+            // Atualizando o produto com os novos dados
+            const queryAtualizaProduto = 'UPDATE produtos SET nome=?, preco=?, categoria=?, descricao=? WHERE id=?';
+            const values = [nome, preco, categoria, descricao, id];
+            await pool.query(queryAtualizaProduto, values);
+            return res.status(200).json({ status: 200, message: 'Produto atualizado com sucesso.' });
         } catch (error) {
-            // Tratamento de erros durante o "Try"
-            console.log('Erro ao atualizar os dados: ' + error);
-            return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
+            console.error(error);
+            return res.status(500).json({ status: 500, message: 'Erro ao atualizar o produto.' });
         }
     },
-    
+
+
     // Criando a função "deletaProduto"
     deletaProduto: async (req, res) => {
         // Recebendo o "id" dos parâmetros
@@ -175,7 +183,7 @@ const produtosController = {
             // Tratamento de erros durante o "Try"
             return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' })
         }
-    }    
+    }
 
 }
 
