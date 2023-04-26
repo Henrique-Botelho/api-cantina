@@ -82,8 +82,8 @@ const usuariosController = {
                 return res.status(401).json({ errorCode: 401, message: 'Senha incorreta.' });
             }
 
-            // Gerando o token de autenticação.
-            const token = jwt.sign({ id: response[0].id }, SECRET, { expiresIn: '1h' });
+            // Gerando o token de autenticação com validade de um dia (24 horas).
+            const token = jwt.sign({ id: response[0].id }, SECRET, { expiresIn: '1d' });
 
             // Resposta ao cliente com o token de autenticação.
             res.status(200).json({ token });
