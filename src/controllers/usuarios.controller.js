@@ -62,7 +62,7 @@ const usuariosController = {
     login: async (req, res) => {
         const { userName, senha } = req.body;
     
-        if (!userName || !senha || !email) {
+        if (!userName || !senha) {
             return res.status(400).json({ errorCode: 400, message: 'Faltam dados.' });
         }
     
