@@ -60,40 +60,40 @@ const usuariosController = {
     },
 
     login: async (req, res) => {
-        // Recebendo as variáveis "userName" e "senha" do body.
         const { userName, senha } = req.body;
-
-        // Verificando se todos os campos estão preenchidos.
+    
         if (!userName || !senha) {
             return res.status(400).json({ errorCode: 400, message: 'Faltam dados.' });
         }
-
+    
         try {
-            // Verificando se o usuário existe no banco de dados.
             const queryVerificaUsuario = 'SELECT * FROM usuarios WHERE userName = ?';
             const [response] = await pool.query(queryVerificaUsuario, [userName]);
+    
             if (response.length === 0) {
                 return res.status(400).json({ errorCode: 400, message: 'Usuário não encontrado.' });
             }
-
-            // Comparando a senha fornecida com o hash armazenado no banco de dados.
+    
             const senhaCorreta = await bcrypt.compare(senha, response[0].senha);
+    
             if (!senhaCorreta) {
                 return res.status(401).json({ errorCode: 401, message: 'Senha incorreta.' });
             }
-
-            // Gerando o token de autenticação com validade de um dia (24 horas).
+    
+            // Salvando o email e o nome no LocalStorage
+            const { email, nome } = response[0];
+            localStorage.setItem('email', email);
+            localStorage.setItem('nome', nome);
+    
             const token = jwt.sign({ id: response[0].id }, SECRET, { expiresIn: '1d' });
-
-            // Resposta ao cliente com o token de autenticação.
+    
             res.status(200).json({ token });
-
+    
         } catch (error) {
-            // Tratamento de erros durante o "Try"
             console.log(error);
             return res.status(500).json({ errorCode: 500, message: 'Erro no servidor.' });
         }
-    }
+    }    
 };
 
 module.exports = usuariosController;
