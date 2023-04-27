@@ -80,11 +80,6 @@ const usuariosController = {
                 return res.status(401).json({ errorCode: 401, message: 'Senha incorreta.' });
             }
     
-            // Salvando o email e o nome no LocalStorage
-            const { email, nome } = response[0];
-            localStorage.setItem('email', email);
-            localStorage.setItem('nome', nome);
-    
             const token = jwt.sign({ id: response[0].id }, SECRET, { expiresIn: '1d' });
     
             res.status(200).json({ token });
