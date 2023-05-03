@@ -125,20 +125,29 @@ const comprasController = {
   // Criando a função "excluirCompra"
   excluirCompra: async (req, res) => {
     const { id } = req.params;
-
-    const queryExcluirCompra = 'DELETE FROM compras WHERE id = ?';
+  
+    // Verifica se a compra existe e se ainda não foi paga
+    const queryVerificaCompra = 'SELECT * FROM compras WHERE id = ? AND pago = 0';
     try {
+      const [compras] = await pool.query(queryVerificaCompra, [id]);
+      if (compras.length === 0) {
+        return res.status(404).json({ status: 404, message: 'Compra não encontrada ou já foi paga.' });
+      }
+  
+      // Exclui a compra
+      const queryExcluirCompra = 'DELETE FROM compras WHERE id = ?';
       const [result] = await pool.query(queryExcluirCompra, [id]);
       if (result.affectedRows === 0) {
         return res.status(404).json({ status: 404, message: 'Compra não encontrada.' });
       }
+  
       res.status(200).json({ status: 200, message: 'Compra excluída com sucesso!' });
     } catch (error) {
       console.log("Erro ao excluir compra: " + error);
       return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
     }
   },
-
+  
   // Criando a função "excluirComprasPorCliente"
   excluirComprasPorCliente: async (req, res) => {
     const { numero } = req.params;
