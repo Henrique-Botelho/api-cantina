@@ -12,14 +12,14 @@ app.use(cors());
 app.use(express.json()); //json que converte os dados enviados em requisições com o tipo de conteúdo application/json
 
 //api. Quando a rota é acessada, a função de retorno de chamada é executada, que neste caso retorna um objeto JSON com uma mensagem de boas-vindas.
-app.get('/api', (req, res) => {
+app.get('/', (req, res) => {
     res.status(200).json({message: 'Bem vindo a API da cantina - Senai Suíço Brasileiro!'});
 });
 
-app.use('/api/produtos', produtosRouter); //api/produtos. Ela usa o método use() do objeto app para associar a rota a um router específico chamado produtosRouter.
-app.use('/api/usuarios', usuariosRouter); //api/produtos. Ela usa o método use() do objeto app para associar a rota a um router específico chamado usuariosRouter.
-app.use('/api/clientes', clientesRouter); //api/produtos. Ela usa o método use() do objeto app para associar a rota a um router específico chamado clientesRouter.
-app.use('/api/compras', comprasRouter); //api/produtos. Ela usa o método use() do objeto app para associar a rota a um router específico chamado comprasRouter.
+app.use('/produtos', produtosRouter); //api/produtos. Ela usa o método use() do objeto app para associar a rota a um router específico chamado produtosRouter.
+app.use('/usuarios', usuariosRouter); //api/produtos. Ela usa o método use() do objeto app para associar a rota a um router específico chamado usuariosRouter.
+app.use('/clientes', clientesRouter); //api/produtos. Ela usa o método use() do objeto app para associar a rota a um router específico chamado clientesRouter.
+app.use('/compras', comprasRouter); //api/produtos. Ela usa o método use() do objeto app para associar a rota a um router específico chamado comprasRouter.
 
 
 //Ele usa o método listen() do objeto app e uma função de retorno de chamada para imprimir uma mensagem no console.log, informando que o servidor está em execução.
