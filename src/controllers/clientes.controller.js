@@ -62,7 +62,7 @@ const clientesController = {
 
     },
 
-    listaCLiente: async (req, res) => {
+    listaCliente: async (req, res) => {
         //Recebendo o id do cliente passado nos parâmetros
         const { id } = req.params;
 
