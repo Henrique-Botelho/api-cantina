@@ -1,7 +1,7 @@
 const PORT = process.env.PORT || 8080; //"PORT" é a porta em que a aplicação será executada. Se a variável de ambiente "PORT" estiver definida, a aplicação usará esse valor para a porta. Caso contrário, usará a porta padrão 8080.
 
 // Cada constante é definida usando o objeto "process.env", que permite que a aplicação acesse as variáveis ​​de ambiente definidas no sistema operacional.
-const DB_HOST = process.env.DB_HOST || '10.105.75.60'; //"DB_HOST" é o endereço do host do banco de dados que a aplicação deve usar. Se a variável de ambiente "DB_HOST" estiver definida, a aplicação usará esse valor como endereço. Caso contrário, usará o valor padrão 'localhost'.
+const DB_HOST = process.env.DB_HOST || 'localhost'; //"DB_HOST" é o endereço do host do banco de dados que a aplicação deve usar. Se a variável de ambiente "DB_HOST" estiver definida, a aplicação usará esse valor como endereço. Caso contrário, usará o valor padrão 'localhost'.
 const DB_USER = process.env.DB_USER || 'root'; //"DB_USER" é o nome de usuário usado para acessar o banco de dados,
 const DB_PASS = process.env.DB_PASS || ''; //"DB_PASS" é a senha associada a esse usuário
 const DB_NAME = process.env.DB_NAME || 'cantina'; //"DB_NAME" é o nome do banco de dados que a aplicação vai usar
