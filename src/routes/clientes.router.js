@@ -10,7 +10,7 @@ router.post('/', verificaUsuario, clientesController.cadastraCliente);
 router.get('/', verificaUsuario, clientesController.listaClientes);
 
 //Rota para listar cliente específico 
-router.get('/:id', verificaUsuario, clientesController.listaCLiente);
+router.get('/:id', verificaUsuario, clientesController.listaCliente);
 
 //Rota para atualizar um cliente específico
 router.put('/:id', verificaUsuario, clientesController.atualizaCliente);
