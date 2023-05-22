@@ -80,7 +80,7 @@ const usuariosController = {
                 return res.status(401).json({ errorCode: 401, message: 'Senha incorreta.' });
             }
     
-            const token = jwt.sign({ email: response[0].email }, SECRET, { expiresIn: '1m' });
+            const token = jwt.sign({ email: response[0].email }, SECRET, { expiresIn: '60s' });
     
             res.status(200).json({ token });
     
