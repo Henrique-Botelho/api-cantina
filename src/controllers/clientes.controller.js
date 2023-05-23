@@ -5,7 +5,7 @@ const pool = require('../database/index');
 const validarNome = /^[a-zA-ZÀ-ú]+([ '-][a-zA-ZÀ-ú]+)*$/;
 
 // Expressão regular para validar se o numero contém apenas números.
-const validarNumero = /^[0-9]{11}$/;
+const validarNumero = /^[0-9]{8,}$/;
 
 // Criando objeto "clientesController"
 const clientesController = {
@@ -25,7 +25,7 @@ const clientesController = {
         }
 
         if (!validarNumero.test(numero)) {
-            return res.status(400).json({ status: 400, message: 'O telefone deve conter apenas números.' });
+            return res.status(400).json({ status: 400, message: 'O telefone deve conter apenas números e no mínimo 8 caracteres.' });
         }
 
         try {
