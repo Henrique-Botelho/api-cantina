@@ -25,7 +25,7 @@ const clientesController = {
         }
 
         if (!validarNumero.test(numero)) {
-            return res.status(400).json({ status: 400, message: 'Numero deve conter apenas números.' });
+            return res.status(400).json({ status: 400, message: 'O telefone deve conter apenas números.' });
         }
 
         try {
