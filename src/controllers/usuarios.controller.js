@@ -100,13 +100,13 @@ const usuariosController = {
       const [response] = await pool.query(queryVerificaUsuario, [email]);
 
       if (response.length === 0) {
-        return res.status(400).json({ message: "Usuário não encontrado." });
+        return res.status(400).json({ message: "Email ou senha incorretos!" });
       }
 
       const senhaCorreta = await bcrypt.compare(senha, response[0].senha);
 
       if (!senhaCorreta) {
-        return res.status(401).json({ message: "Senha incorreta." });
+        return res.status(401).json({ message: "Email ou senha incorretos!" });
       }
 
       const token = jwt.sign({ email: response[0].email }, SECRET, {
