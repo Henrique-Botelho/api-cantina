@@ -9,6 +9,11 @@ router.post('/cadastro', verificaUsuario, usuariosController.cadastraUsuario);
 // Rota para logar um usuário
 router.post('/', usuariosController.login);
 
+// Rota para a verificação do token
 router.post('/verifica-token', verificaUsuario, usuariosController.verificaToken);
+
+// Rota esqueci a senha
+router.post('/esqueci-senha', usuariosController.esqueciSenha);
+
 
 module.exports = router;

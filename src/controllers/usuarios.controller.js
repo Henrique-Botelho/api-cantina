@@ -1,6 +1,7 @@
 const pool = require('../database/index');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const nodemailer = require('nodemailer');
 const { SECRET } = require('../config/config');
 
 // Criando objeto "usuariosController"
@@ -87,6 +88,44 @@ const usuariosController = {
         } catch (error) {
             console.log(error);
             return res.status(500).json({ message: 'Erro no servidor.' });
+        }
+    },
+    esqueciSenha: async (req, res) => {
+        const { email } = req.body;
+
+        if (!email) {
+            return res.status(400).json({ message: "Um email deve ser enviado!" });
+        }
+
+        const queryVerificaEmail = "SELECT * FROM usuarios WHERE email=?";
+        try {
+            const [response] = await pool.query(queryVerificaEmail, [email]);
+            if (response.length !== 1) {
+                return res.status(400).json({ message: "Email inválido!" });
+            }
+
+            const transport = nodemailer.createTransport({
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure: true,
+                auth: {
+                    user: 'senaisuicoturma3dmA@gmail.com',
+                    pass: 'prkeajixphcgtmpm',
+                }
+            });
+
+            const respEmail = await transport.sendMail({
+                from: "Cantina Senai <senaisuicoturma3dmA@gmail.com>",
+                to: "henriquedmbds@gmail.com",
+                subject: 'Teste de envio',
+                text: "Esse é um teste de envio de email"
+            });
+            
+            return res.status(200).json(respEmail);
+
+        } catch (e) {
+            console.log(e);
+            return res.status(500).json({ message: "Ocorreu um erro inesperado!" });
         }
     },
     verificaToken: async (req, res) => {
