@@ -120,11 +120,13 @@ const usuariosController = {
     }
   },
   esqueciSenha: async (req, res) => {
-    const { email } = req.body;
+    let { email } = req.body;
 
     if (!email) {
       return res.status(400).json({ message: "Um email deve ser enviado!" });
     }
+
+    email = email.trim();
 
     const queryVerificaEmail = "SELECT * FROM usuarios WHERE email=?";
     try {
