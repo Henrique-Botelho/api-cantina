@@ -144,21 +144,28 @@ const clientesController = {
             return res.json({ message: 'É necessário informar o id do cliente a ser deletado.' }).status(400);
         }
 
+        const queryBuscaCompras = "SELECT * FROM compras WHERE id_cliente=? AND status=0";
+
         const queryBuscaCliente = 'SELECT * FROM clientes WHERE id = ?';
 
         try {
+            const [comprasNaoPagas] = pool.query(queryBuscaCompras, [ID]);
+
+            if (comprasNaoPagas.length !== 0) {
+                return res.status(400).json({ message: "Esse cliente possui compras não pagas!" });
+            }
+
             const [rows] = await pool.query(queryBuscaCliente, ID);
 
             if (rows.length === 0) {
                 return res.status(404).json({ message: 'Cliente não encontrado.' });
             }
-
             const queryDeletaCliente = 'DELETE FROM clientes WHERE id = ?';
-            const [response] = await pool.query(queryDeletaCliente, ID);
+            await pool.query(queryDeletaCliente, ID);
             return res.status(200).json({ message: 'Cliente deletado com sucesso.' });
         } catch (error) {
             console.log('Erro ao tentar deletar o cliente: ' + error);
-            return res.status(400).json({ message: 'Erro no contato com o servidor ou existem compras relacionadas ao cliente.' }).status(500);
+            return res.status(400).json({ message: 'Ocorreu um erro inesperado!' }).status(500);
         }
     }
 };
