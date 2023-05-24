@@ -163,13 +163,13 @@ const usuariosController = {
     }
   },
   trocarSenha: async (req, res) => {
-    let { email, senha, confirmaSenha } = req.body;
+    let { senha, confirmaSenha } = req.body;
+    const { token } = req.body;
 
-    if (!email) {
-      return res
-        .status(400)
-        .json({ message: "O email do usuário deve ser enviado!" });
+    if (!token) {
+        return res.status(400).json({ message: "Acesso negado!" });
     }
+
     if (!senha || !confirmaSenha) {
       return res
         .status(400)
@@ -186,6 +186,14 @@ const usuariosController = {
     }
 
     senha = senha.trim();
+    
+    try {
+        jwt.verify(token, SECRET);
+    } catch (e) {
+        return res.status(400).json({ message: "Token inválido! Seu tempo expirou!" })
+    }
+
+    const { email } = jwt.decode(token);
 
     try {
       const salt = await bcrypt.genSalt(12);
