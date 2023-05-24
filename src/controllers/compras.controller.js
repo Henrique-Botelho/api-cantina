@@ -5,7 +5,7 @@ const comprasController = {
     const queryListarCompras = 'SELECT * FROM compras';
     try {
       const [resultado] = await pool.query(queryListarCompras);
-      return res.status(200).json({ resultado });
+      return res.status(200).json(resultado);
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: 'Erro no contato com o servidor.' });
