@@ -2,7 +2,7 @@ const pool = require("../database/index");
 
 const comprasController = {
   listarCompras: async (req, res) => {
-    const queryListarCompras = 'SELECT * FROM compras';
+    const queryListarCompras = 'SELECT cli.nome, com.id, com.id_cliente, com.compra, com.total, com.status, com.dataHora FROM clientes AS cli INNER JOIN compras AS com ON cli.id = com.id_cliente';
     try {
       const [resultado] = await pool.query(queryListarCompras);
       return res.status(200).json(resultado);
