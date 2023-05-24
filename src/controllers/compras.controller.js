@@ -14,6 +14,8 @@ const comprasController = {
   insereCompra: async (req, res) => {
     const { cliente, total, compra } = req.body;
     
+    console.log(typeof total);
+
     if (!cliente) {
       return res.status(400).json({message: "O nome do cliente deve ser informado!"});
     }
