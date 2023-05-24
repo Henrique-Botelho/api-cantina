@@ -10,7 +10,7 @@ router.post('/', usuariosController.login);
 router.post('/esqueci-senha', usuariosController.esqueciSenha);
 
 // Rota para trocar a senha
-router.post('/alterar-senha', usuariosController.esqueciSenha);
+router.post('/alterar-senha', usuariosController.trocarSenha);
 
 // Rota para cadastrar um novo usuário
 router.post('/cadastro', verificaUsuario, usuariosController.cadastraUsuario);
