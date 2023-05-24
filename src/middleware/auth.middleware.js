@@ -10,7 +10,7 @@ const authMiddleware = {
 
         // Se o token não existir, o acesso é negado
         if (!token) {
-            return res.status(401).json({errorCode: 401, message: 'Acesso negado!'});
+            return res.status(401).json({ message: 'Acesso negado!' });
         }
 
         // Validando o token
@@ -19,7 +19,7 @@ const authMiddleware = {
             next();
         } catch (error){
             console.log(error);
-            return res.status(400).json({errorCode: 400, message: 'Token inválido!'});
+            return res.status(403).json({ message: 'Token inválido!' });
         }
     },
     verificaChaveDeAcesso: (req, res, next) => {
@@ -28,18 +28,18 @@ const authMiddleware = {
 
         // Verificando se ela existe
         if (!key) {
-            return res.status(400).json({errorCode: 400, message: 'Você precisa de uma chave para acessar esse recurso.'});
+            return res.status(400).json({ message: 'Você precisa de uma chave para acessar esse recurso.' });
         }
 
         // Validando a chave de acesso
         try {
             if (!(key === CARDAPIO_KEY)) {
-                return res.status(401).json({errorCode: 401, message: 'Chave inválida!'});
+                return res.status(401).json({ message: 'Chave inválida!' });
             }
             next();
         } catch (error) {
             console.log(error);
-            return res.status(400).json({errorCode: 400, message})
+            return res.status(400).json({message: "Ocorreu um erro inesperado!"});
         }
     }
 }
