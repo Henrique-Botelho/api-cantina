@@ -6,9 +6,6 @@ const { verificaUsuario, verificaChaveDeAcesso } = require('../middleware/auth.m
 // Rota para pegar todos os produtos
 router.get('/', verificaChaveDeAcesso, produtosController.pegaTodosProdutos)
 
-// Rota para pegar todos os produtos de uma certa categoria
-router.get('/:categoria', verificaChaveDeAcesso, produtosController.pegaProdutoCategoria);
-
 // Rota para cadastrar novo produto
 router.post('/', verificaUsuario, produtosController.insereProduto);
 
