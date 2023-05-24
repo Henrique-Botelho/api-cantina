@@ -8,6 +8,8 @@ const DB_NAME = process.env.DB_NAME || 'cantina'; //"DB_NAME" é o nome do banco
 const DB_PORT = process.env.DB_PORT || 3306; //"DB_PORT" é a porta na qual o banco de dados está sendo executado
 const SECRET = process.env.SECRET || '94c23fd0fcf9056749e48821797666a2'; //"SECRET" é uma chave secreta usada para proteger informações confidenciais
 const CARDAPIO_KEY = process.env.CARDAPIO_KEY || '07ad11b5bb6e2de98a535070ba93cdaf'; //"CARDAPIO_KEY" é uma chave usada para acessar um cardápio
+const USER_EMAIL = process.env.USER_EMAIL || 'senaisuicoturma3dmA@gmail.com';
+const PASS_EMAIL = process.env.PASS_EMAIL || 'prkeajixphcgtmpm';
 
 module.exports = {
     PORT,
@@ -17,5 +19,7 @@ module.exports = {
     DB_NAME,
     DB_PORT,
     SECRET,
-    CARDAPIO_KEY
+    CARDAPIO_KEY,
+    USER_EMAIL,
+    PASS_EMAIL
 }
