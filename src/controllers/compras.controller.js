@@ -11,6 +11,22 @@ const comprasController = {
       return res.status(500).json({ message: 'Erro no contato com o servidor.' });
     }
   },
+  listarComprasPorCliente: async (req, res) => {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "O cliente precisa ser informado (id)!" });
+    }
+
+    const queryListarComprasCliente = "SELECT com.compra, com.total, com.dataHora FROM compras AS com WHERE com.id_cliente=?";
+    try {
+      const [response] = await pool.query(queryListarComprasCliente, [id]);
+      return res.status(200).json(response);
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ message: "Ocorreu um erro inesperado!" });
+    }
+  },
   insereCompra: async (req, res) => {
     const { cliente, total, compra } = req.body;
     

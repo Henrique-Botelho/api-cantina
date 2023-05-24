@@ -6,6 +6,9 @@ const { verificaUsuario } = require('../middleware/auth.middleware');
 // Rota de pegar todas as compras
 router.get("/", verificaUsuario, comprasController.listarCompras);
 
+// Rota de pegar todas as compras por cliente
+router.get("/:id", verificaUsuario, comprasController.listarComprasPorCliente);
+
 // Rota de inserir uma nova compra
 router.post("/", verificaUsuario, comprasController.insereCompra);
 
