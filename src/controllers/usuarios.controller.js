@@ -91,18 +91,18 @@ const usuariosController = {
         }
     },
     esqueciSenha: async (req, res) => {
-        const { email } = req.body;
+        // const { email } = req.body;
 
-        if (!email) {
-            return res.status(400).json({ message: "Um email deve ser enviado!" });
-        }
+        // if (!email) {
+        //     return res.status(400).json({ message: "Um email deve ser enviado!" });
+        // }
 
-        const queryVerificaEmail = "SELECT * FROM usuarios WHERE email=?";
+        // const queryVerificaEmail = "SELECT * FROM usuarios WHERE email=?";
         try {
-            const [response] = await pool.query(queryVerificaEmail, [email]);
-            if (response.length !== 1) {
-                return res.status(400).json({ message: "Email inválido!" });
-            }
+            // const [response] = await pool.query(queryVerificaEmail, [email]);
+            // if (response.length !== 1) {
+            //     return res.status(400).json({ message: "Email inválido!" });
+            // }
 
             const transport = nodemailer.createTransport({
                 host: 'smtp.gmail.com',

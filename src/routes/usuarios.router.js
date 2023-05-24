@@ -13,7 +13,7 @@ router.post('/', usuariosController.login);
 router.post('/verifica-token', verificaUsuario, usuariosController.verificaToken);
 
 // Rota esqueci a senha
-router.post('/esqueci-senha', usuariosController.esqueciSenha);
+router.get('/esqueci-senha', usuariosController.esqueciSenha);
 
 
 module.exports = router;
