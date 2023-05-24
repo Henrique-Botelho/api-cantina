@@ -39,6 +39,23 @@ const comprasController = {
       return res.status(500).json({ message: "Ocorreu um erro inesperado ao inserir a compra!" });
     }
   },
+  finalizarConta: async (req, res) => {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ message: "O cliente deve ser informado (id)!" });
+    }
+
+    const queryFinalizaConta = "UPDATE compras com INNER JOIN clientes cli ON cli.id = com.id_cliente SET com.id_cliente=NULL, com.status=1 WHERE cli.id=?";
+    try {
+      await pool.query(queryFinalizaConta, [id]);
+      return res.status(200).json({ message: "Conta finalizada com sucesso!" });
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ message: "Ocorreu um erro inesperado!" });
+    }
+
+  },
   excluirCompra: async (req, res) => {
     const { id } = req.params;
     
@@ -54,7 +71,7 @@ const comprasController = {
       console.log(e);
       return res.status(500).json({ message: "Erro ao excluir a compra!" });
     }
-  }
+  },
 };
 
 module.exports = comprasController;
