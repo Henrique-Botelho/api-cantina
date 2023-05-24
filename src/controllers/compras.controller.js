@@ -13,15 +13,21 @@ const comprasController = {
   },
   insereCompra: async (req, res) => {
     const { cliente, total, compra } = req.body;
-
+    
     if (!cliente) {
       return res.status(400).json({message: "O nome do cliente deve ser informado!"});
     }
     if (!total || !compra) {
       return res.status(400).json({message: "Faltam dados"});
     }
-    if (typeof total !== "number" || typeof compra !== "string") {
-      return res.status(400).json({message: "O tipo dos dados está incorreto!"});
+    if ((typeof compra) !== "string") {
+      return res.status(400).json({message: "Dados na forma incorreta!"});
+    }
+    if ((typeof total) !== "number") {
+      total = parseFloat(total);
+      if (Number.isNaN(total)) {
+        return res.status(400).json({message: "Dados na forma incorreta!"});
+      }
     }
 
     const queryInsereCompra = "INSERT INTO compras (compra, total, id_cliente) SELECT ?, ?, id FROM clientes WHERE nome=?";
