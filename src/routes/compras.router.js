@@ -10,6 +10,6 @@ router.get("/", verificaUsuario, comprasController.listarCompras);
 router.post("/", verificaUsuario, comprasController.insereCompra);
 
 // Rota de excluir uma compra
-router.delete("/", verificaUsuario, comprasController.excluirCompra);
+router.delete("/:id", verificaUsuario, comprasController.excluirCompra);
 
 module.exports = router;
