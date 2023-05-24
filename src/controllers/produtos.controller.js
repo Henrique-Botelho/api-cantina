@@ -19,31 +19,6 @@ const produtosController = {
             return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
         }
     },
-    // Criando a função "pegaProdutoCategoria"
-    pegaProdutoCategoria: async (req, res) => {
-        // Recebendo a variável "categoria" dos parâmetros
-        let { categoria } = req.params;
-
-        // Verificando se a categoria foi definida
-        if (!categoria) {
-            return res.status(400).json({ status: 400, message: 'Envie uma categoria para realizar a operação.' });
-        }
-        // Transformando todos os carácteres em minúsculo pelo método ".toLowerCase"
-        categoria = categoria.toLowerCase();
-
-        // Selecionando todos os produtos = a categoria selecionada
-        const queryPegaProdutoCategoria = 'SELECT * FROM produtos WHERE categoria= ? ORDER BY nome';
-        try {
-            // Realizando a operação
-            const [response] = await pool.query(queryPegaProdutoCategoria, [categoria]);
-            return res.status(200).json(response);
-        } catch (error) {
-            // Resposta ao cliente que sua operação não foi realizada
-            console.log('Erro ao listar produtos dessa categoria: ' + error);
-            // Tratamento de erros durante o "Try"
-            return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
-        }
-    },
     // Criando a função "insereProduto"
     insereProduto: async (req, res) => {
         // Recebendo as variáveis "nome", "preco", "categoria" e "descricao" do body.
@@ -92,7 +67,6 @@ const produtosController = {
         }
     },
 
-    // Criando a função "atualizaProduto"
     // Criando a função "atualizaProduto"
     atualizaProduto: async (req, res) => {
         // Recebendo o "id" dos parâmetros
