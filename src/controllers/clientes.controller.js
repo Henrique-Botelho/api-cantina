@@ -13,19 +13,19 @@ const clientesController = {
         const { nome, numero } = req.body;
 
         if (!nome || !numero) {
-            return res.status(400).json({ status: 400, message: 'Todos os campos devem ser enviados.' });
+            return res.status(400).json({ message: 'Todos os campos devem ser enviados.' });
         }
 
         if (nome.length > 50 || numero.length < 8) {
-            return res.status(400).json({ status: 400, message: 'Quantidade de caracteres para nome e/ou numero inválidos.' });
+            return res.status(400).json({ message: 'Quantidade de caracteres para nome e/ou numero inválidos.' });
         }
 
         if (!validarNome.test(nome)) {
-            return res.status(400).json({ status: 400, message: 'Nome deve conter apenas letras e espaços.' });
+            return res.status(400).json({ message: 'Nome deve conter apenas letras e espaços.' });
         }
 
         if (!validarNumero.test(numero)) {
-            return res.status(400).json({ status: 400, message: 'O telefone deve conter apenas números e no mínimo 8 caracteres.' });
+            return res.status(400).json({ message: 'O telefone deve conter apenas números e no mínimo 8 caracteres.' });
         }
 
         try {
@@ -33,7 +33,7 @@ const clientesController = {
             const [rows] = await pool.query(queryBuscaCliente, [numero]);
 
             if (rows.length > 0) {
-                return res.status(400).json({ status: 400, message: 'Já existe um cliente cadastrado com este número de telefone.' });
+                return res.status(400).json({ message: 'Já existe um cliente cadastrado com este número de telefone.' });
             }
 
             const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)';
@@ -42,7 +42,7 @@ const clientesController = {
             return res.status(201).json({ message: 'Cliente cadastrado com sucesso!' });
         } catch (error) {
             console.log('Erro ao cadastrar cliente' + error);
-            return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
+            return res.status(500).json({ message: 'Erro no contato com o servidor.' });
         }
     },
 
@@ -57,7 +57,7 @@ const clientesController = {
             // Resposta ao usuario que sua operação não foi realizada.
             console.log('Erro ao listar todos os clientes: ' + error);
             // Tratamento de erros durante o "Try"
-            return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
+            return res.status(500).json({ message: 'Erro no contato com o servidor.' });
         }
 
     },
@@ -69,7 +69,7 @@ const clientesController = {
         //Validação
         if (!id) {
             // Caso não seja inserido nenhum id, reposta ao cliente que é necessário ser inserido.
-            return res.status(400).json({ status: 400, message: 'É necessário informar o id do cliente a ser listado.' });
+            return res.status(400).json({ message: 'É necessário informar o id do cliente a ser listado.' });
         }
 
         // Selecionando "nome" e "telefone" na tabela "clientes" onde o "id" seja igual ao inserido. 
@@ -82,7 +82,7 @@ const clientesController = {
             // Resposta ao usuario que sua operação não foi realizada.
             console.log('Erro ao listar o cliente específico: ' + error);
             // Tratamento de erros durante o "Try"
-            return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
+            return res.status(500).json({ message: 'Erro no contato com o servidor.' });
         }
     },
 
@@ -91,7 +91,7 @@ const clientesController = {
         const { nome, numero } = req.body;
 
         if (!id) {
-            return res.status(400).json({ status: 400, message: 'É necessário informar o id do cliente a ser atualizado.' });
+            return res.status(400).json({ message: 'É necessário informar o id do cliente a ser atualizado.' });
         }
 
         const verificaID = 'SELECT * FROM clientes WHERE id = ?';
@@ -100,24 +100,24 @@ const clientesController = {
             const [rows] = await pool.query(verificaID, [id]);
 
             if (rows.length === 0) {
-                return res.status(404).json({ status: 404, message: 'Cliente não encontrado. Não é possível atualizar.' });
+                return res.status(404).json({ message: 'Cliente não encontrado. Não é possível atualizar.' });
             }
 
             if (nome) {
                 if (!validarNome.test(nome)) {
-                    return res.status(400).json({ status: 400, message: 'Nome deve conter apenas letras e espaços.' });
+                    return res.status(400).json({ message: 'Nome deve conter apenas letras e espaços.' });
                 }
                 if (nome.length < 8 || nome.length > 50) {
-                    return res.status(400).json({ status: 400, message: 'Quantidade de caracteres para nome inválida.' });
+                    return res.status(400).json({ message: 'Quantidade de caracteres para nome inválida.' });
                 }
             }
 
             if (numero) {
                 if (!validarNumero.test(numero)) {
-                    return res.status(400).json({ status: 400, message: 'Número deve conter apenas números.' });
+                    return res.status(400).json({ message: 'Número deve conter apenas números.' });
                 }
                 if (numero.length !== 11) {
-                    return res.status(400).json({ status: 400, message: 'Quantidade de caracteres para número inválida.' });
+                    return res.status(400).json({ message: 'Quantidade de caracteres para número inválida.' });
                 }
             }
 
@@ -132,7 +132,7 @@ const clientesController = {
             return res.status(200).json({ message: 'Cliente atualizado com sucesso!' });
         } catch (error) {
             console.log('Erro ao atualizar cliente: ' + error);
-            return res.status(500).json({ status: 500, message: 'Erro no contato com o servidor.' });
+            return res.status(500).json({ message: 'Erro no contato com o servidor.' });
         }
     },
 

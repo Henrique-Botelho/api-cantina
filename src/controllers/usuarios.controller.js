@@ -11,19 +11,19 @@ const usuariosController = {
 
         // Verificando se todos os campos estão preenchidos
         if (!userName || !email || !senha || !confirmaSenha) {
-            return res.status(400).json({ errorCode: 400, message: 'Faltam dados.' });
+            return res.status(400).json({ message: 'Faltam dados.' });
         }
         // Verificando a igualdade nos campos "senha" e "confirmaSenha".
         if (senha !== confirmaSenha) {
-            return res.status(400).json({ errorCode: 400, message: 'As senhas não são iguais.' });
+            return res.status(400).json({ message: 'As senhas não são iguais.' });
         }
         // Verificando se todos os dados inseridos são do tipo string.
         if (typeof userName !== 'string' || typeof email !== 'string' || typeof senha !== 'string' || typeof confirmaSenha !== 'string') {
-            return res.status(400).json({ errorCode: 400, message: "Todos os dados devem ser do tipo String." });
+            return res.status(400).json({ message: "Todos os dados devem ser do tipo String." });
         }
         // Verificando se quantidade de caracteres inseridos está entre o mínimo e o máximo pedido.
         if (senha.length < 8 || senha.length > 20 || userName.length > 50 || userName.length < 3 || email.length > 255) {
-            return res.status(400).json({ errorCode: 400, message: 'Quantidade de caracteres errada. (userName): min. 3, max. 50; (email): max. 255; (senha): min. 8, max. 20.' });
+            return res.status(400).json({ message: 'Quantidade de caracteres errada. (userName): min. 3, max. 50; (email): max. 255; (senha): min. 8, max. 20.' });
         }
 
         try {
@@ -31,7 +31,7 @@ const usuariosController = {
             const queryConfereUsuario = 'SELECT * FROM usuarios WHERE userName = ? OR email = ?';
             const [responseVerifica] = await pool.query(queryConfereUsuario, [userName, email]);
             if (responseVerifica.length !== 0) {
-                return res.status(400).json({ errorCode: 400, message: 'Esse usuário ou email já existe.' });
+                return res.status(400).json({ message: 'Esse usuário ou email já existe.' });
             }
 
             // Cadastrando novo usuário
@@ -55,7 +55,7 @@ const usuariosController = {
         } catch (error) {
             // Tratamento de erros durante o "Try"
             console.log(error);
-            return res.status(500).json({ errorCode: 500, message: 'Erro no servidor.'});
+            return res.status(500).json({ message: 'Erro no servidor.'});
         }
     },
 
@@ -63,7 +63,7 @@ const usuariosController = {
         const { email, senha } = req.body;
     
         if (!email || !senha) {
-            return res.status(400).json({ errorCode: 400, message: 'Faltam dados.' });
+            return res.status(400).json({ message: 'Faltam dados.' });
         }
     
         try {
@@ -71,13 +71,13 @@ const usuariosController = {
             const [response] = await pool.query(queryVerificaUsuario, [email]);
     
             if (response.length === 0) {
-                return res.status(400).json({ errorCode: 400, message: 'Usuário não encontrado.' });
+                return res.status(400).json({ message: 'Usuário não encontrado.' });
             }
     
             const senhaCorreta = await bcrypt.compare(senha, response[0].senha);
     
             if (!senhaCorreta) {
-                return res.status(401).json({ errorCode: 401, message: 'Senha incorreta.' });
+                return res.status(401).json({ message: 'Senha incorreta.' });
             }
     
             const token = jwt.sign({ email: response[0].email }, SECRET, { expiresIn: '24h' });
@@ -86,7 +86,7 @@ const usuariosController = {
     
         } catch (error) {
             console.log(error);
-            return res.status(500).json({ errorCode: 500, message: 'Erro no servidor.' });
+            return res.status(500).json({ message: 'Erro no servidor.' });
         }
     },
     verificaToken: async (req, res) => {

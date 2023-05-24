@@ -15,44 +15,44 @@ const comprasController = {
     const { cliente, total, compra } = req.body;
     
     if (!cliente) {
-      return res.status(400).json({message: "O nome do cliente deve ser informado!"});
+      return res.status(400).json({ message: "O nome do cliente deve ser informado!" });
     }
     if (!total || !compra) {
-      return res.status(400).json({message: "Faltam dados"});
+      return res.status(400).json({ message: "Faltam dados" });
     }
     if ((typeof compra) !== "string") {
-      return res.status(400).json({message: "Dados na forma incorreta!"});
+      return res.status(400).json({ message: "Dados na forma incorreta!" });
     }
     if ((typeof total) !== "number") {
       total = parseFloat(total);
       if (Number.isNaN(total)) {
-        return res.status(400).json({message: "Dados na forma incorreta!"});
+        return res.status(400).json({ message: "Dados na forma incorreta!" });
       }
     }
 
     const queryInsereCompra = "INSERT INTO compras (compra, total, id_cliente) SELECT ?, ?, id FROM clientes WHERE nome=?";
     try {
       await pool.query(queryInsereCompra, [compra, total, cliente]);
-      return res.status(201).json({message: "Compra criada com sucesso!"});
+      return res.status(201).json({ message: "Compra criada com sucesso!" });
     } catch (e) {
       console.log(e);
-      return res.status(500).json({message: "Ocorreu um erro inesperado ao inserir a compra!"});
+      return res.status(500).json({ message: "Ocorreu um erro inesperado ao inserir a compra!" });
     }
   },
   excluirCompra: async (req, res) => {
     const { id } = req.params;
     
     if (!id) {
-      return res.status(400).json({message: "O id da compra deve ser enviado!"});
+      return res.status(400).json({ message: "O id da compra deve ser enviado!" });
     }
 
     const queryExcluiCompra = "DELETE FROM compras WHERE id=?";
     try {
       await pool.query(queryExcluiCompra, [id]);
-      return res.status(200).json({message: "Compra excluida com sucesso!"});
+      return res.status(200).json({ message: "Compra excluida com sucesso!" });
     } catch(e) {
       console.log(e);
-      return res.status(500).json({message: "Erro ao excluir a compra!"});
+      return res.status(500).json({ message: "Erro ao excluir a compra!" });
     }
   }
 };
