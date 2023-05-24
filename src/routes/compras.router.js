@@ -9,6 +9,9 @@ router.get("/", verificaUsuario, comprasController.listarCompras);
 // Rota de inserir uma nova compra
 router.post("/", verificaUsuario, comprasController.insereCompra);
 
+// Rota para finalizar a conta de um cliente
+router.put("/:id", verificaUsuario, comprasController.finalizarConta);
+
 // Rota de excluir uma compra
 router.delete("/:id", verificaUsuario, comprasController.excluirCompra);
 
