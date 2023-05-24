@@ -18,7 +18,7 @@ const comprasController = {
       return res.status(400).json({ message: "O cliente precisa ser informado (id)!" });
     }
 
-    const queryListarComprasCliente = "SELECT com.compra, com.total, com.dataHora FROM compras AS com WHERE com.id_cliente=?";
+    const queryListarComprasCliente = "SELECT com.id, com.compra, com.total, com.dataHora FROM compras AS com WHERE com.id_cliente=?";
     try {
       const [response] = await pool.query(queryListarComprasCliente, [id]);
       return res.status(200).json(response);
