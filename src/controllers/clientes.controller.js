@@ -149,7 +149,7 @@ const clientesController = {
         const queryBuscaCliente = 'SELECT * FROM clientes WHERE id = ?';
 
         try {
-            const [comprasNaoPagas] = pool.query(queryBuscaCompras, [ID]);
+            const [comprasNaoPagas] = await pool.query(queryBuscaCompras, [ID]);
 
             if (comprasNaoPagas.length !== 0) {
                 return res.status(400).json({ message: "Esse cliente possui compras não pagas!" });
