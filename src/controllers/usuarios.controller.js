@@ -1,8 +1,8 @@
 const pool = require("../database/index");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
-const { SECRET, USER_EMAIL, PASS_EMAIL } = require("../config/config");
+const transport = require('../email/index');
+const { SECRET, USER_EMAIL } = require("../config/config");
 
 // Criando objeto "usuariosController"
 const usuariosController = {
@@ -137,16 +137,6 @@ const usuariosController = {
 
       const tokenSenha = jwt.sign({ email: response[0].email }, SECRET, {
         expiresIn: "300s"
-      });
-
-      const transport = nodemailer.createTransport({
-        host: "smtp.gmail.com",
-        port: 465,
-        secure: true,
-        auth: {
-          user: USER_EMAIL,
-          pass: PASS_EMAIL,
-        },
       });
 
       const respEmail = await transport.sendMail({
