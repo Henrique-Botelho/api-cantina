@@ -143,7 +143,7 @@ const usuariosController = {
         from: `Cantina Senai <${USER_EMAIL}>`,
         to: email,
         subject: "Recuperação de senha",
-        text: `Olá, para trocar de senha, clique no link -> http://localhost:5173/trocar-senha?token=${tokenSenha}`,
+        text: `Olá, para trocar de senha, clique no link -> https://sistema.cantinasenai.com.br/trocar-senha?token=${tokenSenha}`,
       });
 
       return res.status(200).json(respEmail);
