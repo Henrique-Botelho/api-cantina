@@ -28,12 +28,12 @@ const comprasController = {
     }
   },
   insereCompra: async (req, res) => {
-    const { cliente, total, compra } = req.body;
+    const { cliente, total, compra, dataHora } = req.body;
     
     if (!cliente) {
       return res.status(400).json({ message: "O nome do cliente deve ser informado!" });
     }
-    if (!total || !compra) {
+    if (!total || !compra || !dataHora) {
       return res.status(400).json({ message: "Faltam dados" });
     }
     if ((typeof compra) !== "string") {
@@ -46,9 +46,9 @@ const comprasController = {
       }
     }
 
-    const queryInsereCompra = "INSERT INTO compras (compra, total, id_cliente) SELECT ?, ?, id FROM clientes WHERE nome=?";
+    const queryInsereCompra = "INSERT INTO compras (compra, total, dataHora, id_cliente) SELECT ?, ?, ?, id FROM clientes WHERE nome=?";
     try {
-      await pool.query(queryInsereCompra, [compra, total, cliente]);
+      await pool.query(queryInsereCompra, [compra, total, dataHora, cliente]);
       return res.status(201).json({ message: "Compra criada com sucesso!" });
     } catch (e) {
       console.log(e);
