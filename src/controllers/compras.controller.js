@@ -99,6 +99,36 @@ const comprasController = {
     try {
       const queryPagarCompra = "UPDATE compras SET status=1 WHERE id=?";
       await pool.query(queryPagarCompra, [id]);
+
+      const queryDadosEmail = "SELECT clientes.email, compras.dataHora, compras.compra, compras.total FROM compras INNER JOIN clientes ON clientes.id=compras.id_cliente WHERE compras.id=?";
+      const [info] = await pool.query(queryDadosEmail, [id]);
+
+      let total = info[0].total;
+      let dados = JSON.parse(info[0].compra);
+
+      const tabela = `
+        <table border="1px" width="500">
+          <thead>
+            <tr>
+              <th>Quantidade</th>
+              <th>Produto</th>
+              <th>Preço</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${dados.map(itens => `<tr><td>${itens.quantidade}</td><td>${itens.nome[0].toUpperCase() + itens.nome.substring(1)}</td><td>R$ ${itens.preco.toFixed(2).replace('.',',')}</td></tr>`).join('')}
+          </tbody>
+        </table>`;
+
+        const html = `<p>A compra realizada em ${info[0].dataHora} foi paga!</p><br><p>Detalhes da compra:</p><br>${tabela}<br><p><b>TOTAL:</b> R$${total.toFixed(2).replace('.',',')}</p>`;
+
+      await transport.sendMail({
+        from: `Cantina Senai <${USER_EMAIL}>`,
+        to: info[0].email,
+        subject: "Compra paga",
+        html: html
+      });
+
       return res.status(200).json({ message: "Compra atualizada como paga!" });
     
     } catch (e) {
