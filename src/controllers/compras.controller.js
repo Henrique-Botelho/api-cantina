@@ -67,12 +67,12 @@ const comprasController = {
             </tr>
           </thead>
           <tbody>
-            ${dados.map(itens => `<tr><td>${itens.quantidade}</td><td>${itens.nome}</td><td>R$ ${itens.preco.toFixed(2).replace('.',',')}</td></tr>`).join('')}
+            ${dados.map(itens => `<tr><td>${itens.quantidade}</td><td>${itens.nome[0].toUpperCase() + itens.nome.substring(1)}</td><td>R$ ${itens.preco.toFixed(2).replace('.',',')}</td></tr>`).join('')}
           </tbody>
         </table>`;
 
       
-      const html = `<p>Aqui estão os detalhes da sua compra</p><br>${tabela}<br><p>Total: R$${total.toFixed(2).replace('.',',')}</p>`;
+      const html = `<p>Aqui estão os detalhes da sua compra</p><br>${tabela}<br><p><b>TOTAL:</b> R$${total.toFixed(2).replace('.',',')}</p>`;
 
 
       await transport.sendMail({
