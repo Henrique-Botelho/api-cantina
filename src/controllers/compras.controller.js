@@ -18,7 +18,7 @@ const comprasController = {
       return res.status(400).json({ message: "O cliente precisa ser informado (id)!" });
     }
 
-    const queryListarComprasCliente = "SELECT com.id, com.compra, com.total, com.dataHora FROM compras AS com WHERE com.id_cliente=?";
+    const queryListarComprasCliente = "SELECT com.id, com.compra, com.total, com.dataHora FROM compras AS com WHERE com.id_cliente=? AND com.status=0";
     try {
       const [response] = await pool.query(queryListarComprasCliente, [id]);
       return res.status(200).json(response);
@@ -62,8 +62,8 @@ const comprasController = {
       return res.status(400).json({ message: "O cliente deve ser informado (id)!" });
     }
 
-    const queryFinalizaConta = "UPDATE compras com INNER JOIN clientes cli ON cli.id = com.id_cliente SET com.status=1 WHERE cli.id=?";
     try {
+      const queryFinalizaConta = "UPDATE compras com INNER JOIN clientes cli ON cli.id = com.id_cliente SET com.status=1 WHERE cli.id=?";
       await pool.query(queryFinalizaConta, [id]);
       return res.status(200).json({ message: "Conta finalizada com sucesso!" });
     } catch (e) {
