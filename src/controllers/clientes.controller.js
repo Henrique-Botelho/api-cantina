@@ -10,7 +10,7 @@ const validarNumero = /^[0-9]{8,}$/;
 // Criando objeto "clientesController"
 const clientesController = {
     cadastraCliente: async (req, res) => {
-        const { nome, numero, email } = req.body;
+        let { nome, numero, email } = req.body;
 
         if (!nome || !numero || !email) {
             return res.status(400).json({ message: 'Todos os campos devem ser enviados.' });
@@ -27,6 +27,10 @@ const clientesController = {
         if (!validarNumero.test(numero)) {
             return res.status(400).json({ message: 'O telefone deve conter apenas números e no mínimo 8 caracteres.' });
         }
+
+        nome = nome.trim();
+        numero = numero.trim();
+        email = email.trim();
 
         try {
             const queryBuscaCliente = 'SELECT * FROM clientes WHERE numero = ? OR email= ?';
@@ -63,7 +67,7 @@ const clientesController = {
     },
     atualizaCliente: async (req, res) => {
         const { id } = req.params;
-        const { nome, numero, email } = req.body;
+        let { nome, numero, email } = req.body;
 
         if (!id) {
             return res.status(400).json({ message: 'É necessário informar o id do cliente a ser atualizado.' });
@@ -103,6 +107,10 @@ const clientesController = {
             if (!email) {
                 return res.status(400).json({ message: "Você deve colocar um email para esse cliente!" });
             }
+
+            nome = nome.trim();
+            numero = numero.trim();
+            email = email.trim();
 
             const queryAtualizaCliente = 'UPDATE clientes SET nome = ?, numero = ?, email = ? WHERE id = ?';
             await pool.query(queryAtualizaCliente, [nome, numero, email, id]);
