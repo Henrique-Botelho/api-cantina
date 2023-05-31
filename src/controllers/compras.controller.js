@@ -29,7 +29,7 @@ const comprasController = {
     }
   },
   insereCompra: async (req, res) => {
-    const { cliente, total, compra, dataHora } = req.body;
+    let { cliente, total, compra, dataHora } = req.body;
     
     if (!cliente) {
       return res.status(400).json({ message: "O nome do cliente deve ser informado!" });
@@ -54,7 +54,33 @@ const comprasController = {
       const queryPegaEmail = "SELECT email FROM clientes WHERE clientes.nome=?";
       const [listaEmail] = await pool.query(queryPegaEmail, [cliente]);
 
-      console.log(listaEmail);
+      const dados = JSON.parse(compra);
+
+      const tabela = `
+        <table>
+          <thead>
+            <tr>
+              <td>Quantidade</td>
+              <td>Produto</td>
+              <td>Preço</td>
+            </tr>
+          </thead>
+          <tbody>
+            ${dados.map(itens => `<tr><td>${itens.quantidade}</td><td>${itens.nome}</td><td>${itens.preco}</td></tr>`).join('')}
+          </tbody>
+        </table>`;
+
+      
+      const html = `<p>Aqui estão os detalhes da sua compra</p><br>${tabela}<br><p>Total: R$${total.toFixed(2).replace('.',',')}</p>`;
+
+
+      await transport.sendMail({
+        from: `Cantina Senai <${USER_EMAIL}>`,
+        to: listaEmail[0].email,
+        subject: "Recibo de compra",
+        html: html
+      });
+      
 
       return res.status(201).json({ message: "Compra criada com sucesso!" });
     } catch (e) {
