@@ -58,7 +58,7 @@ const comprasController = {
       const dados = JSON.parse(compra);
 
       const tabela = `
-        <table>
+        <table border="1px" width="500">
           <thead>
             <tr>
               <td>Quantidade</td>
@@ -67,7 +67,7 @@ const comprasController = {
             </tr>
           </thead>
           <tbody>
-            ${dados.map(itens => `<tr><td>${itens.quantidade}</td><td>${itens.nome}</td><td>${itens.preco}</td></tr>`).join('')}
+            ${dados.map(itens => `<tr><td>${itens.quantidade}</td><td>${itens.nome}</td><td>R$ ${itens.preco.toFixed(2).replace('.',',')}</td></tr>`).join('')}
           </tbody>
         </table>`;
 
