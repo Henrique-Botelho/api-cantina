@@ -3,18 +3,17 @@ const pool = require('../database/index');
 // Criando objeto "produtosController"
 const produtosController = {
     // Criando a função "pegaTodosProdutos"
-    pegaTodosProdutos: async (req, res) => {
-        // Utilizando a query para selecionar todos os produtos
-        const queryPegaTodosProdutos = 'SELECT * FROM produtos';
-
+    pegaTodosProdutos: async (req, res) => {  
         try {
+            // Utilizando a query para selecionar todos os produtos
+            const queryPegaTodosProdutos = 'SELECT * FROM produtos';
             // Fazendo a operação.
             const [response] = await pool.query(queryPegaTodosProdutos);
             // Exibindo os produtos
             return res.status(200).json(response);
-        } catch (error) {
+        } catch (e) {
             // Resposta ao usuário que sua operação não foi realizada
-            console.log('Erro ao listar todos os produtos: ' + error);
+            console.log(e);
             // Tratamento de erros durante o "Try"
             return res.status(500).json({ message: 'Erro no contato com o servidor.' });
         }
@@ -52,9 +51,9 @@ const produtosController = {
         categoria = categoria.toLowerCase();
         descricao = descricao.toLowerCase();
 
-        // Inserindo um novo produto na tabela produtos.
-        const queryInsereProduto = 'INSERT INTO produtos (nome, preco, categoria, descricao) VALUES (?, ?, ?, ?)';
         try {
+            // Inserindo um novo produto na tabela produtos.
+            const queryInsereProduto = 'INSERT INTO produtos (nome, preco, categoria, descricao) VALUES (?, ?, ?, ?)';
             // Realizando a operação
             await pool.query(queryInsereProduto, [nome, preco, categoria, descricao]);
             // Resposta ao usuario que seu produto foi inserido com sucesso
@@ -102,28 +101,13 @@ const produtosController = {
         categoria = categoria.toLowerCase();
         descricao = descricao.toLowerCase();
 
-        // Selecionando o produto com o "id" informado
-        const querySelecionaProduto = 'SELECT * FROM produtos WHERE id = ?';
         try {
-            // Realizando a operação
-            const [result] = await pool.query(querySelecionaProduto, [id]);
-            const produto = result[0];
-            if (!produto) {
-                return res.status(404).json({ message: 'Produto não encontrado.' });
-            }
-
-            // Comparando os dados do produto no banco de dados com os dados enviados pelo cliente
-            if (produto.nome === nome && produto.preco === preco && produto.categoria === categoria && produto.descricao === descricao) {
-                return res.status(200).json({ message: 'As informações do Produto não foram alteradas.'});
-            }
-
             // Atualizando o produto com os novos dados
             const queryAtualizaProduto = 'UPDATE produtos SET nome=?, preco=?, categoria=?, descricao=? WHERE id=?';
-            const values = [nome, preco, categoria, descricao, id];
-            await pool.query(queryAtualizaProduto, values);
+            await pool.query(queryAtualizaProduto, [nome, preco, categoria, descricao, id]);
             return res.status(200).json({ message: 'Produto atualizado com sucesso.' });
-        } catch (error) {
-            console.error(error);
+        } catch (e) {
+            console.error(e);
             return res.status(500).json({ message: 'Erro ao atualizar o produto.' });
         }
     },
@@ -137,23 +121,15 @@ const produtosController = {
         if (!id) {
             return res.status(400).json({ message: 'Envie o ID do produto para realizar a operação.' });
         }
-        // Selecionando o produto a ser excluído pelo ID
-        const querySelecionaProduto = 'SELECT * FROM produtos WHERE id = ?';
         try {
-            // Realizando a operação
-            const [response] = await pool.query(querySelecionaProduto, [id]);
-            // Verificando se o produto existe
-            if (response.length === 0) {
-                return res.status(404).json({ message: 'Produto não encontrado.' });
-            }
             // Excluindo o produto da tabela produtos
             const queryDeletaProduto = 'DELETE FROM produtos WHERE id = ?';
             await pool.query(queryDeletaProduto, [id]);
             // Resposta ao usuario que seu produto foi excluído com sucesso
             return res.status(200).json({ message: 'Produto excluído com sucesso!' });
-        } catch (error) {
+        } catch (e) {
             // Resposta ao usuario que sua operação não foi realizada 
-            console.log('Erro ao excluir o produto: ' + error);
+            console.log(e);
             // Tratamento de erros durante o "Try"
             return res.status(500).json({ message: 'Erro no contato com o servidor.' })
         }
