@@ -1,5 +1,6 @@
 const pool = require("../database/index");
 const transport = require('../email/index');
+const { USER_EMAIL } = require('../config/config');
 
 const comprasController = {
   listarCompras: async (req, res) => {
