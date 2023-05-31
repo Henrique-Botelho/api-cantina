@@ -61,9 +61,9 @@ const comprasController = {
         <table border="1px" width="500">
           <thead>
             <tr>
-              <td>Quantidade</td>
-              <td>Produto</td>
-              <td>Preço</td>
+              <th>Quantidade</th>
+              <th>Produto</th>
+              <th>Preço</th>
             </tr>
           </thead>
           <tbody>
