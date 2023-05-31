@@ -89,6 +89,24 @@ const comprasController = {
       return res.status(500).json({ message: "Ocorreu um erro inesperado ao inserir a compra!" });
     }
   },
+  pagarCompra: async (req, res) => {
+    const { id } = req.params;
+    
+    if (!id) {
+      return res.status(400).json({ message: "A compra deve ser informada (id)!" });
+    }
+
+    try {
+      const queryPagarCompra = "UPDATE compras SET status=1 WHERE id=?";
+      await pool.query(queryPagarCompra, [id]);
+      return res.status(200).json({ message: "Compra atualizada como paga!" });
+    
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ message: "Ocorreu um erro inesperado!" });
+    }
+
+  },
   finalizarConta: async (req, res) => {
     const { id } = req.params;
 
