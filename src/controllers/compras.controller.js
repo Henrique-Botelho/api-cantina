@@ -1,4 +1,5 @@
 const pool = require("../database/index");
+const transport = require('../email/index');
 
 const comprasController = {
   listarCompras: async (req, res) => {
@@ -46,9 +47,15 @@ const comprasController = {
       }
     }
 
-    const queryInsereCompra = "INSERT INTO compras (compra, total, dataHora, id_cliente) SELECT ?, ?, ?, id FROM clientes WHERE nome=?";
     try {
+      const queryInsereCompra = "INSERT INTO compras (compra, total, dataHora, id_cliente) SELECT ?, ?, ?, id FROM clientes WHERE nome=?";
       await pool.query(queryInsereCompra, [compra, total, dataHora, cliente]);
+
+      const queryPegaEmail = "SELECT email FROM clientes WHERE clientes.nome=?";
+      const [listaEmail] = await pool.query(queryPegaEmail, [cliente]);
+
+      console.log(listaEmail);
+
       return res.status(201).json({ message: "Compra criada com sucesso!" });
     } catch (e) {
       console.log(e);
