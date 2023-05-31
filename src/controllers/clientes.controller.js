@@ -61,31 +61,6 @@ const clientesController = {
         }
 
     },
-
-    listaCliente: async (req, res) => {
-        //Recebendo o id do cliente passado nos parâmetros
-        const { id } = req.params;
-
-        //Validação
-        if (!id) {
-            // Caso não seja inserido nenhum id, reposta ao cliente que é necessário ser inserido.
-            return res.status(400).json({ message: 'É necessário informar o id do cliente a ser listado.' });
-        }
-
-        // Selecionando "nome" e "telefone" na tabela "clientes" onde o "id" seja igual ao inserido. 
-        const queryListaCliente = 'SELECT nome, numero FROM clientes WHERE id = (?)';
-        try {
-            // Fazendo a operação.
-            const [response] = await pool.query(queryListaCliente, id);
-            return res.status(200).json(response);
-        } catch (error) {
-            // Resposta ao usuario que sua operação não foi realizada.
-            console.log('Erro ao listar o cliente específico: ' + error);
-            // Tratamento de erros durante o "Try"
-            return res.status(500).json({ message: 'Erro no contato com o servidor.' });
-        }
-    },
-
     atualizaCliente: async (req, res) => {
         const { id } = req.params;
         const { nome, numero, email } = req.body;
