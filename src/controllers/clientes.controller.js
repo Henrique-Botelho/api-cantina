@@ -10,9 +10,9 @@ const validarNumero = /^[0-9]{8,}$/;
 // Criando objeto "clientesController"
 const clientesController = {
     cadastraCliente: async (req, res) => {
-        const { nome, numero } = req.body;
+        const { nome, numero, email } = req.body;
 
-        if (!nome || !numero) {
+        if (!nome || !numero || !email) {
             return res.status(400).json({ message: 'Todos os campos devem ser enviados.' });
         }
 
@@ -29,15 +29,15 @@ const clientesController = {
         }
 
         try {
-            const queryBuscaCliente = 'SELECT * FROM clientes WHERE numero = ?';
-            const [rows] = await pool.query(queryBuscaCliente, [numero]);
+            const queryBuscaCliente = 'SELECT * FROM clientes WHERE numero = ? OR email= ?';
+            const [rows] = await pool.query(queryBuscaCliente, [numero, email]);
 
             if (rows.length > 0) {
-                return res.status(400).json({ message: 'Já existe um cliente cadastrado com este número de telefone.' });
+                return res.status(400).json({ message: 'Já existe um cliente cadastrado com este número de telefone ou email.' });
             }
 
-            const queryInsereCliente = 'INSERT INTO clientes (nome, numero) VALUES (?, ?)';
-            const response2 = await pool.query(queryInsereCliente, [nome, numero]);
+            const queryInsereCliente = 'INSERT INTO clientes (nome, numero, email) VALUES (?, ?, ?)';
+            await pool.query(queryInsereCliente, [nome, numero, email]);
 
             return res.status(201).json({ message: 'Cliente cadastrado com sucesso!' });
         } catch (error) {
