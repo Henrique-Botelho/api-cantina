@@ -88,7 +88,7 @@ const clientesController = {
 
     atualizaCliente: async (req, res) => {
         const { id } = req.params;
-        const { nome, numero } = req.body;
+        const { nome, numero, email } = req.body;
 
         if (!id) {
             return res.status(400).json({ message: 'É necessário informar o id do cliente a ser atualizado.' });
@@ -110,8 +110,10 @@ const clientesController = {
                 if (nome.length < 8 || nome.length > 50) {
                     return res.status(400).json({ message: 'Quantidade de caracteres para nome inválida.' });
                 }
+            } else {
+                return res.status(400).json({ message: "Você deve colocar um nome para esse cliente!" });
             }
-
+            
             if (numero) {
                 if (!validarNumero.test(numero)) {
                     return res.status(400).json({ message: 'Número deve conter apenas números.' });
@@ -119,15 +121,16 @@ const clientesController = {
                 if (numero.length !== 11) {
                     return res.status(400).json({ message: 'Quantidade de caracteres para número inválida.' });
                 }
+            } else {
+                return res.status(400).json({ message: "Você deve colocar um número para esse cliente!" });
+            }
+            
+            if (!email) {
+                return res.status(400).json({ message: "Você deve colocar um email para esse cliente!" });
             }
 
-            // verifica se há mudanças antes de atualizar
-            if (nome === rows[0].nome && numero === rows[0].numero) {
-                return res.status(200).json({ message: 'As informações do cliente não foram alteradas.' });
-            }
-
-            const queryAtualizaCliente = 'UPDATE clientes SET nome = ?, numero = ? WHERE id = ?';
-            const response = await pool.query(queryAtualizaCliente, [nome, numero, id]);
+            const queryAtualizaCliente = 'UPDATE clientes SET nome = ?, numero = ?, email = ? WHERE id = ?';
+            await pool.query(queryAtualizaCliente, [nome, numero, email, id]);
 
             return res.status(200).json({ message: 'Cliente atualizado com sucesso!' });
         } catch (error) {
