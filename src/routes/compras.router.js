@@ -22,6 +22,6 @@ router.put("/pagar/:id", verificaUsuario, comprasController.pagarCompra);
 router.delete("/:id", verificaUsuario, comprasController.excluirCompra);
 
 // Rota de excluir compras pagas
-router.delete("/pagas", verificaUsuario, comprasController.excluirComprasPagas);
+router.delete("/excluir/pagas", verificaUsuario, comprasController.excluirComprasPagas);
 
 module.exports = router;
