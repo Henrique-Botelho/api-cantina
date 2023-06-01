@@ -232,7 +232,6 @@ const comprasController = {
     try {
       const queryExcluirComprasPagas = "DELETE FROM compras WHERE compras.status=1";
       await pool.query(queryExcluirComprasPagas);
-      console.log("teste");
       return res.status(200).json({ message: "Compras pagas excluidas com sucesso!" });
     } catch (e) {
       console.log(e);
