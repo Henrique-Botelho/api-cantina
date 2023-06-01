@@ -4,7 +4,10 @@ const produtosController = require('../controllers/produtos.controller');
 const { verificaUsuario, verificaChaveDeAcesso } = require('../middleware/auth.middleware');
 
 // Rota para pegar todos os produtos
-router.get('/', verificaChaveDeAcesso, produtosController.pegaTodosProdutos)
+router.get('/', verificaChaveDeAcesso, produtosController.pegaTodosProdutos);
+
+// Rota para pegar todas as categorias
+router.get('/categorias', verificaChaveDeAcesso, produtosController.pegaCategorias);
 
 // Rota para cadastrar novo produto
 router.post('/', verificaUsuario, produtosController.insereProduto);
