@@ -152,56 +152,58 @@ const comprasController = {
       const queryFinalizaConta = "UPDATE compras com INNER JOIN clientes cli ON cli.id = com.id_cliente SET com.status=1 WHERE cli.id=?";
       await pool.query(queryFinalizaConta, [id]);
 
-      // let total = 0;
-      // let dados = [];
+      let total = 0;
+      let dados = [];
 
-      // info.map(item => {
-      //   total += item.total
-      //   let comps = JSON.parse(item.compra);
-      //   let quant = comps.length;
-      //   comps.map((cada, index) => {
-      //     if (index == 0) {
-      //       dados.push(`
-      //         <tr>
-      //           <td rowspan="${quant}" align="center">${item.dataHora}</td>
-      //           <td>${cada.quantidade}</td>
-      //           <td>${cada.nome}</td>
-      //           <td>${cada.preco}</td>
-      //           </tr>`
-      //           )
-      //     } else {
-      //       dados.push(`
-      //           <tr>
-      //           <td>${cada.quantidade}</td>
-      //           <td>${cada.nome}</td>
-      //           <td>${cada.preco}</td>
-      //         </tr>
-      //       `)
-      //     }
-      //   });
-      // });
+      info.map(item => {
+        total += item.total
+        let comps = JSON.parse(item.compra);
+        let quant = comps.length;
+        comps.map((cada, index) => {
+          if (index == 0) {
+            dados.push(`
+              <tr>
+                <td rowspan="${quant}" align="center">${item.dataHora}</td>
+                <td>${cada.quantidade}</td>
+                <td>${cada.nome}</td>
+                <td>${cada.preco}</td>
+                </tr>`
+                )
+          } else {
+            dados.push(`
+                <tr>
+                <td>${cada.quantidade}</td>
+                <td>${cada.nome}</td>
+                <td>${cada.preco}</td>
+              </tr>
+            `)
+          }
+        });
+      });
 
-      // const tabela = `
-      //   <table border="1px" width="500">
-      //     <thead>
-      //       <tr>
-      //         <th>Data/Hora</th>
-      //         <th>Quantidade</th>
-      //         <th>Produto</th>
-      //         <th>Preço</th>
-      //       </tr>
-      //     </thead>
-      //     <tbody>
-      //       ${dados.map(item => item)}
-      //     </tbody>
-      //   </table>`;
+      const tabela = `
+        <table border="1px" width="500">
+          <thead>
+            <tr>
+              <th>Data/Hora</th>
+              <th>Quantidade</th>
+              <th>Produto</th>
+              <th>Preço</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${dados.map(item => item)}
+          </tbody>
+        </table>`;
 
-      // await transport.sendMail({
-      //   from: `Cantina Senai <${USER_EMAIL}>`,
-      //   to: info[0].email,
-      //   subject: "Compra paga",
-      //   html: html
-      // });
+      const html = `<p>As suas compras pendentes foram pagas!</p><br><p>Detalhes das compras:</p><br>${tabela}<br><p><b>TOTAL:</b> R$${total.toFixed(2).replace('.',',')}</p>`
+
+      await transport.sendMail({
+        from: `Cantina Senai <${USER_EMAIL}>`,
+        to: info[0].email,
+        subject: "Compras pagas",
+        html: html
+      });
       
 
       return res.status(200).json({ message: "Conta finalizada com sucesso!" });
