@@ -228,6 +228,16 @@ const comprasController = {
       return res.status(500).json({ message: "Erro ao excluir a compra!" });
     }
   },
+  excluirComprasPagas: async (req, res) => {
+    try {
+      const queryExcluirComprasPagas = "DELETE FROM compras WHERE status=1";
+      await pool.query(queryExcluirComprasPagas);
+      return res.status(200).json({ message: "Compras pagas excluidas com sucesso!" });
+    } catch (e) {
+      console.log(e);
+      return res.status(500).json({ message: "Ocorreu um erro inesperado!" });
+    }
+  }
 };
 
 module.exports = comprasController;
