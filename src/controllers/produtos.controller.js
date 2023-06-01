@@ -18,6 +18,16 @@ const produtosController = {
             return res.status(500).json({ message: 'Erro no contato com o servidor.' });
         }
     },
+    pegaCategorias: async (req, res) => {
+        try {
+            const queryPegaCategorias = "SELECT DISTINCT categoria FROM produtos";
+            const [response] = await pool.query(queryPegaCategorias);
+            return res.status(200).json(response);
+        } catch (e) {
+            console.log(e);
+            return res.status(500).json({ message: "Ocorreu um erro inesperado!" });
+        }
+    },
     // Criando a função "insereProduto"
     insereProduto: async (req, res) => {
         // Recebendo as variáveis "nome", "preco", "categoria" e "descricao" do body.
