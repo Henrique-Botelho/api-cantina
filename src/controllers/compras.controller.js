@@ -145,7 +145,7 @@ const comprasController = {
     }
 
     try {
-      const queryBuscaDados = "SELECT compras.compra, compras.total, clientes.email FROM compras INNER JOIN clientes ON clientes.id=compras.id_cliente WHERE compras.status=0 AND clientes.id=?";
+      const queryBuscaDados = "SELECT compras.compra, compras.total, compras.dataHora, clientes.email FROM compras INNER JOIN clientes ON clientes.id=compras.id_cliente WHERE compras.status=0 AND clientes.id=?";
       const [info] = await pool.query(queryBuscaDados, [id]);
       console.log(info);
 
@@ -166,7 +166,7 @@ const comprasController = {
                 <td rowspan="${quant}" align="center">${item.dataHora}</td>
                 <td>${cada.quantidade}</td>
                 <td>${cada.nome}</td>
-                <td>${cada.preco}</td>
+                <td>R$ ${cada.preco.toFixed(2).replace('.',',')}</td>
                 </tr>`
                 )
           } else {
@@ -174,7 +174,7 @@ const comprasController = {
                 <tr>
                 <td>${cada.quantidade}</td>
                 <td>${cada.nome}</td>
-                <td>${cada.preco}</td>
+                <td>R$ ${cada.preco.toFixed(2).replace('.',',')}</td>
               </tr>
             `)
           }
