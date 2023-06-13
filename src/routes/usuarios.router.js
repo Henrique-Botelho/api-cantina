@@ -13,7 +13,7 @@ router.post('/esqueci-senha', usuariosController.esqueciSenha);
 router.post('/alterar-senha', usuariosController.trocarSenha);
 
 // Rota para cadastrar um novo usuário
-router.post('/cadastro', usuariosController.cadastraUsuario);
+router.post('/cadastro', verificaUsuario, usuariosController.cadastraUsuario);
 
 // Rota para a verificação do token
 router.post('/verifica-token', verificaUsuario, usuariosController.verificaToken);
