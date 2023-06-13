@@ -83,17 +83,17 @@ const comprasController = {
       });
       
 
-      return res.status(201).json({ message: "Compra criada com sucesso!" });
+      return res.status(201).json({ message: "Venda criada com sucesso!" });
     } catch (e) {
       console.log(e);
-      return res.status(500).json({ message: "Ocorreu um erro inesperado ao inserir a compra!" });
+      return res.status(500).json({ message: "Ocorreu um erro inesperado ao inserir a venda!" });
     }
   },
   pagarCompra: async (req, res) => {
     const { id } = req.params;
     
     if (!id) {
-      return res.status(400).json({ message: "A compra deve ser informada (id)!" });
+      return res.status(400).json({ message: "A venda deve ser informada (id)!" });
     }
 
     try {
@@ -129,7 +129,7 @@ const comprasController = {
         html: html
       });
 
-      return res.status(200).json({ message: "Compra atualizada como paga!" });
+      return res.status(200).json({ message: "Venda atualizada como paga!" });
     
     } catch (e) {
       console.log(e);
@@ -216,23 +216,23 @@ const comprasController = {
     const { id } = req.params;
     
     if (!id) {
-      return res.status(400).json({ message: "O id da compra deve ser enviado!" });
+      return res.status(400).json({ message: "O id da venda deve ser enviado!" });
     }
 
     const queryExcluiCompra = "DELETE FROM compras WHERE id=?";
     try {
       await pool.query(queryExcluiCompra, [id]);
-      return res.status(200).json({ message: "Compra excluida com sucesso!" });
+      return res.status(200).json({ message: "Venda excluida com sucesso!" });
     } catch(e) {
       console.log(e);
-      return res.status(500).json({ message: "Erro ao excluir a compra!" });
+      return res.status(500).json({ message: "Erro ao excluir a venda!" });
     }
   },
   excluirComprasPagas: async (req, res) => {
     try {
       const queryExcluirComprasPagas = "DELETE FROM compras WHERE compras.status=1";
       await pool.query(queryExcluirComprasPagas);
-      return res.status(200).json({ message: "Compras pagas excluidas com sucesso!" });
+      return res.status(200).json({ message: "Vendas pagas excluidas com sucesso!" });
     } catch (e) {
       console.log(e);
       return res.status(500).json({ message: "Ocorreu um erro inesperado!" });
