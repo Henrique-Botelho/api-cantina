@@ -41,7 +41,7 @@ module.exports = {
         .status(400)
         .json({
           message:
-            "Quantidade de caracteres errada. (userName): min. 3, max. 50; (email): max. 255; (senha): min. 8, max. 20.",
+            "Quantidade de caracteres errada!",
         });
     }
 
