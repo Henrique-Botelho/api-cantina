@@ -2,7 +2,7 @@ const pool = require("../database/index");
 const transport = require('../email/index');
 const { USER_EMAIL } = require('../config/config');
 
-const comprasController = {
+module.exports = {
   listarCompras: async (req, res) => {
     const queryListarCompras = 'SELECT cli.nome, com.id, com.id_cliente, com.compra, com.total, com.status, com.dataHora FROM clientes AS cli INNER JOIN compras AS com ON cli.id = com.id_cliente';
     try {
@@ -239,5 +239,3 @@ const comprasController = {
     }
   }
 };
-
-module.exports = comprasController;

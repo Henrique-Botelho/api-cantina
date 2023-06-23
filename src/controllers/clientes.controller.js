@@ -7,8 +7,7 @@ const validarNome = /^[a-zA-ZÀ-ú]+([ '-][a-zA-ZÀ-ú]+)*$/;
 // Expressão regular para validar se o numero contém apenas números.
 const validarNumero = /^[0-9]{8,}$/;
 
-// Criando objeto "clientesController"
-const clientesController = {
+module.exports = {
     cadastraCliente: async (req, res) => {
         let { nome, numero, email } = req.body;
 
@@ -129,5 +128,3 @@ const clientesController = {
         }
     }
 };
-
-module.exports = clientesController;

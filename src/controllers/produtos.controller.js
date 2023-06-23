@@ -1,7 +1,6 @@
 const pool = require('../database/index');
 
-// Criando objeto "produtosController"
-const produtosController = {
+module.exports = {
     // Criando a função "pegaTodosProdutos"
     pegaTodosProdutos: async (req, res) => {  
         try {
@@ -146,5 +145,3 @@ const produtosController = {
     }
 
 }
-
-module.exports = produtosController;
