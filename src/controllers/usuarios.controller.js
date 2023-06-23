@@ -105,6 +105,16 @@ module.exports = {
       return res.status(404).json({ message: "Todos os dados devem ser enviados! (id, tipo)" });
     }
     try {
+      // Quantos admins
+      const queryVerificaQuantidadeAdmins = "SELECT COUNT(id) AS quantidadeAdmins FROM usuarios WHERE tipo='admin'";
+      const [response] = await pool.query(queryVerificaQuantidadeAdmins);
+      // O usuário a ser excluído é um admin?
+      const queryVerificaTipo = "SELECT tipo FROM usuarios WHERE id=?";
+      const [usuarios] = await pool.query(queryVerificaTipo, [id]);
+
+      if (response[0].quantidadeAdmins === 1 && usuarios[0].tipo === "admin") {
+        return res.status(400).json({ message: "Deve haver pelo menos um Administrador no sistema!" });
+      }
       const queryEditaTipo = "UPDATE usuarios SET tipo=? WHERE id=?";
       await pool.query(queryEditaTipo, [tipo, id]);
       return res.status(200).json({ message: "Tipo do usuário editado com sucesso!" });
@@ -120,9 +130,13 @@ module.exports = {
       return res.status(404).json({ message: "Todos os dados devem ser enviados! (id)" });
     }
     try {
-      const queryVerificaQuantosAtivados = "SELECT COUNT(ativado) AS adminsAtivados FROM usuarios WHERE tipo='admin'";
+      // Quantos admins ativos
+      const queryVerificaQuantosAtivados = "SELECT COUNT(id) AS adminsAtivados FROM usuarios WHERE tipo='admin' AND ativado=1";
       const [respAdminsAtivados] = await pool.query(queryVerificaQuantosAtivados);
-      if (respAdminsAtivados[0].adminsAtivados === 1) {
+      // O usuário a ser excluído é um admin?
+      const queryVerificaTipo = "SELECT tipo FROM usuarios WHERE id=?";
+      const [usuarios] = await pool.query(queryVerificaTipo, [id]);
+      if (respAdminsAtivados[0].adminsAtivados === 1 && usuarios[0].tipo === "admin") {
         return res.status(400).json({ message: "Deve haver pelo menos um Administrador ativado!" });
       }
 
@@ -140,9 +154,11 @@ module.exports = {
       return res.status(400).json({ message: "O usuário deve ser informado! (id)" });
     }
     try {
+      // Quantos admins
       const queryVerificaQuantidadeAdmins = "SELECT COUNT(id) AS quantidadeAdmins FROM usuarios WHERE tipo='admin'";
       const [response] = await pool.query(queryVerificaQuantidadeAdmins);
-      const queryVerificaTipo = "SELECT * FROM usuarios WHERE id=?";
+      // O usuário a ser excluído é um admin?
+      const queryVerificaTipo = "SELECT tipo FROM usuarios WHERE id=?";
       const [usuarios] = await pool.query(queryVerificaTipo, [id]);
 
       if (response[0].quantidadeAdmins === 1 && usuarios[0].tipo === "admin") {
