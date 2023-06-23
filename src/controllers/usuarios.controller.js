@@ -4,8 +4,7 @@ const jwt = require("jsonwebtoken");
 const transport = require('../email/index');
 const { SECRET, USER_EMAIL } = require("../config/config");
 
-// Criando objeto "usuariosController"
-const usuariosController = {
+module.exports = {
   cadastraUsuario: async (req, res) => {
     // Recebendo as variáveis "userName", "email", "senha", "confirmaSenha" do body.
     let { userName, email, senha, confirmaSenha } = req.body;
@@ -113,7 +112,9 @@ const usuariosController = {
         expiresIn: "24h",
       });
 
-      res.status(200).json({ token });
+      const userIsAdmin = response[0].tipo === "admin";
+
+      res.status(200).json({ token, userIsAdmin });
     } catch (error) {
       console.log(error);
       return res.status(500).json({ message: "Erro no servidor." });
@@ -202,5 +203,3 @@ const usuariosController = {
     return res.status(200).json({ message: true });
   },
 };
-
-module.exports = usuariosController;
