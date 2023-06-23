@@ -136,7 +136,12 @@ module.exports = {
     try {
       const queryVerificaQuantidadeAdmins = "SELECT COUNT(id) AS quantidadeAdmins FROM usuarios WHERE tipo='admin'";
       const [response] = await pool.query(queryVerificaQuantidadeAdmins);
-      console.log(response);
+      const queryVerificaTipo = "SELECT * FROM usuarios WHERE id=?";
+      const [usuarios] = await pool.query(queryVerificaTipo, [id]);
+
+      if (response[0].quantidadeAdmins === 1 && usuarios[0].tipo === "admin") {
+        return res.status(400).json({ message: "Deve haver pelo menos um Administrador no sistema!" });
+      }
 
       const queryExcluirUsuario = "DELETE FROM usuarios WHERE id=?";
       await pool.query(queryExcluirUsuario, [id]);
