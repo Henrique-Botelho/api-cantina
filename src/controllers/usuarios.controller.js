@@ -134,6 +134,10 @@ module.exports = {
       return res.status(400).json({ message: "O usuário deve ser informado! (id)" });
     }
     try {
+      const queryVerificaQuantidadeAdmins = "SELECT COUNT(id) AS quantidadeAdmins FROM usuarios WHERE tipo='admin'";
+      const [response] = await pool.query(queryVerificaQuantidadeAdmins);
+      console.log(response);
+
       const queryExcluirUsuario = "DELETE FROM usuarios WHERE id=?";
       await pool.query(queryExcluirUsuario, [id]);
       return res.status(200).json({ message: "Usuário excluido com sucesso!" });
