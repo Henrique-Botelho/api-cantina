@@ -12,11 +12,19 @@ router.post('/esqueci-senha', usuariosController.esqueciSenha);
 // Rota para trocar a senha
 router.post('/alterar-senha', usuariosController.trocarSenha);
 
-// Rota para cadastrar um novo usuário
-router.post('/cadastro', verificaUsuario, usuariosController.cadastraUsuario);
-
 // Rota para a verificação do token
 router.post('/verifica-token', verificaUsuario, usuariosController.verificaToken);
 
+// Rota para cadastrar um novo usuário
+router.post('/cadastro', verificaUsuario, usuariosController.cadastraUsuario);
+
+// Rota para listar os usuários
+router.get('/', verificaUsuario, usuariosController.listarUsuarios);
+
+// Rota para editar um usuário
+router.put('/:id', verificaUsuario, usuariosController.editarUsuario);
+
+// Rota para excluir um usuário
+router.delete('/:id', verificaUsuario, usuariosController.excluirUsuario);
 
 module.exports = router;

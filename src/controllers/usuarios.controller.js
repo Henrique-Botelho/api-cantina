@@ -7,10 +7,10 @@ const { SECRET, USER_EMAIL } = require("../config/config");
 module.exports = {
   cadastraUsuario: async (req, res) => {
     // Recebendo as variáveis "userName", "email", "senha", "confirmaSenha" do body.
-    let { userName, email, senha, confirmaSenha } = req.body;
+    let { userName, email, senha, confirmaSenha, tipo } = req.body;
 
     // Verificando se todos os campos estão preenchidos
-    if (!userName || !email || !senha || !confirmaSenha) {
+    if (!userName || !email || !senha || !confirmaSenha || !tipo) {
       return res.status(400).json({ message: "Faltam dados." });
     }
     // Verificando a igualdade nos campos "senha" e "confirmaSenha".
@@ -22,7 +22,8 @@ module.exports = {
       typeof userName !== "string" ||
       typeof email !== "string" ||
       typeof senha !== "string" ||
-      typeof confirmaSenha !== "string"
+      typeof confirmaSenha !== "string" ||
+      typeof tipo !== "string"
     ) {
       return res
         .status(400)
@@ -58,11 +59,11 @@ module.exports = {
           .json({ message: "Esse usuário ou email já existe." });
       }
 
-      // Cadastrando novo usuário
+      // Retirando espaços em branco do começo e do fim dos dados
       userName = userName.trim();
       email = email.trim();
-      // Cadastrando nova senha.
       senha = senha.trim();
+      tipo = tipo.trim();
 
       // Gerando o "Salt" do "Hash" da senha.
       const salt = await bcrypt.genSalt(12);
@@ -71,11 +72,12 @@ module.exports = {
 
       // Inserindo um novo cadastro na tabela usuários.
       const queryCadastraUsuario =
-        "INSERT INTO usuarios (userName, email, senha) VALUES (?,?,?)";
-      const [response] = await pool.query(queryCadastraUsuario, [
+        "INSERT INTO usuarios (userName, email, senha, tipo) VALUES (?,?,?,?)";
+      await pool.query(queryCadastraUsuario, [
         userName,
         email,
         senhaHash,
+        tipo
       ]);
 
       // Resposta ao cliente que seu usuário foi cadastrado.
@@ -86,7 +88,45 @@ module.exports = {
       return res.status(500).json({ message: "Erro no servidor." });
     }
   },
-
+  listarUsuarios: async (req, res) => {
+    try {
+      const queryListarUsuarios = "SELECT id, userName, email, tipo, ativado FROM usuarios";
+      const [response] = pool.query(queryListarUsuarios);
+      return res.status(200).json(response);
+    } catch(error) {
+      console.log(error);
+      return res.status(500).json({ message: "Erro no servidor." })
+    }
+  },
+  editarUsuario: async (req, res) => {
+    const { tipo, ativado } = req.body;
+    const { id } = req.params;
+    if (!id || !tipo || !ativado) {
+      return res.status(404).json({ message: "Todos os dados devem ser enviados! (id, tipo, ativado)" });
+    }
+    try {
+      const queryEditaUsuario = "UPDATE usuarios SET tipo=?, ativado=? WHERE id=?";
+      await pool.query(queryEditaUsuario, [tipo, ativado, id]);
+      return res.status(200).json({ message: "Usuário editado com sucesso!" });
+    } catch(error) {
+      console.log(error);
+      return res.status(500).json({ message: "Erro no servidor." });
+    }
+  },
+  excluirUsuario: async (req, res) => {
+    const { id } = req.params;
+    if (!id) {
+      return res.status(400).json({ message: "O usuário deve ser informado! (id)" });
+    }
+    try {
+      const queryExcluirUsuario = "DELETE FROM usuarios WHERE id=?";
+      await pool.query(queryExcluirUsuario, [id]);
+      return res.status(200).json({ message: "Usuário excluido com sucesso!" });
+    } catch(error) {
+      console.log(error);
+      return res.status(500).json({ message: "Erro no servidor." });
+    }
+  },
   login: async (req, res) => {
     const { email, senha } = req.body;
 
