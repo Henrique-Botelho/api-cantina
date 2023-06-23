@@ -21,8 +21,11 @@ router.post('/cadastro', verificaUsuario, usuariosController.cadastraUsuario);
 // Rota para listar os usuários
 router.get('/', verificaUsuario, usuariosController.listarUsuarios);
 
-// Rota para editar um usuário
-router.put('/:id', verificaUsuario, usuariosController.editarUsuario);
+// Rota para editar o tipo de um usuário
+router.put('/tipo/:id', verificaUsuario, usuariosController.editarTipo);
+
+// Rota para editar o status de um usuário
+router.put('/ativado/:id', verificaUsuario, usuariosController.editarAtivado);
 
 // Rota para excluir um usuário
 router.delete('/:id', verificaUsuario, usuariosController.excluirUsuario);

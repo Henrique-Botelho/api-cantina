@@ -98,16 +98,31 @@ module.exports = {
       return res.status(500).json({ message: "Erro no servidor." })
     }
   },
-  editarUsuario: async (req, res) => {
-    const { tipo, ativado } = req.body;
+  editarTipo: async (req, res) => {
+    const { tipo } = req.body;
     const { id } = req.params;
-    if (!id || !tipo || !ativado) {
-      return res.status(404).json({ message: "Todos os dados devem ser enviados! (id, tipo, ativado)" });
+    if (!id || !tipo) {
+      return res.status(404).json({ message: "Todos os dados devem ser enviados! (id, tipo)" });
     }
     try {
-      const queryEditaUsuario = "UPDATE usuarios SET tipo=?, ativado=? WHERE id=?";
-      await pool.query(queryEditaUsuario, [tipo, ativado, id]);
-      return res.status(200).json({ message: "Usuário editado com sucesso!" });
+      const queryEditaTipo = "UPDATE usuarios SET tipo=? WHERE id=?";
+      await pool.query(queryEditaTipo, [tipo, id]);
+      return res.status(200).json({ message: "Tipo do usuário editado com sucesso!" });
+    } catch(error) {
+      console.log(error);
+      return res.status(500).json({ message: "Erro no servidor." });
+    }
+  },
+  editarAtivado: async (req, res) => {
+    const { ativado } = req.body;
+    const { id } = req.params;
+    if (!id || !ativado) {
+      return res.status(404).json({ message: "Todos os dados devem ser enviados! (id, ativado)" });
+    }
+    try {
+      const queryEditaAtivado = "UPDATE usuarios SET ativado=? WHERE id=?";
+      await pool.query(queryEditaAtivado, [ativado, id]);
+      return res.status(200).json({ message: "Status do usuário editado com sucesso!" });
     } catch(error) {
       console.log(error);
       return res.status(500).json({ message: "Erro no servidor." });
