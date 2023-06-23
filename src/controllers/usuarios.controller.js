@@ -120,6 +120,12 @@ module.exports = {
       return res.status(404).json({ message: "Todos os dados devem ser enviados! (id)" });
     }
     try {
+      const queryVerificaQuantosAtivados = "SELECT COUNT(ativado) AS adminsAtivados FROM usuarios WHERE tipo='admin'";
+      const [respAdminsAtivados] = await pool.query(queryVerificaQuantosAtivados);
+      if (respAdminsAtivados[0].adminsAtivados === 1) {
+        return res.status(400).json({ message: "Deve haver pelo menos um Administrador ativado!" });
+      }
+
       const queryEditaAtivado = "UPDATE usuarios SET ativado=? WHERE id=?";
       await pool.query(queryEditaAtivado, [ativado, id]);
       return res.status(200).json({ message: "Status do usuário editado com sucesso!" });

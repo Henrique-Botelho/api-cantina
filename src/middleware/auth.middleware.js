@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const { SECRET, CARDAPIO_KEY } = require('../config/config');
+const pool = require('../database/index');
 
 const authMiddleware = {
     verificaUsuario: (req, res, next) => {
@@ -15,8 +16,25 @@ const authMiddleware = {
 
         // Validando o token
         try {
-            jwt.verify(token, SECRET);
-            next();
+            jwt.verify(token, SECRET, async (err, decoded) => {
+                if (err) {
+                    return res.status(403).json({ message: 'Token inválido!' });
+                }
+
+                const queryVerificaAtivado = "SELECT ativado FROM usuarios WHERE email=?";
+                const [respAtivado] = await pool.query(queryVerificaAtivado, [decoded.email]);
+                if (!respAtivado[0].ativado) {
+                    return res.status(400).json({ message: "Sua conta foi desativada!" });
+                }
+
+                const queryVerificaExiste = "SELECT * FROM usuarios WHERE email=?";
+                const [respExiste] = await pool.query(queryVerificaExiste, [decoded.email]);
+                if (respExiste.length === 0) {
+                    return res.status(400).json({ message: "Sua conta foi excluida!" });
+                }
+                
+                next();
+            });
         } catch (error){
             console.log(error);
             return res.status(403).json({ message: 'Token inválido!' });
