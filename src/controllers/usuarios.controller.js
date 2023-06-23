@@ -116,8 +116,8 @@ module.exports = {
   editarAtivado: async (req, res) => {
     const { ativado } = req.body;
     const { id } = req.params;
-    if (!id || !ativado) {
-      return res.status(404).json({ message: "Todos os dados devem ser enviados! (id, ativado)" });
+    if (!id) {
+      return res.status(404).json({ message: "Todos os dados devem ser enviados! (id)" });
     }
     try {
       const queryEditaAtivado = "UPDATE usuarios SET ativado=? WHERE id=?";
