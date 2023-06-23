@@ -91,7 +91,7 @@ module.exports = {
   listarUsuarios: async (req, res) => {
     try {
       const queryListarUsuarios = "SELECT id, userName, email, tipo, ativado FROM usuarios";
-      const [response] = pool.query(queryListarUsuarios);
+      const [response] = await pool.query(queryListarUsuarios);
       return res.status(200).json(response);
     } catch(error) {
       console.log(error);
